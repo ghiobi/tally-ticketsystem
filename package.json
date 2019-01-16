@@ -8,7 +8,8 @@
     "start": "node server.js",
     "test": "node ace test",
     "lint": "eslint '**/*.js'",
-    "lint:fix": "eslint '**/*.js' --fix"
+    "lint:fix": "eslint '**/*.js' --fix",
+    "ci": "npm run lint && npm run test"
   },
   "keywords": [
     "adonisjs",
