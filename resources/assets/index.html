@@ -4,14 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Hello, world!</title>
+  <title>{{ title }}</title>
   $css
 </head>
 <body>
-
-@section('content')
-@endsection
-
+  @section('vars')
+    @set('title', 'Tally-ticketing system')
+  @endsection
+<div class="header">
+  @include('partials/header')
+</div>
+<div class="content">
+  @!section('content')
+</div>
+<div class="footer">
+  @include('partials/footer')
+</div>
 $bundles
 </body>
 </html>
