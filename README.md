@@ -43,21 +43,14 @@ SESSION_DRIVER=cookie
 HASH_DRIVER=bcrypt
 ```
 
-4. Start the backend and frontend in another terminal
-
-```
-npm start
-```
+4. Start the frontend and backend in another terminal
 
 ```
 npm run front:dev
 ```
-
-### Dev environment
-
-1. Please use Vs-code and install the `Prettier - Code Formatter` plugin
-
-2. Change Vs-code setting to `format on save`
+```
+npm start
+```
 
 ### Migrations
 
