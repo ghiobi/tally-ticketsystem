@@ -6,6 +6,11 @@ node_modules
 
 # Adonis directory for storing tmp files
 tmp
+.fusebox
+
+# Generated directories and files
+resources/views/layouts/index.edge
+public
 
 # Environment variables, never commit this file
 .env

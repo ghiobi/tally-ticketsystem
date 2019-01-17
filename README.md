@@ -43,10 +43,14 @@ SESSION_DRIVER=cookie
 HASH_DRIVER=bcrypt
 ```
 
-4. Start the app
+4. Start the backend and frontend in another terminal
 
 ```
-npm start or adonis serve
+npm start
+```
+
+```
+npm run front:dev
 ```
 
 ### Migrations
