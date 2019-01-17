@@ -1,6 +1,6 @@
 # Tally-Ticketsystem
 
-This is the ticketing/feedback system that is to be accompagnied with tally expense bot.   
+This is the ticketing/feedback system that is to be accompagnied with tally expense bot.
 
 ## Setup
 
@@ -52,6 +52,12 @@ npm start
 ```
 npm run front:dev
 ```
+
+### Dev environment
+
+1. Please use Vs-code and install the `Prettier - Code Formatter` plugin
+
+2. Change Vs-code setting to `format on save`
 
 ### Migrations
 
