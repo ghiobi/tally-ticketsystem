@@ -1,0 +1,20 @@
+{
+  "env": {
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "semi": ["error", "never"],
+    "comma-dangle": ["error", "never"],
+    "space-before-function-paren": ["error", { "anonymous": "never", "named": "always" }],
+    "global-require": "off",
+    "arrow-parens": ["error", "always"],
+    "quotes": ["error", "single"]
+  },
+  "globals": {
+    "use": true
+  }
+}
