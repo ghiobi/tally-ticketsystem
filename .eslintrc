@@ -9,7 +9,6 @@
   "rules": {
     "semi": ["error", "never"],
     "comma-dangle": ["error", "never"],
-    "space-before-function-paren": ["error", { "anonymous": "never", "named": "always" }],
     "global-require": "off",
     "arrow-parens": ["error", "always"],
     "quotes": ["error", "single"]

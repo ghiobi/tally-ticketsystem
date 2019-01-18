@@ -36,7 +36,7 @@ context(
   }
 )
 
-task('bundle:dev', context => {
+task('bundle:dev', (context) => {
   context.isProduction = false
   const fuse = context.config()
 
@@ -50,7 +50,7 @@ task('bundle:dev', context => {
   fuse.run()
 })
 
-task('bundle:prod', context => {
+task('bundle:prod', (context) => {
   context.isProduction = true
   const fuse = context.config()
 
