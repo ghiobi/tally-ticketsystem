@@ -10,8 +10,7 @@
 |
 */
 
-// Uncomment when want to run migrations
-// const ace = require('@adonisjs/ace')
+const ace = require('@adonisjs/ace')
 
 module.exports = (cli, runner) => {
   runner.before(async () => {
@@ -34,7 +33,8 @@ module.exports = (cli, runner) => {
     | Migrate the database before starting the tests.
     |
     */
-    // await ace.call('migration:run', {}, { silent: true })
+    await ace.call('migration:run', {}, { silent: true })
+    await ace.call('seed', {}, { silent: true })
   })
 
   runner.after(async () => {
@@ -59,6 +59,6 @@ module.exports = (cli, runner) => {
     | original state
     |
     */
-    // await ace.call('migration:reset', {}, { silent: true })
+    await ace.call('migration:reset', {}, { silent: true })
   })
 }
