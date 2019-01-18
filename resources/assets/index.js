@@ -1,2 +1,3 @@
-require('./styles/main.scss')
-require('./scripts')
+import './styles/main.scss'
+import './components'
+import './scripts'

@@ -3,11 +3,19 @@ const {
   FuseBox,
   QuantumPlugin,
   SassPlugin,
-  WebIndexPlugin
+  WebIndexPlugin,
+  VueComponentPlugin
 } = require('fuse-box')
 const { context, src, task } = require('fuse-box/sparky')
 
 const OUTPUT_DIR = 'public'
+
+const SCSS_PLUGINS = [
+  SassPlugin({
+    importer: true
+  }),
+  CSSPlugin()
+]
 
 /* eslint-disable */
 context(
@@ -22,15 +30,20 @@ context(
           this.isProduction &&
             QuantumPlugin({
               treeshake: true,
-              uglify: true
+              uglify: true,
+              css: true
             }),
-          [SassPlugin(), CSSPlugin()],
+          SCSS_PLUGINS,
           WebIndexPlugin({
             template: 'resources/assets/index.html',
             target: '../resources/views/layouts/index.edge'
+          }),
+          VueComponentPlugin({
+            style: SCSS_PLUGINS
           })
         ],
-        useTypescriptCompiler: true
+        useTypescriptCompiler: true,
+        allowSyntheticDefaultImports: true
       })
     }
   }
@@ -41,11 +54,12 @@ task('bundle:dev', (context) => {
   const fuse = context.config()
 
   fuse.dev()
+  fuse.bundle('vendor').instructions('~ index.js')
   fuse
     .bundle('app')
     .watch()
     .hmr()
-    .instructions(' > index.js')
+    .instructions('> index.js')
 
   fuse.run()
 })
