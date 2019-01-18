@@ -76,7 +76,13 @@ SESSION_DRIVER=cookie
 HASH_DRIVER=bcrypt
 ```
 
-4. Start the frontend and backend in another terminal
+4. Setup database
+
+```
+adonis migration:run && adonis seed
+```
+
+5. Start the frontend and backend in another terminal
 
 ```
 npm run front:dev
