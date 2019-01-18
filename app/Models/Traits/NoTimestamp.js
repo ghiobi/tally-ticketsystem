@@ -2,14 +2,13 @@
 
 class NoTimestamp {
   register(Model) {
-    Object.defineProperties(Model, 'createdAtColumn', {
-      get() {
+    Object.defineProperty(Model, 'createdAtColumn', {
+      get: function() {
         return null
       }
     })
-
-    Object.defineProperties(Model, 'updatedAtColumn', {
-      get() {
+    Object.defineProperty(Model, 'updatedAtColumn', {
+      get: function() {
         return null
       }
     })

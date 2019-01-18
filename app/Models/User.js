@@ -34,6 +34,38 @@ class User extends Model {
   tokens() {
     return this.hasMany('App/Models/Token')
   }
+
+  /**
+   * Returns the belongs to organization orm relationship object.
+   *
+   * @returns {BelongsTo}
+   */
+  organization() {
+    return this.belongsTo('App/Models/Organization')
+  }
+
+  /**
+   * Returns the belongs to many role orm relationship object.
+   *
+   * @returns {BelongsToMany}
+   */
+  roles() {
+    return this.belongsToMany('App/Models/Role')
+  }
+
+  /**
+   * Checks if a user has a role by key.
+   *
+   * @param role The role key.
+   * @returns {Promise<boolean>}
+   */
+  async hasRole(role) {
+    const exists = await this.roles()
+      .where('key', role)
+      .first()
+
+    return !!exists
+  }
 }
 
 module.exports = User
