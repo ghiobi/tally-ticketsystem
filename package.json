@@ -36,18 +36,23 @@
     "jquery": "^3.3.1",
     "mysql2": "^1.6.4",
     "popper.js": "^1.14.6",
-    "sqlite3": "^4.0.6"
+    "sqlite3": "^4.0.6",
+    "vue": "^2.5.22"
   },
   "devDependencies": {
     "eslint": "^5.12.0",
     "fuse-box": "^3.6.0",
     "husky": "^1.3.1",
     "node-sass": "^4.11.0",
+    "postcss-selector-parser": "^5.0.0",
     "precise-commits": "^1.0.2",
     "prettier": "^1.15.3",
     "typescript": "^3.2.2",
     "uglify-es": "^3.3.9",
-    "uglify-js": "^3.4.9"
+    "uglify-js": "^3.4.9",
+    "vue-hot-reload-api": "^2.3.1",
+    "vue-template-compiler": "^2.5.22",
+    "vue-template-es2015-compiler": "^1.8.1"
   },
   "autoload": {
     "App": "./app"
