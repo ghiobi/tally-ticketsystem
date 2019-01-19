@@ -2,7 +2,7 @@
 
 const { test } = use('Test/Suite')('Role Model')
 
-const Role = use('App/Models/Role')
+const { Role } = models
 
 test('make sure the roles models are seeded', async ({ assert }) => {
   const roles = await Role.all()

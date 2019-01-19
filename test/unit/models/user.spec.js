@@ -1,28 +1,22 @@
 'use strict'
 
-const { test, beforeEach } = use('Test/Suite')('User Model')
+const { test, trait, before } = use('Test/Suite')('User Model')
+const { User, Role, UserFactory, OrganizationFactory } = models
 
-const User = use('App/Models/User')
-const Role = use('App/Models/Role')
-const Organization = use('App/Models/Organization')
+trait('DatabaseTransactions')
 
 let organization = null
 
-beforeEach(async () => {
-  organization = await Organization.findOrCreate({
-    name: 'User Company',
-    slug: 'user-company'
-  })
+before(async () => {
+  organization = await OrganizationFactory.create()
 })
 
 test('make sure a user can be initialized with an organization', async ({
   assert
 }) => {
-  await organization.users().create({
-    name: 'Bob Marley',
-    email: 'bob_marley@tally.com',
-    password: '411+9'
-  })
+  await organization.users().save(await UserFactory.make({
+    email: 'bob_marley@tally.com'
+  }))
 
   const user = await User.query()
     .where('organization_id', organization.id)
@@ -35,20 +29,16 @@ test('make sure a user can be initialized with an organization', async ({
 test('make sure a user cannot be initialized with a non unique email in an organization', async ({
   assert
 }) => {
-  await organization.users().create({
-    name: 'Stephen Hawking',
-    email: 'stephen.hawking@oxford.uk',
-    password: '411+9'
-  })
+  await organization.users().save(await UserFactory.make({
+    email: 'stephen.hawking@oxford.uk'
+  }))
 
   let pass = true
 
   try {
-    await organization.users().create({
-      name: 'Stephen Hawking 2',
-      email: 'stephen.hawking@oxford.uk',
-      password: '411+9'
-    })
+    await organization.users().save(await UserFactory.make({
+      email: 'stephen.hawking@oxford.uk'
+    }))
     pass = false
   } catch (e) {
     // continue regardless of error
@@ -58,15 +48,13 @@ test('make sure a user cannot be initialized with a non unique email in an organ
 })
 
 test('make sure a user has a organization owner role', async ({ assert }) => {
-  const user = await organization.users().create({
-    name: 'John F. Kennedy',
-    email: 'john.f.kennedy@usa.gov.com',
-    password: '411+9'
-  })
+  const user = await UserFactory.make()
+  await organization.users().save(user)
 
   const role = await Role.query()
     .where('key', 'owner')
     .first()
+
   await user.roles().attach([role.id])
 
   const isOwner = await user.hasRole('owner')

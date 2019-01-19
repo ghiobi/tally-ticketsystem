@@ -131,7 +131,7 @@ module.exports = {
   |
   */
   csrf: {
-    enable: true,
+    enable: process.env.NODE_ENV === 'testing' ? false : true,
     methods: ['POST', 'PUT', 'DELETE'],
     filterUris: [],
     cookieOptions: {

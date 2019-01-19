@@ -12,6 +12,7 @@ class UserSchema extends Schema {
       table.string('password', 60).notNullable()
       table
         .integer('organization_id')
+        .notNullable()
         .unsigned()
         .references('id')
         .inTable('organizations')

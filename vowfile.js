@@ -12,6 +12,9 @@
 
 const ace = require('@adonisjs/ace')
 
+// Set Models for Tests
+global.models = require('./test/models')
+
 module.exports = (cli, runner) => {
   runner.before(async () => {
     /*
@@ -33,8 +36,8 @@ module.exports = (cli, runner) => {
     | Migrate the database before starting the tests.
     |
     */
-    await ace.call('migration:run', {}, { silent: true })
-    await ace.call('seed', {}, { silent: true })
+    await ace.call('migration:run', {}, { silent: true, keepAlive: true })
+    await ace.call('seed', {}, { silent: true, keepAlive: true, files: 'RoleSeeder.js' })
   })
 
   runner.after(async () => {
