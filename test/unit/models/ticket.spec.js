@@ -1,6 +1,6 @@
 'use strict'
 
-const { test, beforeEach } = use('Test/Suite')('Ticket Model')
+const { test, before } = use('Test/Suite')('Ticket Model')
 
 const Ticket = use('App/Models/Ticket')
 const User = use('App/Models/User')
@@ -8,7 +8,7 @@ const User = use('App/Models/User')
 let user = null
 let admin = null
 
-beforeEach(async () => {
+before(async () => {
   user = await User.create({
     name: 'User One',
     email: 'user@tally.com',
@@ -25,7 +25,7 @@ beforeEach(async () => {
 test('check if a ticket can be inserted', async ({ assert }) => {
   await Ticket.create({
     opened_by: user.id,
-    admin_id: admin.id,
+    assigned_to: admin.id,
     title: 'Test title',
     status: 'submitted'
   })
@@ -37,10 +37,10 @@ test('check if a ticket can be inserted', async ({ assert }) => {
   assert.isNotNull(ticket)
 })
 
-test('check if status can be update', async ({ assert }) => {
+test('check if status can be updated', async ({ assert }) => {
   await Ticket.create({
     opened_by: user.id,
-    admin_id: admin.id,
+    assigned_to: admin.id,
     title: 'Test title',
     status: 'submitted'
   })
@@ -48,6 +48,9 @@ test('check if status can be update', async ({ assert }) => {
   var ticket = await Ticket.query()
     .where('opened_by', user.id)
     .first()
-  ticket.updateStatus('closed')
+  await ticket.updateStatus('closed')
+  ticket = await Ticket.query()
+    .where('opened_by', user.id)
+    .first()
   assert.equal(ticket.status, 'closed')
 })

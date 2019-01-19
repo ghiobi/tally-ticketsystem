@@ -14,7 +14,7 @@ class TicketSchema extends Schema {
         .inTable('users')
         .notNullable()
       table
-        .integer('admin_id')
+        .integer('assigned_to')
         .unsigned()
         .references('id')
         .inTable('users')

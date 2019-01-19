@@ -1,6 +1,6 @@
 'use strict'
 
-const { test, beforeEach } = use('Test/Suite')('Message Model')
+const { test, before } = use('Test/Suite')('Message Model')
 
 const Message = use('App/Models/Message')
 const Ticket = use('App/Models/Ticket')
@@ -9,7 +9,7 @@ const User = use('App/Models/User')
 let ticket = null
 let user = null
 
-beforeEach(async () => {
+before(async () => {
   user = await User.create({
     name: 'User One',
     email: 'user@tally.com',
