@@ -58,7 +58,7 @@ cp .env.example .env && adonis key:generate
 Example `.env file`
 
 ```
-HOST=0.0.0.1
+HOST=127.0.0.1
 PORT=3333
 NODE_ENV=development
 APP_URL=http://${HOST}:${PORT}
@@ -70,7 +70,7 @@ DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=
-DB_DATABASE=adonis
+DB_DATABASE=
 
 SESSION_DRIVER=cookie
 HASH_DRIVER=bcrypt
