@@ -1,0 +1,31 @@
+@layout('layouts.index')
+
+@section('content')
+  @set('title', 'Find Your Organization')
+
+  <div id="organization-find">
+    <div class="text-center">
+
+      @if(hasErrorFor('404'))
+        <div class="alert alert-danger" role="alert">
+          {{ getErrorFor('404') }}
+        </div>
+      @endif
+
+      <div class="mb-3">
+        Sign in to your organization
+      </div>
+      <form action="/organization" method="post">
+        {{ csrfField() }}
+        <div class="form-group d-flex align-items-center">
+          <span>{{  request.protocol() + '://' + request.hostname() + request.originalUrl() }}/</span>
+          <input type="text" name="organization" class="form-control" required>
+        </div>
+        <button class="btn btn-primary" type="submit">
+          Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+
+@endsection

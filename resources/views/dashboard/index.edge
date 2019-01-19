@@ -1,0 +1,7 @@
+@layout('layouts.index')
+
+@section('content')
+@set('title', 'Dashboard')
+  {{ organization.name }}
+  Welcome {{ auth.user.name }}
+@endsection
