@@ -5,6 +5,8 @@ const MODEL_DIR = 'App/Models/'
 const ORGANIZATION_MODEL = MODEL_DIR + 'Organization'
 const USER_MODEL = MODEL_DIR + 'User'
 const ROLE_MODEL = MODEL_DIR + 'Role'
+const TICKET_MODEL = MODEL_DIR + 'Ticket'
+const MESSAGE_MODEL = MODEL_DIR + 'Message'
 
 module.exports = {
   Organization: use(ORGANIZATION_MODEL),
@@ -12,6 +14,12 @@ module.exports = {
 
   User: use(USER_MODEL),
   UserFactory: Factory.model(USER_MODEL),
+
+  Ticket: use(TICKET_MODEL),
+  TicketFactory: Factory.model(TICKET_MODEL),
+
+  Message: use(MESSAGE_MODEL),
+  MessageFactory: Factory.model(MESSAGE_MODEL),
 
   Role: use(ROLE_MODEL)
 }

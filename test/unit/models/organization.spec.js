@@ -1,9 +1,7 @@
 'use strict'
 
-const { test, trait } = use('Test/Suite')('Organization Model')
+const { test } = use('Test/Suite')('Organization Model')
 const { Organization, OrganizationFactory } = models
-
-trait('DatabaseTransactions')
 
 test('make sure a model can be created', async ({ assert }) => {
   await OrganizationFactory.create({

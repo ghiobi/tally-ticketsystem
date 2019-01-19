@@ -1,9 +1,7 @@
 'use strict'
 
-const { test, trait, before } = use('Test/Suite')('User Model')
+const { test, before } = use('Test/Suite')('User Model')
 const { User, Role, UserFactory, OrganizationFactory } = models
-
-trait('DatabaseTransactions')
 
 let organization = null
 
@@ -23,7 +21,7 @@ test('make sure a user can be initialized with an organization', async ({
     .where('email', 'bob_marley@tally.com')
     .first()
 
-  assert.isNotNull(user)
+  assert.exists(user)
 })
 
 test('make sure a user cannot be initialized with a non unique email in an organization', async ({

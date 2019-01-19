@@ -1,38 +1,41 @@
 'use strict'
 
 const { test, before } = use('Test/Suite')('Message Model')
-
-const Message = use('App/Models/Message')
-const Ticket = use('App/Models/Ticket')
-const User = use('App/Models/User')
+const { UserFactory, TicketFactory, MessageFactory, Message } = models
 
 let ticket = null
 let user = null
 
 before(async () => {
-  user = await User.create({
-    name: 'User One',
-    email: 'user@tally.com',
-    password: 'abd123'
-  })
+  user = await UserFactory.create()
 
-  ticket = await Ticket.create({
-    opened_by: user.id,
-    title: 'Test title',
-    status: 'submitted'
+  ticket = await TicketFactory.create({
+    user_id: user.id,
+    assigned_to: null
   })
 })
 
 test('check if a message can be inserted', async ({ assert }) => {
-  await Message.create({
+  const message = await MessageFactory.create({
     user_id: user.id,
-    ticket_id: ticket.id,
-    body: 'Test body'
+    ticket_id: ticket.id
   })
 
-  const message = await Message.query()
-    .where('user_id', user.id)
-    .first()
+  const inDatabase = await Message.find(message.id)
+  assert.exists(inDatabase)
+})
 
-  assert.isNotNull(message)
+test('makes sure the relations return the correct models', async ({ assert }) => {
+  const message = await MessageFactory.create({
+    user_id: user.id,
+    ticket_id: ticket.id
+  })
+
+  const writer = await message.user().fetch()
+  assert.exists(writer)
+  assert.deepEqual(writer, user)
+
+  const fetchedTicket = await message.ticket().fetch()
+  assert.exists(fetchedTicket)
+  assert.deepEqual(fetchedTicket, ticket)
 })

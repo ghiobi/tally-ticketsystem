@@ -1,9 +1,7 @@
 'use strict'
 
-const { test, trait, before } = use('Test/Suite')('User Organization Service')
+const { test, before } = use('Test/Suite')('User Organization Service')
 const { UserFactory, OrganizationFactory } = models
-
-trait('DatabaseTransactions')
 
 const UserOrganizationService = use('App/Services/UserOrganizationService')
 

@@ -41,6 +41,3 @@ Route
     Route.post('/', 'Organization/FindOrganizationController.find')
   })
   .prefix('organization')
-
-
-

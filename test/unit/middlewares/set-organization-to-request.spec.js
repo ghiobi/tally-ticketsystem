@@ -1,10 +1,10 @@
 'use strict'
 const sinon = require('sinon')
 
-const { test, trait, before, beforeEach } = use('Test/Suite')('Set Organization To Request')
+const { test, before, beforeEach } = use('Test/Suite')(
+  'Set Organization To Request'
+)
 const { OrganizationFactory } = models
-
-trait('DatabaseTransactions')
 
 const SetOrganizationToRequest = use('App/Middleware/SetOrganizationToRequest')
 
