@@ -9,10 +9,10 @@ class Ticket extends Model {
   }
 
   user() {
-    return this.belongsTo('App/Models/User', 'opened_by', 'id')
+    return this.belongsTo('App/Models/User')
   }
 
-  admin() {
+  assignedTo() {
     return this.belongsTo('App/Models/User', 'assigned_to', 'id')
   }
 

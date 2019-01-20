@@ -1,25 +1,8 @@
 @import '~bootstrap/scss/bootstrap.scss';
 
-html,
-body {
-  width: 100%;
-  height: 100%;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-}
-
-body {
+#organization-find {
+  height: 100vh;
   display: flex;
-  flex-direction: column;
-}
-
-body .header {
-  flex: 1 1 10%;
-}
-
-body .content {
-  flex: 1 1 90%;
+  align-items: center;
+  justify-content: center;
 }

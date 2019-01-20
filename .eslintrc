@@ -1,9 +1,10 @@
 {
   "env": {
-    "node": true
+    "node": true,
+    "browser": true
   },
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
   "extends": "eslint:recommended",
@@ -15,6 +16,7 @@
     "quotes": ["error", "single"]
   },
   "globals": {
-    "use": true
+    "use": true,
+    "models": true
   }
 }

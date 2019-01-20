@@ -1,0 +1,38 @@
+@layout('layouts.index')
+
+@section('content')
+@set('title', 'Sign Into Your Account')
+
+{{ organization.name }}
+
+Sign In
+
+@if(hasErrorFor('invalid'))
+  <div class="alert alert-danger" role="alert">
+    {{ getErrorFor('invalid') }}
+  </div>
+@endif
+<form action="/organization/{{ organization.slug }}/login" method="post">
+  {{ csrfField() }}
+  <div class="form-group">
+    <label for="form_email">Email</label>
+    <input type="text" id="form_email" class="form-control {{ elIf('$self', 'is-invalid',hasErrorFor('email')) }}" name="email" value="{{ old('email', '') }}" required>
+    @if(hasErrorFor('email'))
+    <div class="invalid-feedback">
+      {{ getErrorFor('email') }}
+    </div>
+    @endif
+
+  </div>
+  <div class="form-group">
+    <label for="form_password">Password</label>
+    <input type="password" id="form_password" class="form-control {{ elIf('$self', 'is-invalid', hasErrorFor('password')) }}" name="password" required>
+    @if(hasErrorFor('password'))
+      <div class="invalid-feedback">
+        {{ getErrorFor('password') }}
+      </div>
+    @endif
+  </div>
+  <button class="btn btn-primary" type="submit">Sign In</button>
+</form>
+@endsection

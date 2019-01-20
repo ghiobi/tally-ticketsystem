@@ -1,33 +1,29 @@
 'use strict'
 
 const { test } = use('Test/Suite')('Organization Model')
-
-const Organization = use('App/Models/Organization')
+const { Organization, OrganizationFactory } = models
 
 test('make sure a model can be created', async ({ assert }) => {
-  await Organization.create({
-    name: 'Tally',
-    slug: 'tally'
+  await OrganizationFactory.create({
+      slug: 'tally'
   })
 
   const tally = await Organization.query()
     .where('slug', 'tally')
     .first()
 
-  assert.equal(tally.name, 'Tally')
+  assert.isNotNull(tally)
 })
 
 test('make sure a model has a unique slug', async ({ assert }) => {
-  await Organization.create({
-    name: 'BestCompany',
-    slug: 'best-company'
-  })
+  await OrganizationFactory.create({
+      slug: 'best-company'
+    })
 
   let pass = true
 
   try {
-    await Organization.create({
-      name: 'AwesomeBestCompany',
+    await OrganizationFactory.create({
       slug: 'best-company'
     })
     pass = false

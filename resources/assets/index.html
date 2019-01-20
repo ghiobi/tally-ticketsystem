@@ -4,22 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>{{ title }}</title>
+  <title>{{ title ? title + ' - ' : '' }}Tally Ticketing</title>
   $css
 </head>
 <body>
-  @section('vars')
-    @set('title', 'Tally-ticketing system')
-  @endsection
-<div class="header">
-  @include('partials/header')
-</div>
-<div class="content">
   @!section('content')
-</div>
-<div class="footer">
-  @include('partials/footer')
-</div>
 $bundles
 </body>
 </html>
