@@ -18,6 +18,9 @@ const Route = use('Route')
 
 Route.on('/').render('home')
 
+Route.get('/join', 'Auth/RegistrationController.index')
+Route.post('/join', 'Auth/RegistrationController.register')
+
 Route.group(() => {
   Route.get('/login', 'Auth/LoginController.index')
   Route.post('/login', 'Auth/LoginController.login')

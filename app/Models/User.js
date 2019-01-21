@@ -6,6 +6,8 @@ const Hash = use('Hash')
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 
+const Role = use('App/Models/Role')
+
 class User extends Model {
   static boot() {
     super.boot()
@@ -69,6 +71,24 @@ class User extends Model {
       .first()
 
     return !!exists
+  }
+
+  /**
+   * Sets a role to a user.
+   *
+   * @param role The role key.
+   * @returns {Promise<void>}
+   */
+  async setRole(role) {
+    if (await this.hasRole(role)) {
+      return
+    }
+
+    const model = await Role.query()
+      .where('key', role)
+      .first()
+
+    await this.roles().attach([model.id])
   }
 }
 
