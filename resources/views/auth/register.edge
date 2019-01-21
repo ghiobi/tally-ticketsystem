@@ -1,0 +1,17 @@
+@layout('layouts.index')
+
+@section('content')
+@set('title', 'Create Your Organization')
+
+Create Your Organization
+
+<form action="/join" method="post">
+  {{ csrfField() }}
+  @!component('partials.forms.input', config = {label: 'Name', key: 'organization.name'}, error = getErrorFor, old = old )
+  @!component('partials.forms.input', config = {label: 'Url', key: 'organization.slug'}, error = getErrorFor, old = old)
+  @!component('partials.forms.input', config = {label: 'Your Full Name', key: 'user.name'}, error = getErrorFor, old = old)
+  @!component('partials.forms.input', config = {label: 'Email', key: 'user.email'}, error = getErrorFor, old = old)
+  @!component('partials.forms.input', config = {label: 'Password', key: 'user.password', type: 'password'}, error = getErrorFor)
+  <button type="submit">Join</button>
+</form>
+@endsection

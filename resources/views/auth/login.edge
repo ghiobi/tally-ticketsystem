@@ -14,25 +14,8 @@ Sign In
 @endif
 <form action="/organization/{{ organization.slug }}/login" method="post">
   {{ csrfField() }}
-  <div class="form-group">
-    <label for="form_email">Email</label>
-    <input type="text" id="form_email" class="form-control {{ elIf('$self', 'is-invalid',hasErrorFor('email')) }}" name="email" value="{{ old('email', '') }}" required>
-    @if(hasErrorFor('email'))
-    <div class="invalid-feedback">
-      {{ getErrorFor('email') }}
-    </div>
-    @endif
-
-  </div>
-  <div class="form-group">
-    <label for="form_password">Password</label>
-    <input type="password" id="form_password" class="form-control {{ elIf('$self', 'is-invalid', hasErrorFor('password')) }}" name="password" required>
-    @if(hasErrorFor('password'))
-      <div class="invalid-feedback">
-        {{ getErrorFor('password') }}
-      </div>
-    @endif
-  </div>
+  @!component('partials.forms.input', config = {label: 'Email', key: 'email'}, error = getErrorFor, old = old )
+  @!component('partials.forms.input', config = {label: 'Password', key: 'password', type: 'password'}, error = getErrorFor )
   <button class="btn btn-primary" type="submit">Sign In</button>
 </form>
 @endsection

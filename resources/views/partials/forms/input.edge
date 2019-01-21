@@ -1,0 +1,34 @@
+{{--
+  Input Component
+  -> A component for generating an input field.
+
+  + config - the configuration object
+  + config.key - the name key of the input
+  + config.label - the displaying label
+  + config.type - the type of input -> default: 'text'
+  + config.required - is required -> defaults: true
+  + error - the sessions getErrorFor method
+    Since components are stateless we can't use sessions methods directly, thus they must be
+    passed into the component.
+    See github issue for more details https://github.com/adonisjs/adonis-framework/issues/780
+  + old (optional) - the sessions old method set old value
+--}}
+<div class="form-group">
+  <label for="form__{{ config.key }}">
+    {{ config.label }}
+    @if(config.required === false)
+      <small class="font-italic">- Optional</small>
+    @endif
+  </label>
+  <input id="form__{{ config.key }}"
+    class="form-control {{ elIf('$self', 'is-invalid', error(config.key)) }}"
+    type="{{ config.type ? config.type : 'text' }}"
+    name="{{ config.key }}" value="{{ old && old(config.key, '') }}"
+    {{ config.required === false ? '' : 'required' }}
+  >
+  @if(error(config.key))
+    <div class="invalid-feedback">
+      {{ error(config.key) }}
+    </div>
+  @endif
+</div>

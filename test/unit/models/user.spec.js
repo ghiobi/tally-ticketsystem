@@ -64,3 +64,24 @@ test('make sure a user has a organization owner role', async ({ assert }) => {
   const isOwner = await user.hasRole('owner')
   assert.isTrue(isOwner)
 })
+
+test('make sure a user can set an admin role', async ({ assert }) => {
+  const user = await UserFactory.make()
+  await organization.users().save(user)
+
+  await user.setRole('admin')
+
+  const isAdmin = await user.hasRole('admin')
+  assert.isTrue(isAdmin)
+})
+
+test('make sure a regular user does not have a role', async ({ assert }) => {
+  const user = await UserFactory.make()
+  await organization.users().save(user)
+
+  const isAdmin = await user.hasRole('admin')
+  assert.isFalse(isAdmin)
+
+  const isOwner = await user.hasRole('owner')
+  assert.isFalse(isOwner)
+})

@@ -6,5 +6,5 @@ trait('Test/Browser')
 
 test('Visit home page', async ({ browser }) => {
   const page = await browser.visit('/')
-  await page.assertHas('This is the home page')
+  await page.assertHas('Welcome to Tally')
 })
