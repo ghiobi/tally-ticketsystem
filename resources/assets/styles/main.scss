@@ -1,4 +1,11 @@
 @import '~bootstrap/scss/bootstrap.scss';
+@import './dashboard/admin.scss';
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
 
 #organization-find {
   height: 100vh;

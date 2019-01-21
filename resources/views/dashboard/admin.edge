@@ -1,0 +1,57 @@
+@layout('layouts.index')
+
+@section('content')
+  @set('title', 'Admin Dashboard')
+  <div id="admin-dashboard">
+    <div class="feedback-table-header">
+      <span>
+          {{ organization.name }}
+          Welcome {{ auth.user.name }}
+      </span>
+    </div>
+    <div class="feedback-table-columns"> 
+      <div class="column">
+        <div class="column-title">
+          <span class="counter">{{open.length}}</span>
+          <span>Open</span>
+        </div>
+        <ul>
+            @each(feedback in open)
+            <li class="card feedback">
+                <span class="text">{{feedback.text}}</span>
+                <span class="author"><i>Feedback by: </i>{{feedback.author}}</span>
+            </li>
+            @endeach
+        </ul>
+      </div>
+      <div class="column">
+          <div class="column-title">
+              <span class="counter">{{inprogress.length}}</span>
+              <span>In Progress</span>
+            </div>
+        <ul>
+            @each(feedback in inprogress)
+            <li class="card feedback">
+              <span class="text">{{feedback.text}}</span>
+              <span class="author"><i>Feedback by: </i>{{feedback.author}}</span>
+            </li>
+            @endeach
+        </ul>
+      </div>
+      <div class="column">
+          <div class="column-title">
+              <span class="counter">{{closed.length}}</span>
+              <span>Closed</span>
+            </div>
+        <ul>
+            @each(feedback in closed)
+            <li class="card feedback">
+                <span class="text">{{feedback.text}}</span>
+                <span class="author"><i>Feedback by: </i>{{feedback.author}}</span>  
+            </li>
+            @endeach
+        </ul>
+      </div>
+    </div>
+  </div>
+@endsection
