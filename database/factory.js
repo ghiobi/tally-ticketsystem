@@ -14,7 +14,13 @@
 const Factory = use('Factory')
 
 Factory.blueprint('App/Models/User', (faker, i, data) => {
-  return { name: faker.name(), email: faker.email(), password: faker.string(), organization_id: 1, ...data }
+  return {
+    name: faker.name(),
+    email: faker.email(),
+    password: faker.string(),
+    organization_id: 1,
+    ...data
+  }
 })
 
 Factory.blueprint('App/Models/Organization', (faker, i, data) => {
@@ -39,4 +45,3 @@ Factory.blueprint('App/Models/Message', (faker, i, data) => {
     ...data
   }
 })
-

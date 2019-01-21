@@ -5,7 +5,7 @@ const { Organization, OrganizationFactory } = models
 
 test('make sure a model can be created', async ({ assert }) => {
   await OrganizationFactory.create({
-      slug: 'tally'
+    slug: 'tally'
   })
 
   const tally = await Organization.query()
@@ -17,8 +17,8 @@ test('make sure a model can be created', async ({ assert }) => {
 
 test('make sure a model has a unique slug', async ({ assert }) => {
   await OrganizationFactory.create({
-      slug: 'best-company'
-    })
+    slug: 'best-company'
+  })
 
   let pass = true
 

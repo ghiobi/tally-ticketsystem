@@ -43,7 +43,9 @@ beforeEach(async () => {
   middleware = new SetOrganizationToRequest()
 })
 
-test('makes sure the middleware finds the specific organization and sets it to the request object', async ({ assert }) => {
+test('makes sure the middleware finds the specific organization and sets it to the request object', async ({
+  assert
+}) => {
   handle.params.organization = organization.slug
   await middleware.handle(handle, next)
 
@@ -56,7 +58,9 @@ test('makes sure the middleware finds the specific organization and sets it to t
   })
 })
 
-test('makes sure the middleware redirects when no organization is found', async ({ assert }) => {
+test('makes sure the middleware redirects when no organization is found', async ({
+  assert
+}) => {
   handle.params.organization = 'some-other-organization-slug'
   await middleware.handle(handle, next)
 

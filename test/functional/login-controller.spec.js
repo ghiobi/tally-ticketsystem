@@ -21,31 +21,45 @@ before(async () => {
   await organization.users().save(user)
 })
 
-test('make sure the user is redirected to an authenticated dashboard page', async ({ client }) => {
-  const response = await client.post(`/organization/${organization.slug}/login`).send({
-    email: 'login-controller-test@email.com',
-    password: 'password'
-  }).end()
+test('make sure the user is redirected to an authenticated dashboard page', async ({
+  client
+}) => {
+  const response = await client
+    .post(`/organization/${organization.slug}/login`)
+    .send({
+      email: 'login-controller-test@email.com',
+      password: 'password'
+    })
+    .end()
 
   response.assertRedirect(`/organization/${organization.slug}`)
 })
 
-
-test('make sure the user is redirected back in case of wrong email', async ({ client }) => {
-  const response = await client.post(`/organization/${organization.slug}/login`).send({
-    email: 'wrong-email@email.com',
-    password: 'password'
-  }).end()
+test('make sure the user is redirected back in case of wrong email', async ({
+  client
+}) => {
+  const response = await client
+    .post(`/organization/${organization.slug}/login`)
+    .send({
+      email: 'wrong-email@email.com',
+      password: 'password'
+    })
+    .end()
 
   // Since we're starting from '/'
   response.assertRedirect('/')
 })
 
-test('make sure the user is redirected back in case of wrong password', async ({ client }) => {
-  const response = await client.post(`/organization/${organization.slug}/login`).send({
-    email: 'login-controller-test@email.com',
-    password: 'whatisapassword'
-  }).end()
+test('make sure the user is redirected back in case of wrong password', async ({
+  client
+}) => {
+  const response = await client
+    .post(`/organization/${organization.slug}/login`)
+    .send({
+      email: 'login-controller-test@email.com',
+      password: 'whatisapassword'
+    })
+    .end()
 
   response.assertRedirect('/')
 })

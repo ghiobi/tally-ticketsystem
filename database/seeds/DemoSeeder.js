@@ -13,7 +13,7 @@
 const Organization = use('App/Models/Organization')
 
 class DemoSeeder {
-  async run () {
+  async run() {
     const organization = await Organization.create({
       name: 'Tally Inc.',
       slug: 'tally'

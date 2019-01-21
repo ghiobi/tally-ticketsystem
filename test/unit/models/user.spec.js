@@ -12,9 +12,11 @@ before(async () => {
 test('make sure a user can be initialized with an organization', async ({
   assert
 }) => {
-  await organization.users().save(await UserFactory.make({
-    email: 'bob_marley@tally.com'
-  }))
+  await organization.users().save(
+    await UserFactory.make({
+      email: 'bob_marley@tally.com'
+    })
+  )
 
   const user = await User.query()
     .where('organization_id', organization.id)
@@ -27,16 +29,20 @@ test('make sure a user can be initialized with an organization', async ({
 test('make sure a user cannot be initialized with a non unique email in an organization', async ({
   assert
 }) => {
-  await organization.users().save(await UserFactory.make({
-    email: 'stephen.hawking@oxford.uk'
-  }))
+  await organization.users().save(
+    await UserFactory.make({
+      email: 'stephen.hawking@oxford.uk'
+    })
+  )
 
   let pass = true
 
   try {
-    await organization.users().save(await UserFactory.make({
-      email: 'stephen.hawking@oxford.uk'
-    }))
+    await organization.users().save(
+      await UserFactory.make({
+        email: 'stephen.hawking@oxford.uk'
+      })
+    )
     pass = false
   } catch (e) {
     // continue regardless of error

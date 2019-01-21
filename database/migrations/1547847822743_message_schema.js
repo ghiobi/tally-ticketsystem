@@ -4,7 +4,7 @@
 const Schema = use('Schema')
 
 class MessageSchema extends Schema {
-  up () {
+  up() {
     this.create('messages', (table) => {
       table.increments()
       table
@@ -24,7 +24,7 @@ class MessageSchema extends Schema {
     })
   }
 
-  down () {
+  down() {
     this.drop('messages')
   }
 }

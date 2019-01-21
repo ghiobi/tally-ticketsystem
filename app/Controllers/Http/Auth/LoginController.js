@@ -29,9 +29,7 @@ class LoginController {
     })
 
     if (validation.fails()) {
-      session
-        .withErrors(validation.messages())
-        .flashAll()
+      session.withErrors(validation.messages()).flashAll()
 
       return response.redirect('back')
     }
@@ -71,7 +69,6 @@ class LoginController {
 
     return response.redirect('back')
   }
-
 }
 
 module.exports = LoginController

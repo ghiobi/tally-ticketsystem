@@ -14,11 +14,16 @@ before(async () => {
 test('make sure a user can be initialized with an organization', async ({
   assert
 }) => {
-  await organization.users().save(await UserFactory.make({
-    email: 'user.oranization.service@email.com'
-  }))
+  await organization.users().save(
+    await UserFactory.make({
+      email: 'user.oranization.service@email.com'
+    })
+  )
 
-  const user = await UserOrganizationService.findByEmail(organization, 'user.oranization.service@email.com')
+  const user = await UserOrganizationService.findByEmail(
+    organization,
+    'user.oranization.service@email.com'
+  )
 
   assert.exists(user)
   assert.equal(user.email, 'user.oranization.service@email.com')

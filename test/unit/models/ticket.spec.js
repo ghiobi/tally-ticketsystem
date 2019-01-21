@@ -35,7 +35,9 @@ test('check if status can be updated', async ({ assert }) => {
   assert.equal(inDatabase.status, 'closed')
 })
 
-test('makes sure the relations return the correct models', async ({ assert }) => {
+test('makes sure the relations return the correct models', async ({
+  assert
+}) => {
   const ticket = await TicketFactory.create({
     user_id: user.id,
     assigned_to: admin.id,

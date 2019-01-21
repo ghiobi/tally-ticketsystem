@@ -1,4 +1,3 @@
-
 class UserOrganizationService {
   /**
    * Finds a user within an organization.
