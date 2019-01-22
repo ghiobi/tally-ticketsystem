@@ -1,0 +1,9 @@
+.feedback-detail-container {
+  .reply {
+    display: flex;
+    flex-direction: column;
+    .author {
+      align-self: flex-end;
+    }
+  }
+}

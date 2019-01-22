@@ -35,7 +35,7 @@ Route.group(() => {
   .middleware(['set.organization', 'auth'])
 
 Route.group(() => {
-  Route.get('/feedback/:id', 'Feedback/FeedbackController.index')
+  Route.get('/feedback/:feedback_id', 'Feedback/FeedbackController.index')
 })
   .prefix('organization/:organization')
   .middleware(['set.organization', 'auth'])

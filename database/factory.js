@@ -35,7 +35,6 @@ Factory.blueprint('App/Models/Ticket', (faker, i, data) => {
   return {
     title: faker.sentence({ words: 5 }),
     status: 'submitted',
-    description: faker.sentence({ words: 10 }),
     ...data
   }
 })

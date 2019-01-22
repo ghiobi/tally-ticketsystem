@@ -20,7 +20,7 @@
             @each(feedback in open)
             <li class="card">
               <a href="/organization/{{organization.slug}}/feedback/{{feedback.id}}" class="feedback">
-                  <span class="text">{{feedback.description}}</span>
+                  <span class="text">{{feedback.title}}</span>
                   <span class="author"><i>Feedback by: </i>{{feedback.user.name}}</span>
               </a>              
             </li>
@@ -36,7 +36,7 @@
             @each(feedback in inprogress)
             <li class="card">
               <a href="/organization/{{organization.slug}}/feedback/{{feedback.id}}" class="feedback">
-                  <span class="text">{{feedback.description}}</span>
+                  <span class="text">{{feedback.title}}</span>
                   <span class="author"><i>Feedback by: </i>{{feedback.user.name}}</span>
               </a>              
             </li>
@@ -52,7 +52,7 @@
             @each(feedback in closed)
             <li class="card">
               <a href="/organization/{{organization.slug}}/feedback/{{feedback.id}}" class="feedback">
-                  <span class="text">{{feedback.description}}</span>
+                  <span class="text">{{feedback.title}}</span>
                   <span class="author"><i>Feedback by: </i>{{feedback.user.name}}</span>
               </a>              
             </li>

@@ -1,5 +1,16 @@
 @layout('layouts.index')
 
 @section('content')
-Hello world
+<div class="feedback-detail-container container">
+    <ul class="list-group">
+        <li class="list-group-item">{{ticket.title}}</li>
+        @each(reply in ticket.messages)
+            <li class="list-group-item reply">
+                <span>{{reply.body}}</span>
+                <span class="author">{{reply.user.name}}</span>
+            </li>
+        @endeach
+    </ul>
+</div>
+
 @endsection
