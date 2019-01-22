@@ -38,3 +38,14 @@ Route.group(() => {
   Route.get('/', 'Organization/FindOrganizationController.index')
   Route.post('/', 'Organization/FindOrganizationController.find')
 }).prefix('organization')
+
+Route.group(() => {
+  Route.get(
+    '/user/:userId',
+    'Ticket/TicketController.getUserTickets'
+  ).middleware('auth')
+  Route.get(
+    '/organization/:organizationId',
+    'Ticket/Ticketcontroller.getOrganizationTickets'
+  ).middleware('auth')
+}).prefix('api/tickets')

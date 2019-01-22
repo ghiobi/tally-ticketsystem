@@ -12,7 +12,6 @@ before(async () => {
   ticket = await TicketFactory.create({
     user_id: user.id,
     assigned_to: null,
-    description: 'test',
     organization_id: 0
   })
 })
