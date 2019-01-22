@@ -1,4 +1,9 @@
 @import '~bootstrap/scss/bootstrap.scss';
+@import './dashboard/admin.scss';
+
+.full-screen {
+  height: 100vh;
+}
 
 #organization-find {
   height: 100vh;

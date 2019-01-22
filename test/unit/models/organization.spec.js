@@ -5,11 +5,11 @@ const { Organization, OrganizationFactory } = models
 
 test('make sure a model can be created', async ({ assert }) => {
   await OrganizationFactory.create({
-    slug: 'tally'
+    slug: 'tally2'
   })
 
   const tally = await Organization.query()
-    .where('slug', 'tally')
+    .where('slug', 'tally2')
     .first()
 
   assert.isNotNull(tally)
