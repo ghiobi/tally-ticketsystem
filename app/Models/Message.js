@@ -15,6 +15,18 @@ class Message extends Model {
   ticket() {
     return this.belongsTo('App/Models/Ticket')
   }
+
+  static get updated_at() {
+    return super.dates.concat(['updated_at'])
+  }
+
+  static castDates(field, value) {
+    if (['updated_at'].indexOf(field) > -1) {
+      return value.format('MM/DD/YYYY h:mm A')
+    }
+
+    return super.formatDates(field, value)
+  }
 }
 
 module.exports = Message

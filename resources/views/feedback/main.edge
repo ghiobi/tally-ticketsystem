@@ -2,14 +2,21 @@
 
 @section('content')
 <div class="feedback-detail-container container">
-    <ul class="list-group">
-        <li class="list-group-item">{{ticket.title}}</li>
+    <ul class="list-group reply-container">
+        <li class="list-group-item reply-title">{{ticket.title}}</li>
         @each(reply in ticket.messages)
             <li class="list-group-item reply">
                 <span>{{reply.body}}</span>
-                <span class="author">{{reply.user.name}}</span>
+                <span class="author">
+                    <span>{{reply.updated_at}}</span>
+                    <i class="name">{{reply.user.name}}</i>
+                </span>
             </li>
         @endeach
+        <div class="form-group">
+            <label for="reply">Reply</label>
+            <input type="text" class="form-control" id="reply" placeholder="Leave a reply ...">
+        </div>
     </ul>
 </div>
 
