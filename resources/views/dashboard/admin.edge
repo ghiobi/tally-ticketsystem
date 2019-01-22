@@ -2,6 +2,7 @@
 
 @section('content')
   @set('title', 'Admin Dashboard')
+  @set('bodyCSS', 'full-screen')
   <div id="admin-dashboard">
     <div class="feedback-table-header">
       <span>
@@ -19,7 +20,7 @@
             @each(feedback in open)
             <li class="card feedback">
                 <span class="text">{{feedback.description}}</span>
-                <span class="author"><i>Feedback by: </i>{{feedback.author.name}}</span>
+                <span class="author"><i>Feedback by: </i>{{feedback.user.name}}</span>
             </li>
             @endeach
         </ul>
@@ -33,7 +34,7 @@
             @each(feedback in inprogress)
             <li class="card feedback">
               <span class="text">{{feedback.description}}</span>
-              <span class="author"><i>Feedback by: </i>{{feedback.author.name}}</span>
+              <span class="author"><i>Feedback by: </i>{{feedback.user.name}}</span>
             </li>
             @endeach
         </ul>
@@ -47,7 +48,7 @@
             @each(feedback in closed)
             <li class="card feedback">
                 <span class="text">{{feedback.description}}</span>
-                <span class="author"><i>Feedback by: </i>{{feedback.author.name}}</span>  
+                <span class="author"><i>Feedback by: </i>{{feedback.user.name}}</span>  
             </li>
             @endeach
         </ul>

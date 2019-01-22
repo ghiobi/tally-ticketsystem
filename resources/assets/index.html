@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="{{  bodyCSS ? bodyCSS : '' }}">
   <head>
     <meta charset="utf-8" />
     <meta
@@ -10,7 +10,7 @@
     <title>{{ title ? title + ' - ' : '' }}Tally Ticketing</title>
     $css
   </head>
-  <body>
+  <body class="{{  bodyCSS ? bodyCSS : '' }}">
     @!section('content')
     <!-- prettier-ignore -->
     $bundles
