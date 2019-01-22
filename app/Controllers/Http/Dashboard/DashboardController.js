@@ -1,23 +1,26 @@
 'use strict'
+const Ticket = use('App/Models/Ticket')
 
 class DashboardController {
   async index({ view, auth }) {
+    // TODO: Clean this part up once API is available
+    const tickets = await Ticket.all()
     const data = {
-      open: [
-        { text: 'Tally has really sped things up', author: 'Eric Xiao' },
-        { text: 'Lorem ipsum yeah?', author: 'Laurendy Lam' }
-      ],
-      inprogress: [
-        { text: 'Hey can we get this feature', author: 'Brian Vo' },
-        { text: 'Tally is the best', author: 'Nathan Chao' },
-        { text: 'Wow, this is really useful', author: 'Kevin Zhang' },
-        {
-          text: 'Can this be integrated with slack bots?',
-          author: 'Michel Chatmajian'
-        }
-      ],
-      closed: [{ text: 'Thanks Tally!', author: 'Justin Leger' }]
+      open: [],
+      inprogress: [],
+      closed: []
     }
+    for (const ticket of tickets.rows) {
+      ticket.author = await ticket.user().fetch()
+      if (ticket.status == 'submitted') {
+        data['open'].push(ticket)
+      } else if (ticket.status == 'replied') {
+        data['inprogress'].push(ticket)
+      } else if (ticket.status == 'closed') {
+        data['closed'].push(ticket)
+      }
+    }
+
     return Promise.all([
       auth.user.hasRole('admin'),
       auth.user.hasRole('owner')

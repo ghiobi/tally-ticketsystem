@@ -11,7 +11,9 @@ before(async () => {
 
   ticket = await TicketFactory.create({
     user_id: user.id,
-    assigned_to: null
+    assigned_to: null,
+    description: 'test',
+    organization_id: 0
   })
 })
 
@@ -34,10 +36,10 @@ test('makes sure the relations return the correct models', async ({
   })
 
   const writer = await message.user().fetch()
-  assert.exists(writer)
+  assert.isNotNull(writer)
   assert.deepEqual(writer, user)
 
   const fetchedTicket = await message.ticket().fetch()
-  assert.exists(fetchedTicket)
-  assert.deepEqual(fetchedTicket, ticket)
+  assert.isNotNull(fetchedTicket)
+  assert.deepEqual(fetchedTicket['$attributes'], ticket['$attributes'])
 })
