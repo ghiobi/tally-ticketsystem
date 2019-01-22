@@ -18,9 +18,11 @@
         </div>
         <ul>
             @each(feedback in open)
-            <li class="card feedback">
-                <span class="text">{{feedback.description}}</span>
-                <span class="author"><i>Feedback by: </i>{{feedback.user.name}}</span>
+            <li class="card">
+              <a href="/organization/{{organization.slug}}/feedback/{{feedback.id}}" class="feedback">
+                  <span class="text">{{feedback.description}}</span>
+                  <span class="author"><i>Feedback by: </i>{{feedback.user.name}}</span>
+              </a>              
             </li>
             @endeach
         </ul>
@@ -32,9 +34,11 @@
             </div>
         <ul>
             @each(feedback in inprogress)
-            <li class="card feedback">
-              <span class="text">{{feedback.description}}</span>
-              <span class="author"><i>Feedback by: </i>{{feedback.user.name}}</span>
+            <li class="card">
+              <a href="/organization/{{organization.slug}}/feedback/{{feedback.id}}" class="feedback">
+                  <span class="text">{{feedback.description}}</span>
+                  <span class="author"><i>Feedback by: </i>{{feedback.user.name}}</span>
+              </a>              
             </li>
             @endeach
         </ul>
@@ -46,9 +50,11 @@
             </div>
         <ul>
             @each(feedback in closed)
-            <li class="card feedback">
-                <span class="text">{{feedback.description}}</span>
-                <span class="author"><i>Feedback by: </i>{{feedback.user.name}}</span>  
+            <li class="card">
+              <a href="/organization/{{organization.slug}}/feedback/{{feedback.id}}" class="feedback">
+                  <span class="text">{{feedback.description}}</span>
+                  <span class="author"><i>Feedback by: </i>{{feedback.user.name}}</span>
+              </a>              
             </li>
             @endeach
         </ul>

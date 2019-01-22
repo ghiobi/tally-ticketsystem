@@ -31,16 +31,28 @@
       ul {
         list-style: none;
         padding-left: 0;
-        .feedback {
+        .card {
           margin-bottom: 5px;
+        }
+        a {
+          text-decoration: none;
+          color: inherit;
+        }
+        a:hover {
+          color: blue;
+        }
+        .feedback {
           min-height: 50px;
           padding: 4px;
+          cursor: pointer;
+          display: flex;
+          flex-direction: column;
           .text {
             margin-bottom: 5px;
             font-size: 15px;
           }
           .author {
-            text-align: right;
+            align-self: flex-end;
             font-size: 12px;
           }
         }
