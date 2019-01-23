@@ -1,6 +1,6 @@
 'use strict'
 const sinon = require('sinon')
-const Factory = use('Factory')
+const { UserFactory, TicketFactory, OrganizationFactory } = models
 
 const { test, before, beforeEach } = use('Test/Suite')(
   'Feedback belongs to user'
@@ -22,33 +22,38 @@ let ticket3 = null
 
 before(async () => {
   next = sinon.fake()
-  organization = await Factory.model('App/Models/Organization').create()
-  organization2 = await Factory.model('App/Models/Organization').create()
   /**
     Stub data
     */
-  user = await Factory.model('App/Models/User').create()
+  organization = await OrganizationFactory.create()
+  organization2 = await OrganizationFactory.create()
+
+  // Admin/Owner in organization 1
+  user = await UserFactory.create()
   await user.setRole('admin')
   await user.setRole('owner')
   await organization.users().save(user)
-  user2 = await Factory.model('App/Models/User').create()
+  // User in organization 1
+  user2 = await UserFactory.create()
   await user2.setRole('user')
   await organization.users().save(user2)
-  user3 = await Factory.model('App/Models/User').create()
+
+  // User in organization 2
+  user3 = await UserFactory.create()
   await user3.setRole('user')
   await organization2.users().save(user3)
 
-  ticket1 = await Factory.model('App/Models/Ticket').make()
+  //ticket  by user 1, in organization 1
+  ticket1 = await TicketFactory.make()
   await ticket1.user().associate(user)
-  await ticket1.organization().associate(organization)
 
-  ticket2 = await Factory.model('App/Models/Ticket').make()
+  //ticket  by user 2, in organization 1
+  ticket2 = await TicketFactory.make()
   await ticket2.user().associate(user2)
-  await ticket2.organization().associate(organization)
 
-  ticket3 = await Factory.model('App/Models/Ticket').make()
+  //ticket  by user 3, in organization 2
+  ticket3 = await TicketFactory.make()
   await ticket3.user().associate(user3)
-  await ticket3.organization().associate(organization)
 
   handle = {
     response: {
