@@ -30,6 +30,10 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/', 'Dashboard/DashboardController.index')
+  Route.get(
+    '/feedback/:feedback_id',
+    'Feedback/FeedbackController.index'
+  ).middleware(['feedback.belongs.to.user'])
 })
   .prefix('organization/:organization')
   .middleware(['set.organization', 'auth'])
@@ -40,11 +44,17 @@ Route.group(() => {
 }).prefix('organization')
 
 Route.group(() => {
-  Route.get('/user/:userId', 'Ticket/TicketController.getUserTickets')
+  Route.get(
+    '/user/:userId',
+    'Ticket/TicketController.getUserTickets'
+  ).middleware('getUserTicketsAccess')
   Route.get(
     '/organization/:organizationId',
     'Ticket/Ticketcontroller.getOrganizationTickets'
-  )
+  ).middleware('getOrganizationTicketsAccess')
 })
   .prefix('api/tickets')
   .middleware('auth')
+
+Route.on('/403').render('error.403')
+Route.on('/*').render('error.404')

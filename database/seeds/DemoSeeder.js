@@ -19,28 +19,41 @@ class DemoSeeder {
       name: 'Tally Inc.',
       slug: 'tally'
     })
-
+    /**
+      Seed the roles
+     */
     await Role.createMany([
       { key: 'owner', display_name: 'Organization Owner' },
       { key: 'admin', display_name: 'Organization Administrator' },
       { key: 'user', display_name: 'User' }
     ])
-
+    /**
+      Seed an admin/owner
+     */
     const user = await Factory.model('App/Models/User').create({
       email: 'owner@tally.com',
       name: 'Owner',
       password: 'password'
     })
-
     await organization.users().save(user)
     await user.setRole('owner')
     await user.setRole('admin')
 
-    const user2 = await Factory.model('App/Models/User').create()
+    /**
+      Seed more users
+     */
+    const user2 = await Factory.model('App/Models/User').create({
+      email: 'user@tally.com',
+      name: 'user',
+      password: 'nimda'
+    })
     const user3 = await Factory.model('App/Models/User').create()
     await user2.setRole('user')
     await user3.setRole('user')
 
+    /**
+      Seed some tickets
+     */
     const ticket = await Factory.model('App/Models/Ticket').make()
     await ticket.user().associate(user2)
 
@@ -76,6 +89,29 @@ class DemoSeeder {
       status: 'closed'
     })
     await ticket8.user().associate(user)
+
+    /**
+      Seed some messages to ticket
+     */
+    await Factory.model('App/Models/Message').create({
+      user_id: user.id,
+      ticket_id: ticket.id
+    })
+
+    await Factory.model('App/Models/Message').create({
+      user_id: user2.id,
+      ticket_id: ticket.id
+    })
+
+    await Factory.model('App/Models/Message').create({
+      user_id: user3.id,
+      ticket_id: ticket.id
+    })
+
+    await Factory.model('App/Models/Message').create({
+      user_id: user.id,
+      ticket_id: ticket.id
+    })
   }
 }
 
