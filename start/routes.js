@@ -30,11 +30,6 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get('/', 'Dashboard/DashboardController.index')
-})
-  .prefix('organization/:organization')
-  .middleware(['set.organization', 'auth'])
-
-Route.group(() => {
   Route.get('/feedback/:feedback_id', 'Feedback/FeedbackController.index')
 })
   .prefix('organization/:organization')

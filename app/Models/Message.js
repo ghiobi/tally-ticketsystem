@@ -19,9 +19,11 @@ class Message extends Model {
   static get updated_at() {
     return super.dates.concat(['updated_at'])
   }
-
+  /**
+    castDates is called when doing message.toJSON()
+   */
   static castDates(field, value) {
-    if (['updated_at'].indexOf(field) > -1) {
+    if ('updated_at' === field) {
       return value.format('MM/DD/YYYY h:mm A')
     }
 

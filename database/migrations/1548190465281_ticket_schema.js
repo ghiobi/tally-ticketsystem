@@ -14,6 +14,10 @@ class TicketSchema extends Schema {
   down() {
     this.table('tickets', (table) => {
       // reverse alternations
+      table
+        .string('description', 255)
+        .defaultTo('')
+        .notNullable()
     })
   }
 }
