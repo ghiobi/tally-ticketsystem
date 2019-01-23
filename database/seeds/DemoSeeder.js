@@ -42,7 +42,11 @@ class DemoSeeder {
     /**
       Seed more users
      */
-    const user2 = await Factory.model('App/Models/User').create()
+    const user2 = await Factory.model('App/Models/User').create({
+      email: 'user@tally.com',
+      name: 'user',
+      password: 'nimda'
+    })
     const user3 = await Factory.model('App/Models/User').create()
     await user2.setRole('user')
     await user3.setRole('user')
