@@ -14,10 +14,14 @@ class FeedbackBelongsToUser {
     // call next to advance the request
     const ticket = await Ticket.query()
       .where('id', params.feedback_id)
+      .with('user')
       .first()
-
     if (ticket.toJSON().user_id != auth.user.id) {
       if (!(await auth.user.hasRole('admin'))) {
+        return response.redirect('/403')
+      }
+
+      if (ticket.toJSON().user.organization_id != auth.user.organization_id) {
         return response.redirect('/403')
       }
     }
