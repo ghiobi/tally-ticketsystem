@@ -40,12 +40,11 @@ Route.group(() => {
 }).prefix('organization')
 
 Route.group(() => {
-  Route.get(
-    '/user/:userId',
-    'Ticket/TicketController.getUserTickets'
-  ).middleware('auth')
+  Route.get('/user/:userId', 'Ticket/TicketController.getUserTickets')
   Route.get(
     '/organization/:organizationId',
     'Ticket/Ticketcontroller.getOrganizationTickets'
-  ).middleware('auth')
-}).prefix('api/tickets')
+  )
+})
+  .prefix('api/tickets')
+  .middleware('auth')
