@@ -43,5 +43,18 @@ Route.group(() => {
   Route.post('/', 'Organization/FindOrganizationController.find')
 }).prefix('organization')
 
+Route.group(() => {
+  Route.get(
+    '/user/:userId',
+    'Ticket/TicketController.getUserTickets'
+  ).middleware('getUserTicketsAccess')
+  Route.get(
+    '/organization/:organizationId',
+    'Ticket/Ticketcontroller.getOrganizationTickets'
+  ).middleware('getOrganizationTicketsAccess')
+})
+  .prefix('api/tickets')
+  .middleware('auth')
+
 Route.on('/403').render('error.403')
 Route.on('/*').render('error.404')
