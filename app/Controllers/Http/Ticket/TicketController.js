@@ -1,19 +1,14 @@
 'use strict'
 
-const User = use('App/Models/User')
-const Organization = use('App/Models/Organization')
+const TicketService = use('App/Services/TicketsService')
 
 class TicketController {
   async getOrganizationTickets({ auth, response }) {
-    const organization = await Organization.find(auth.user.organization_id)
-    const tickets = await organization.tickets().fetch()
-    return response.json(tickets)
+    return response.json(TicketService.getOrganizationTickets(auth.user))
   }
 
   async getUserTickets({ response, params }) {
-    const user = await User.find(params.userId)
-    const tickets = await user.tickets().fetch()
-    return response.json(tickets)
+    return response.json(TicketService.getUserTickets(params.id))
   }
 }
 
