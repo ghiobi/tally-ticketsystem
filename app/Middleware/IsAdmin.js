@@ -3,7 +3,7 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-class GetOrganizationTicketsAccess {
+class IsAdmin {
   /**
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -18,4 +18,4 @@ class GetOrganizationTicketsAccess {
   }
 }
 
-module.exports = GetOrganizationTicketsAccess
+module.exports = IsAdmin

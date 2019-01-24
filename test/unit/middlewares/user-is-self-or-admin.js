@@ -7,7 +7,7 @@ const { test, before, beforeEach } = use('Test/Suite')(
 const { UserFactory } = models
 const Factory = use('Factory')
 
-const GetUserTicketsAccess = use('App/Middleware/GetUserTicketsAccess')
+const IsSelfOrAdmin = use('App/Middleware/IsSelfOrAdmin')
 
 let user1 = null
 let user2 = null
@@ -42,7 +42,7 @@ before(async () => {
     }
   }
 
-  middleware = new GetUserTicketsAccess()
+  middleware = new IsSelfOrAdmin()
 })
 
 beforeEach(async () => {

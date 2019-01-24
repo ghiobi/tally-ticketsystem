@@ -45,15 +45,15 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get(
-    '/user/:userId',
+    '/tickets/user/:userId',
     'Ticket/TicketController.getUserTickets'
-  ).middleware('getUserTicketsAccess')
+  ).middleware('IsSelfOrAdmin')
   Route.get(
-    '/organization/:organizationId',
+    '/tickets/organization/:organizationId',
     'Ticket/Ticketcontroller.getOrganizationTickets'
-  ).middleware('getOrganizationTicketsAccess')
+  ).middleware('IsAdmin')
 })
-  .prefix('api/tickets')
+  .prefix('api')
   .middleware('auth')
 
 Route.on('/403').render('error.403')

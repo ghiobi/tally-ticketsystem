@@ -1,7 +1,7 @@
 'use strict'
 
 const { test, trait, before } = use('Test/Suite')('Ticket Controller')
-const { OrganizationFactory, UserFactory } = models
+const { OrganizationFactory, UserFactory, TicketFactory } = models
 const Factory = use('Factory')
 
 trait('Test/ApiClient')
@@ -32,10 +32,10 @@ before(async () => {
 
   await userAdmin.setRole('admin')
 
-  ticket1 = await Factory.model('App/Models/Ticket').make()
-  ticket2 = await Factory.model('App/Models/Ticket').make()
-  ticket3 = await Factory.model('App/Models/Ticket').make()
-  ticket4 = await Factory.model('App/Models/Ticket').make()
+  ticket1 = await TicketFactory.make()
+  ticket2 = await TicketFactory.make()
+  ticket3 = await TicketFactory.make()
+  ticket4 = await TicketFactory.make()
 
   await ticket1.user().associate(user1)
   await ticket2.user().associate(user1)

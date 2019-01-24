@@ -1,14 +1,10 @@
 'use strict'
 const sinon = require('sinon')
 
-const { test, before, beforeEach } = use('Test/Suite')(
-  'Get Organization Tickets Access'
-)
+const { test, before, beforeEach } = use('Test/Suite')('User Is Admin')
 const { OrganizationFactory, UserFactory } = models
 
-const GetOrganizationTicketsAccess = use(
-  'App/Middleware/GetOrganizationTicketsAccess'
-)
+const IsAdmin = use('App/Middleware/IsAdmin')
 
 let organization = null
 let user = null
@@ -20,7 +16,7 @@ let middleware = null
 
 before(async () => {
   organization = await OrganizationFactory.create({
-    slug: 'middleware-test'
+    slug: 'isAdmin-test'
   })
   user = await UserFactory.make()
   admin = await UserFactory.make()
@@ -41,7 +37,7 @@ before(async () => {
     }
   }
 
-  middleware = new GetOrganizationTicketsAccess()
+  middleware = new IsAdmin()
 })
 
 beforeEach(async () => {
