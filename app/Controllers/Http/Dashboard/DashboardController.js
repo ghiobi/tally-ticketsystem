@@ -1,31 +1,31 @@
 'use strict'
-const Ticket = use('App/Models/Ticket')
+const TicketService = use('App/Services/TicketsService')
 
 class DashboardController {
   async index({ view, auth }) {
-    // TODO: Clean this part up once API is available
-    const tickets = await Ticket.query()
-      .with('user')
-      .fetch()
-    const data = {
-      open: [],
-      inprogress: [],
-      closed: []
-    }
-    for (const ticket of tickets.toJSON()) {
-      if (ticket.status == 'submitted') {
-        data['open'].push(ticket)
-      } else if (ticket.status == 'replied') {
-        data['inprogress'].push(ticket)
-      } else if (ticket.status == 'closed') {
-        data['closed'].push(ticket)
-      }
-    }
-
     if (await auth.user.hasRole('admin')) {
+      const tickets = await TicketService.getOrganizationTickets(auth.user)
+
+      const data = {
+        open: [],
+        inprogress: [],
+        closed: []
+      }
+
+      for (const ticket of tickets.toJSON()) {
+        if (ticket.status == 'submitted') {
+          data['open'].push(ticket)
+        } else if (ticket.status == 'replied') {
+          data['inprogress'].push(ticket)
+        } else if (ticket.status == 'closed') {
+          data['closed'].push(ticket)
+        }
+      }
       return view.render('dashboard.admin', data)
     }
-    return view.render('dashboard.main')
+    const tickets = await TicketService.getUserTickets(auth.user.id)
+    const data = { tickets: tickets }
+    return view.render('dashboard.main', data)
   }
 }
 
