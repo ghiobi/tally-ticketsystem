@@ -1,13 +1,12 @@
-const { User, Organization } = models
+const User = use('App/Models/User')
 
 class TicketsService {
   async getOrganizationTickets(user) {
-    const organization = await Organization.find(user.organization_id)
-    const tickets = await organization
+    const organization = await user.organization().fetch()
+    return await organization
       .tickets()
       .with('user')
       .fetch()
-    return tickets
   }
 
   async getUserTickets(userId) {
