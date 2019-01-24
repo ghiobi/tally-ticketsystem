@@ -1,7 +1,7 @@
 'use strict'
 
 const { test, before } = use('Test/Suite')('User Model')
-const { User, Role, UserFactory, OrganizationFactory } = models
+const { User, Role, UserFactory, OrganizationFactory, TicketFactory } = models
 
 let organization = null
 
@@ -84,4 +84,18 @@ test('make sure a regular user does not have a role', async ({ assert }) => {
 
   const isOwner = await user.hasRole('owner')
   assert.isFalse(isOwner)
+})
+
+test('make sure a user can get their tickets', async ({ assert }) => {
+  const user = await UserFactory.create()
+
+  const ticket = await TicketFactory.create({
+    user_id: user.id,
+    assigned_to: null
+  })
+
+  const tickets = await user.tickets().fetch()
+
+  assert.equal(tickets.size(), 1)
+  assert.deepEqual(tickets.first(), ticket)
 })

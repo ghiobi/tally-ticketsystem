@@ -17,9 +17,7 @@ let ticket3 = null
 let ticket4 = null
 
 before(async () => {
-  organization = await OrganizationFactory.create({
-    slug: 'test'
-  })
+  organization = await OrganizationFactory.create()
 
   user1 = await UserFactory.make()
   user2 = await UserFactory.make()
@@ -44,9 +42,10 @@ before(async () => {
 
 test('check that a users can retrieve their tickets', async ({ client }) => {
   const response = await client
-    .get(`/api/tickets/user/${user2.id}`)
+    .get(`/organization/${organization.slug}/api/tickets/user/${user2.id}`)
     .loginVia(user2)
     .end()
+
   response.assertStatus(200)
   response.assertJSONSubset([
     {
@@ -64,7 +63,7 @@ test('check if all tickets from an organization can be retrieved', async ({
   client
 }) => {
   const response = await client
-    .get(`/api/tickets/organization/${userAdmin.organization_id}`)
+    .get(`/organization/${organization.slug}/api/tickets`)
     .loginVia(userAdmin)
     .end()
 
@@ -89,7 +88,7 @@ test('check that a user cannot see all tickets of an organization', async ({
   client
 }) => {
   const response = await client
-    .get(`/api/tickets/organization/${user2.organization_id}`)
+    .get(`/organization/${organization.slug}/api/tickets`)
     .loginVia(user2)
     .end()
 
@@ -100,7 +99,7 @@ test('check that a user cannot see tickets opened by other users', async ({
   client
 }) => {
   const response = await client
-    .get(`/api/tickets/user/${user2.id}`)
+    .get(`organization/${organization.slug}/api/tickets/user/${user2.id}`)
     .loginVia(user1)
     .end()
 
@@ -111,7 +110,7 @@ test('check that an admin can see tickets belonging to a user', async ({
   client
 }) => {
   const response = await client
-    .get(`/api/tickets/user/${user2.id}`)
+    .get(`organization/${organization.slug}/api/tickets/user/${user2.id}`)
     .loginVia(userAdmin)
     .end()
 

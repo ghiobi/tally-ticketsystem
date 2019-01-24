@@ -15,6 +15,19 @@ class Organization extends Model {
   tickets() {
     return this.manyThrough('App/Models/User', 'tickets')
   }
+
+  /**
+   * Finds a user within an organization.
+   *
+   * @param organization
+   * @param email
+   * @returns {*}
+   */
+  findUserByEmail(email) {
+    return this.users()
+      .where('email', email)
+      .first()
+  }
 }
 
 module.exports = Organization
