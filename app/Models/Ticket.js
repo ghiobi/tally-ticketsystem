@@ -16,10 +16,6 @@ class Ticket extends Model {
     return this.belongsTo('App/Models/User', 'assigned_to', 'id')
   }
 
-  organization() {
-    return this.belongsTo('App/Models/Organization')
-  }
-
   messages() {
     return this.hasMany('App/Models/Message')
   }

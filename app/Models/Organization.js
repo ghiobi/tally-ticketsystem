@@ -11,6 +11,10 @@ class Organization extends Model {
   users() {
     return this.hasMany('App/Models/User')
   }
+
+  tickets() {
+    return this.manyThrough('App/Models/User', 'tickets')
+  }
 }
 
 module.exports = Organization
