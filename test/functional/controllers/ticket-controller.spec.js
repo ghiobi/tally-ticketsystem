@@ -2,7 +2,6 @@
 
 const { test, trait, before } = use('Test/Suite')('Ticket Controller')
 const { OrganizationFactory, UserFactory, TicketFactory } = models
-const Factory = use('Factory')
 
 trait('Test/ApiClient')
 trait('Auth/Client')
@@ -86,7 +85,7 @@ test('check if all tickets from an organization can be retrieved', async ({
   ])
 })
 
-test("check that a user cannot see all the organization's tickets", async ({
+test('check that a user cannot see all tickets of an organization', async ({
   client
 }) => {
   const response = await client
@@ -108,7 +107,9 @@ test('check that a user cannot see tickets opened by other users', async ({
   response.assertRedirect('/403')
 })
 
-test("check that an admin can see a user's tickets", async ({ client }) => {
+test('check that an admin can see tickets belonging to a user', async ({
+  client
+}) => {
   const response = await client
     .get(`/api/tickets/user/${user2.id}`)
     .loginVia(userAdmin)

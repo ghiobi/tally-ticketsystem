@@ -65,7 +65,7 @@ test('check if the middleware prevents a users to see tickets opened by others',
   assert.isTrue(handle.response.redirect.called)
 })
 
-test("check if the middleware allows an admin to see a user's tickets", async ({
+test('check if the middleware allows an admin to see tickets belonging to a user', async ({
   assert
 }) => {
   await user2.setRole('admin')
