@@ -1,6 +1,5 @@
 'use strict'
 
-const UserOrganizationService = use('App/Services/UserOrganizationService')
 const Hash = use('Hash')
 
 const { validateAll } = use('Validator')
@@ -37,8 +36,7 @@ class LoginController {
     /**
      * Validating the existance of the user.
      */
-    const user = await UserOrganizationService.findByEmail(
-      request.organization,
+    const user = await request.organization.findUserByEmail(
       request.input('email')
     )
 
