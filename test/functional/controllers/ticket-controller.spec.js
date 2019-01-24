@@ -97,7 +97,7 @@ test("check that a user cannot see all the organization's tickets", async ({
   response.assertRedirect('/403')
 })
 
-test('check that a user cannnot see tickets opened by other users', async ({
+test('check that a user cannot see tickets opened by other users', async ({
   client
 }) => {
   const response = await client
