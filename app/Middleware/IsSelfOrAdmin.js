@@ -10,7 +10,10 @@ class IsSelfOrAdmin {
    * @param {Function} next
    */
   async handle({ response, auth, params }, next) {
-    if (params.userId != auth.user.id && !(await auth.user.hasRole('admin'))) {
+    if (
+      +params.userId !== auth.user.id &&
+      !(await auth.user.hasRole('admin'))
+    ) {
       return response.redirect('/403')
     }
 

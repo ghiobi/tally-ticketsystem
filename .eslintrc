@@ -14,7 +14,8 @@
     "comma-dangle": ["error", "never"],
     "global-require": "off",
     "arrow-parens": ["error", "always"],
-    "quotes": ["error", "single"]
+    "quotes": ["error", "single"],
+    "eqeqeq": ["error", "always"]
   },
   "globals": {
     "use": true,
