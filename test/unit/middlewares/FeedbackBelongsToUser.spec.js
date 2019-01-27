@@ -33,14 +33,13 @@ before(async () => {
   await user.setRole('admin')
   await user.setRole('owner')
   await organization.users().save(user)
+
   // User in organization 1
   user2 = await UserFactory.create()
-  await user2.setRole('user')
   await organization.users().save(user2)
 
   // User in organization 2
   user3 = await UserFactory.create()
-  await user3.setRole('user')
   await organization2.users().save(user3)
 
   //ticket  by user 1, in organization 1

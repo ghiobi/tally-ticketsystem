@@ -9,7 +9,6 @@ test('make sure the roles models are seeded', async ({ assert }) => {
 
   assert.deepEqual(roles.toJSON(), [
     { id: 1, key: 'owner', display_name: 'Organization Owner' },
-    { id: 2, key: 'admin', display_name: 'Organization Administrator' },
-    { id: 3, key: 'user', display_name: 'User' }
+    { id: 2, key: 'admin', display_name: 'Organization Administrator' }
   ])
 })
