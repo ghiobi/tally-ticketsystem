@@ -29,7 +29,9 @@ class AppServiceProvider extends ServiceProvider {
       ).then((files) =>
         files.map((file) => file.substring(0, file.lastIndexOf('.js')))
       )
-    } catch (e) {}
+    } catch (e) {
+      // Continue regardless of error
+    }
 
     services.forEach((service) => {
       this.app.singleton(`App/Services/${service}`, () => {
