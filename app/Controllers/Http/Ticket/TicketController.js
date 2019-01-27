@@ -1,10 +1,10 @@
 'use strict'
 
+const EmailService = use('App/Services/EmailService')
+const ForbiddenException = use('App/Exceptions/ForbiddenException')
+const User = use('App/Models/User')
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
-const EmailService = use('App/Services/EmailService')
-
-const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
 class TicketController {
   async index({ view, params }) {
@@ -44,6 +44,37 @@ class TicketController {
     }
 
     return response.redirect('back')
+  }
+
+  async createTicket({ request, response }) {
+    //user: external_id,
+    //ticket: title,                set status: submitted
+    //message:
+
+    const { user_id, title, body } = request.post()
+
+    const user = await User.query()
+      .where('external_id', user_id)
+      .first()
+
+    if (!user) {
+      //TODO: complete this once Laurendy implements slack user service
+    }
+
+    const ticket = await Ticket.create({
+      user_id: user.id,
+      title: title
+    })
+
+    Message.create({
+      user_id: user.id,
+      ticket_id: ticket.id,
+      body: body
+    })
+
+    return response.status(200).send({
+      ok: true
+    })
   }
 }
 

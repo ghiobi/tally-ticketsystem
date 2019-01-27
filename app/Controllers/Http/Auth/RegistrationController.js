@@ -39,9 +39,13 @@ class RegistrationController {
      * Persist data models.
      */
     const { user: userData, organization: organizationData } = request.post()
+
+    organizationData.external_id = 'FOR_TESTING_ONLY_TO_BE_REMOVED'
     const organization = await Organization.create(organizationData)
 
     const user = new User(userData)
+
+    userData.external_id = 'FOR_TESTING_ONLY_TO_BE_REMOVED'
     user.fill(userData)
 
     await organization.users().save(user)

@@ -19,7 +19,7 @@ class MessageSchema extends Schema {
         .references('id')
         .inTable('tickets')
         .notNullable()
-      table.string('body', 'text').notNullable()
+      table.text('body', 'text').notNullable()
       table.timestamps()
     })
   }

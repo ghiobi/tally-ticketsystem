@@ -48,6 +48,8 @@ Route.group(() => {
     '/api/tickets',
     'Api/ApiTicketController.getOrganizationTickets'
   ).middleware('IsAdmin')
+
+  Route.post('/api/tickets', 'Ticket/TicketController.createTicket')
 })
   .prefix('organization/:organization')
   .middleware(['organization', 'auth', 'within'])
