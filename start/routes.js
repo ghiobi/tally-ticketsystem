@@ -16,18 +16,19 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.on('/').render('home')
-
-Route.get('/join', 'Auth/RegistrationController.index')
-Route.post('/join', 'Auth/RegistrationController.register')
-
+/**
+ * Public Organization Routes
+ */
 Route.group(() => {
   Route.get('/login', 'Auth/LoginController.index')
   Route.post('/login', 'Auth/LoginController.login')
 })
   .prefix('organization/:organization')
-  .middleware(['set.organization'])
+  .middleware(['set.organization', 'guest'])
 
+/**
+ * Authenticated Organization Routes
+ */
 Route.group(() => {
   Route.get('/', 'Dashboard/DashboardController.index')
   Route.get(
@@ -47,10 +48,17 @@ Route.group(() => {
   .prefix('organization/:organization')
   .middleware(['set.organization', 'auth'])
 
+/**
+ * Public Routes
+ */
 Route.group(() => {
-  Route.get('/', 'Organization/FindOrganizationController.index')
-  Route.post('/', 'Organization/FindOrganizationController.find')
-}).prefix('organization')
+  Route.on('/').render('home')
 
-Route.on('/403').render('error.403')
-Route.on('/*').render('error.404')
+  Route.get('/join', 'Auth/RegistrationController.index')
+  Route.post('/join', 'Auth/RegistrationController.register')
+
+  Route.get('/organization', 'Organization/FindOrganizationController.index')
+  Route.post('/organization', 'Organization/FindOrganizationController.find')
+}).middleware(['guest'])
+
+Route.on('/403').render('403')

@@ -18,13 +18,22 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @param  {Object} options.request
    * @param  {Object} options.response
    *
-   * @return {void}
+   * @return {response}
    */
-  async handle(error, { request, response }) {
-    if (error.name === 'InvalidSessionException') {
-      return response.redirect(
-        `/organization/${request.organization.slug}/login`
-      )
+  async handle(error, { request, response, view, auth }) {
+    switch (error.name) {
+      case 'InvalidSessionException':
+        return response.redirect(
+          `/organization/${request.organization.slug}/login`
+        )
+      case 'HttpException':
+        if (error.status === 404) {
+          return response.send(view.render('404'))
+        }
+        if (error.message.indexOf('E_GUEST_ONLY') > -1) {
+          const organization = await auth.user.organization().fetch()
+          return response.redirect(`/organization/${organization.slug}`)
+        }
     }
 
     response.status(error.status).send(error.message)
