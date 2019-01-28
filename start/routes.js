@@ -52,5 +52,4 @@ Route.group(() => {
   Route.post('/', 'Organization/FindOrganizationController.find')
 }).prefix('organization')
 
-Route.on('/403').render('error.403')
-Route.on('/*').render('error.404')
+Route.on('/403').render('403')
