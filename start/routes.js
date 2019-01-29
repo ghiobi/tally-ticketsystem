@@ -41,15 +41,15 @@ Route.group(() => {
 
   Route.get(
     '/api/tickets/user/:userId',
-    'Api/ApiTicketController.getUserTickets'
+    'Ticket/Api/TicketController.getUserTickets'
   ).middleware('IsSelfOrAdmin')
 
   Route.get(
     '/api/tickets',
-    'Api/ApiTicketController.getOrganizationTickets'
+    'Ticket/Api/TicketController.getOrganizationTickets'
   ).middleware('IsAdmin')
 
-  Route.post('/api/tickets', 'Ticket/TicketController.createTicket')
+  Route.post('/api/tickets', 'Ticket/Api/TicketController.createTicket')
 })
   .prefix('organization/:organization')
   .middleware(['organization', 'auth', 'within'])

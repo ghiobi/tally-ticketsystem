@@ -47,10 +47,6 @@ class TicketController {
   }
 
   async createTicket({ request, response }) {
-    //user: external_id,
-    //ticket: title,                set status: submitted
-    //message:
-
     const { user_id, title, body } = request.post()
 
     const user = await User.query()
@@ -58,7 +54,8 @@ class TicketController {
       .first()
 
     if (!user) {
-      //TODO: complete this once Laurendy implements slack user service
+      //if user does not exist, then create him
+      //TODO: complete this once Laurendy implements slack user service to create a user account
     }
 
     const ticket = await Ticket.create({
