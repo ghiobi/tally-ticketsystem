@@ -12,6 +12,7 @@ class OrganizationSchema extends Schema {
         .string('slug', 255)
         .notNullable()
         .unique()
+      table.string('external_id').unique()
 
       table.timestamps()
     })
