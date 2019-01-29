@@ -14,4 +14,9 @@ Create Your Organization
   @!component('partials.forms.input', config = {label: 'Password', key: 'user.password', type: 'password'}, error = getErrorFor)
   <button type="submit">Join</button>
 </form>
+
+<div>
+  Or
+  @include('partials.oauth-button')
+</div>
 @endsection

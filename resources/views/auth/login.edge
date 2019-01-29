@@ -18,4 +18,9 @@ Sign In
   @!component('partials.forms.input', config = {label: 'Password', key: 'password', type: 'password'}, error = getErrorFor )
   <button class="btn btn-primary" type="submit">Sign In</button>
 </form>
+
+<div>
+  Or
+  @include('partials.oauth-button')
+</div>
 @endsection
