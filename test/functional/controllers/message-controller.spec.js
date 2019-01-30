@@ -50,13 +50,8 @@ before(async () => {
   await message3.ticket().associate(ticket)
 })
 
-test('check that a users can retrieve the messages of one of their tickets', async ({
-  client
-}) => {
-  const response = await client
-    .get(`organization/${organization.slug}/api/tickets/messages/${ticket.id}`)
-    .loginVia(user1)
-    .end()
+test('check messages of a ticket can be retrieved', async ({ client }) => {
+  const response = await client.get(`api/tickets/${ticket.id}/messages`).end()
 
   response.assertStatus(200)
   response.assertJSONSubset([
@@ -76,46 +71,4 @@ test('check that a users can retrieve the messages of one of their tickets', asy
       ticket_id: ticket.id
     }
   ])
-})
-
-test('check that an admin can retrieve the messages of a ticket', async ({
-  client
-}) => {
-  const response = await client
-    .get(`organization/${organization.slug}/api/tickets/messages/${ticket.id}`)
-    .loginVia(userAdmin)
-    .end()
-
-  response.assertStatus(200)
-  response.assertJSONSubset([
-    {
-      id: message1.id,
-      user_id: user1.id,
-      ticket_id: ticket.id
-    },
-    {
-      id: message2.id,
-      user_id: user1.id,
-      ticket_id: ticket.id
-    },
-    {
-      id: message3.id,
-      user_id: user1.id,
-      ticket_id: ticket.id
-    }
-  ])
-})
-
-test('check that a user cannot retrieve the messages of of another user', async ({
-  client
-}) => {
-  let user2 = await UserFactory.make()
-  await organization.users().save(user2)
-
-  const response = await client
-    .get(`organization/${organization.slug}/api/tickets/messages/${ticket.id}`)
-    .loginVia(user2)
-    .end()
-
-  response.assertRedirect('/403')
 })

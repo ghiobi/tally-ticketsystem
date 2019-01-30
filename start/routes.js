@@ -44,10 +44,6 @@ Route.group(() => {
     '/api/tickets',
     'Ticket/TicketController.getOrganizationTickets'
   ).middleware('IsAdmin')
-  Route.get(
-    '/api/tickets/messages/:ticketId',
-    'Ticket/MessageController.getTicketMessages'
-  )
 })
   .prefix('organization/:organization')
   .middleware(['set.organization', 'auth'])
@@ -64,5 +60,10 @@ Route.group(() => {
   Route.get('/organization', 'Organization/FindOrganizationController.index')
   Route.post('/organization', 'Organization/FindOrganizationController.find')
 }).middleware(['guest'])
+
+Route.get(
+  '/api/tickets/:ticketId/messages',
+  'Ticket/MessageController.getTicketMessages'
+)
 
 Route.on('/403').render('403')
