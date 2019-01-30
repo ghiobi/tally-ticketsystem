@@ -101,12 +101,12 @@ class DemoSeeder {
     })
 
     await Factory.model('App/Models/Message').create({
-      user_id: user3.id,
+      user_id: user.id,
       ticket_id: ticket.id
     })
 
     await Factory.model('App/Models/Message').create({
-      user_id: user.id,
+      user_id: user2.id,
       ticket_id: ticket.id
     })
   }

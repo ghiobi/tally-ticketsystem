@@ -44,6 +44,10 @@ Route.group(() => {
     '/api/tickets',
     'Ticket/TicketController.getOrganizationTickets'
   ).middleware('IsAdmin')
+  Route.get(
+    '/api/tickets/messages/:ticketId',
+    'Ticket/MessageController.getTicketMessages'
+  ).middleware('IsSelfOrAdmin')
 })
   .prefix('organization/:organization')
   .middleware(['set.organization', 'auth'])
