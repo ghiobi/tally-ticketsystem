@@ -7,6 +7,7 @@ const { test, before, beforeEach } = use('Test/Suite')(
 )
 
 const FeedbackBelongsToUser = use('App/Middleware/FeedbackBelongsToUser')
+
 let middleware = null
 let next = null
 let handle = null
@@ -35,11 +36,11 @@ before(async () => {
   await organization.users().save(user)
 
   // User in organization 1
-  user2 = await UserFactory.create()
+  user2 = await UserFactory.make()
   await organization.users().save(user2)
 
   // User in organization 2
-  user3 = await UserFactory.create()
+  user3 = await UserFactory.make()
   await organization2.users().save(user3)
 
   //ticket  by user 1, in organization 1
@@ -71,7 +72,7 @@ beforeEach(async () => {
   middleware = new FeedbackBelongsToUser()
 })
 
-test('Make sure users can only access feedbacks belonging to them', async ({
+test('make sure users can only access feedbacks belonging to them', async ({
   assert
 }) => {
   //allowed to view tickets that belong to them
@@ -84,14 +85,23 @@ test('Make sure users can only access feedbacks belonging to them', async ({
   next = sinon.fake()
   //not allowed to view tickets not belonging to them
   handle.params.feedback_id = ticket1.id
-  await middleware.handle(handle, next)
+
+  let pass = true
+  try {
+    await middleware.handle(handle, next)
+    pass = false
+  } catch (e) {
+    // continue regardless of error
+  }
+  assert.isOk(pass, 'feedback belongs to user')
+
   assert.isFalse(
     next.called,
     'next() was called when it feedback did not belong to user'
   )
 })
 
-test('Make sure admin can access all feedbacks in their organization', async ({
+test('make sure admin can access all feedbacks in their organization', async ({
   assert
 }) => {
   // allow admin/owner to access any feedback in their organization
@@ -107,7 +117,16 @@ test('Make sure admin can access all feedbacks in their organization', async ({
 
   // disallow admin/owner to access any feedback that is not in their organization
   handle.params.feedback_id = ticket3.id
-  await middleware.handle(handle, next)
+
+  let pass = true
+  try {
+    await middleware.handle(handle, next)
+    pass = false
+  } catch (e) {
+    // continue regardless of error
+  }
+  assert.isOk(pass, '')
+
   assert.isFalse(
     next.called,
     'next() was called even though ticket did not belong to admin organization'
