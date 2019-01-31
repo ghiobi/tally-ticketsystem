@@ -17,6 +17,9 @@ class UserSchema extends Schema {
         .references('id')
         .inTable('organizations')
 
+      table.string('external_id').unique()
+      table.string('external_access_token')
+
       table.timestamps()
       table.unique(['email', 'organization_id'])
     })

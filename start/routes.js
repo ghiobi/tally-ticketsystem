@@ -30,7 +30,9 @@ Route.group(() => {
  * Authenticated Organization Routes
  */
 Route.group(() => {
+  Route.get('/logout', 'Auth/LogoutController.logout')
   Route.get('/', 'Dashboard/DashboardController.index')
+
   Route.get(
     '/feedback/:feedback_id',
     'Feedback/FeedbackController.index'
@@ -59,6 +61,9 @@ Route.group(() => {
 
   Route.get('/organization', 'Organization/FindOrganizationController.index')
   Route.post('/organization', 'Organization/FindOrganizationController.find')
+
+  Route.get('/oauth', 'Auth/SlackOAuthController.redirect')
+  Route.get('/oauth/authenticate', 'Auth/SlackOAuthController.authenticate')
 }).middleware(['guest'])
 
 Route.get(

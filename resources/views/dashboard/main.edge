@@ -1,8 +1,9 @@
 @layout('layouts.index')
 
 @section('content')
-@set('title', 'Dashboard')
-@set('bodyCSS', 'full-screen')
+  @set('title', 'Dashboard')
+  @set('bodyCSS', 'full-screen')
+  @include('partials.header')
   {{ organization.name }}
   Welcome {{ auth.user.name }}, you're a regular user
 @endsection

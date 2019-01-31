@@ -73,11 +73,17 @@ task('bundle:prod', (context) => {
   fuse.run()
 })
 
+task('copy', async () => {
+  await src('**/*', { base: './resources/assets/public' })
+    .dest('./public')
+    .exec()
+})
+
 task('clean', async () => {
   await src('./public')
     .clean('public/')
     .exec()
 })
 
-task('default', ['clean', 'bundle:dev'])
-task('prod', ['clean', 'bundle:prod'])
+task('default', ['clean', 'copy', 'bundle:dev'])
+task('prod', ['clean', 'copy', 'bundle:prod'])
