@@ -26,23 +26,22 @@ class FeedbackController {
       .first()
 
     const reply = request.input('reply', '')
-
-    //check ownership
-    if (ticket.user.id !== auth.user.id) {
-      if (!(await auth.user.hasRole('admin'))) {
-        return response.redirect('403')
+    if (reply !== null) {
+      //check ownership
+      if (ticket.user.id !== auth.user.id) {
+        if (!(await auth.user.hasRole('admin'))) {
+          return response.redirect('403')
+        }
       }
+
+      Message.create({
+        user_id: auth.user.id,
+        ticket_id: ticket.id,
+        body: reply
+      })
     }
 
-    Message.create({
-      user_id: auth.user.id,
-      ticket_id: ticket.id,
-      body: reply
-    })
-
-    return response.redirect(
-      `/organization/${request.organization.slug}/feedback/${feedback_id}`
-    )
+    return response.redirect('back')
   }
 }
 
