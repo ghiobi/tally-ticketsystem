@@ -61,4 +61,9 @@ Route.group(() => {
   Route.post('/organization', 'Organization/FindOrganizationController.find')
 }).middleware(['guest'])
 
+Route.get(
+  '/api/tickets/:ticketId/messages',
+  'Ticket/MessageController.getTicketMessages'
+)
+
 Route.on('/403').render('403')
