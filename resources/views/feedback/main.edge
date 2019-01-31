@@ -13,10 +13,13 @@
                 </span>
             </li>
         @endeach
-        <div class="form-group">
-            <label for="reply">Reply</label>
-            <input type="text" class="form-control" id="reply" placeholder="Leave a reply ...">
-        </div>
+        <form method="POST" action="">
+            {{ csrfField() }}
+            <div class="form-group">
+                <label for="reply">Reply</label>
+                <input type="text" name="reply" class="form-control" id="reply" placeholder="Leave a reply ...">
+            </div>
+        </form>
     </ul>
 </div>
 

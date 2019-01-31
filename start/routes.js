@@ -35,7 +35,7 @@ Route.group(() => {
     '/feedback/:feedback_id',
     'Feedback/FeedbackController.index'
   ).middleware(['feedback.belongs.to.user'])
-
+  Route.post('/feedback/:feedback_id', 'Feedback/FeedbackController.reply')
   Route.get(
     '/api/tickets/user/:userId',
     'Ticket/TicketController.getUserTickets'
