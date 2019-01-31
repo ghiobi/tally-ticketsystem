@@ -40,7 +40,7 @@ const globalMiddleware = [
 const namedMiddleware = {
   auth: 'Adonis/Middleware/Auth',
   guest: 'Adonis/Middleware/AllowGuestOnly',
-  'set.organization': 'App/Middleware/SetOrganizationToRequest',
+  organization: 'App/Middleware/Organization',
   'feedback.belongs.to.user': 'App/Middleware/FeedbackBelongsToUser',
   IsSelfOrAdmin: 'App/Middleware/IsSelfOrAdmin',
   IsAdmin: 'App/Middleware/IsAdmin'
