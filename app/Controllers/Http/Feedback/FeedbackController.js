@@ -25,10 +25,10 @@ class FeedbackController {
       .with('user') // returns who submited the ticket
       .first()
 
-    const reply = request.input('reply', '')
+    const reply = request.input('reply')
     if (reply !== null) {
       //check ownership
-      if (ticket.user.id !== auth.user.id) {
+      if (ticket.toJSON().user.id !== auth.user.id) {
         if (!(await auth.user.hasRole('admin'))) {
           return response.redirect('403')
         }
@@ -40,7 +40,6 @@ class FeedbackController {
         body: reply
       })
     }
-
     return response.redirect('back')
   }
 }
