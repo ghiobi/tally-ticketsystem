@@ -21,7 +21,9 @@ let message2 = null
 let message3 = null
 
 before(async () => {
-  organization = await OrganizationFactory.create()
+  organization = await OrganizationFactory.create({
+    api_token: 'someRandomAPIToken'
+  })
 
   user1 = await UserFactory.make()
   userAdmin = await UserFactory.make()

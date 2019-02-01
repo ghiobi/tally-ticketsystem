@@ -61,7 +61,10 @@ test('make sure correct token is passed', async ({ assert }) => {
   const handle = {
     request: {
       organization,
-      input: sinon.fake.returns('api!@#$%^&*(token')
+      input: sinon.fake.returns('api!@#$%^&*(token'),
+      params: {
+        organization: organization.slug
+      }
     }
   }
 
