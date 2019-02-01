@@ -13,7 +13,7 @@ class ApiTokenController {
     organization.api_token = chance.string({ length: 255 })
     await organization.save()
 
-    return request.redirect('back')
+    return response.redirect('back')
   }
 }
 
