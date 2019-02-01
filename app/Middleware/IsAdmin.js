@@ -2,6 +2,7 @@
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
+const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
 class IsAdmin {
   /**
@@ -9,9 +10,9 @@ class IsAdmin {
    * @param {Request} ctx.request
    * @param {Function} next
    */
-  async handle({ response, auth }, next) {
+  async handle({ auth }, next) {
     if (!(await auth.user.hasRole('admin'))) {
-      return response.redirect('/403')
+      throw new ForbiddenException()
     }
 
     await next()

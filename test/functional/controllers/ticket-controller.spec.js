@@ -92,7 +92,7 @@ test('check that a user cannot see all tickets of an organization', async ({
     .loginVia(user2)
     .end()
 
-  response.assertRedirect('/403')
+  response.assertStatus(403)
 })
 
 test('check that a user cannot see tickets opened by other users', async ({
@@ -103,7 +103,7 @@ test('check that a user cannot see tickets opened by other users', async ({
     .loginVia(user1)
     .end()
 
-  response.assertRedirect('/403')
+  response.assertStatus(403)
 })
 
 test('check that an admin can see tickets belonging to a user', async ({

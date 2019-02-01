@@ -70,5 +70,3 @@ Route.get(
   '/api/tickets/:ticketId/messages',
   'Ticket/MessageController.getTicketMessages'
 )
-
-Route.on('/403').render('403')
