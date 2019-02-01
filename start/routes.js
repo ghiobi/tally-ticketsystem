@@ -27,6 +27,13 @@ Route.group(() => {
   .middleware(['organization', 'guest'])
 
 /**
+ * Authenticated Organization API Routes
+ */
+Route.group(() => {})
+  .prefix('organization/:organization/api')
+  .middleware(['organization', 'api'])
+
+/**
  * Authenticated Organization Routes
  */
 Route.group(() => {
