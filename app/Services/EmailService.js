@@ -12,20 +12,22 @@ class EmailService {
   async sendTicketConfirmation(ticket) {
     let subject = 'Tally Ticket Confirmation'
     let view = 'emails.ticket-confirmation-email'
-    let user = await ticket.user()
-    let message = await ticket.messages().first() //get the users's message
-    let data = { ticket, user, message }
-    await this.sendEmail(subject, view, data)
+    await ticket.loadMany({
+      user: null,
+      messages: (builder) => builder.first()
+    })
+    await this.sendEmail(subject, view, ticket.toJSON())
   }
 
   //call this when an admin replies
   async sendReplyNotification(ticket) {
     let subject = 'Tally Ticket Reply'
     let view = 'emails.reply-notification-email'
-    let user = await ticket.user()
-    let message = await ticket.messages().max('create_at') //get the most recent message
-    let data = { ticket, user, message }
-    await this.sendEmail(subject, view, data)
+    await ticket.loadMany({
+      user: null,
+      messages: (builder) => builder.pickInverse(1)
+    })
+    await this.sendEmail(subject, view, ticket.toJSON())
   }
 }
 

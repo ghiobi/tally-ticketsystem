@@ -1,14 +1,6 @@
 'use strict'
-const Mail = use('Mail')
-
 class DashboardController {
   async index({ view, auth, request }) {
-    await Mail.send('emails.welcome', {}, (message) => {
-      message.from('feedback.tally@gmail.com')
-      message.to('xiao_eric@hotmail.com')
-      message.subject('hello')
-    })
-
     if (await auth.user.hasRole('admin')) {
       const tickets = await request.organization.tickets().fetch()
 

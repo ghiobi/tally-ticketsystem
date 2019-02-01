@@ -42,8 +42,8 @@ class DemoSeeder {
       Seed more users
      */
     const user2 = await Factory.model('App/Models/User').create({
-      email: 'user@tally.com',
-      name: 'user',
+      email: 'tally.feedback2@gmail.com',
+      name: 'John Doe',
       password: 'nimda'
     })
     const user3 = await Factory.model('App/Models/User').create()
@@ -108,6 +108,16 @@ class DemoSeeder {
     await Factory.model('App/Models/Message').create({
       user_id: user2.id,
       ticket_id: ticket.id
+    })
+
+    await Factory.model('App/Models/Message').create({
+      user_id: user2.id,
+      ticket_id: ticket2.id
+    })
+
+    await Factory.model('App/Models/Message').create({
+      user_id: user2.id,
+      ticket_id: ticket2.id
     })
   }
 }
