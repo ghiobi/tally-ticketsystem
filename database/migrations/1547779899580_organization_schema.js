@@ -13,7 +13,8 @@ class OrganizationSchema extends Schema {
         .notNullable()
         .unique()
       table.string('external_id').unique()
-
+      table.string('api_token')
+      
       table.timestamps()
     })
   }
