@@ -8,7 +8,6 @@ class OrganizationSchema extends Schema {
     this.create('organizations', (table) => {
       table.increments()
       table.string('name', 255).notNullable()
-      table.string('external_id', 255).notNullable()
       table
         .string('slug', 255)
         .notNullable()

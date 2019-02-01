@@ -5,6 +5,8 @@ const ForbiddenException = use('App/Exceptions/ForbiddenException')
 const User = use('App/Models/User')
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
+const SlackService = use('App/Services/SlackService')
+const Client = use('Slack/WebClient')
 
 class TicketController {
   async index({ view, params }) {
@@ -54,8 +56,12 @@ class TicketController {
       .first()
 
     if (!user) {
-      //if user does not exist, then create him
-      //TODO: complete this once Laurendy implements slack user service to create a user account
+      const client = Client.create()
+      user = SlackService.findOrCreateUser(
+        client,
+        request.organization,
+        user_id
+      )
     }
 
     const ticket = await Ticket.create({
@@ -63,7 +69,7 @@ class TicketController {
       title: title
     })
 
-    Message.create({
+    await Message.create({
       user_id: user.id,
       ticket_id: ticket.id,
       body: body

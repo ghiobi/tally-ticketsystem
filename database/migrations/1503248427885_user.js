@@ -10,7 +10,6 @@ class UserSchema extends Schema {
       table.string('name', 80).notNullable()
       table.string('email', 255).notNullable()
       table.string('password', 60).notNullable()
-      table.string('external_id', 255).notNullable()
       table
         .integer('organization_id')
         .notNullable()
