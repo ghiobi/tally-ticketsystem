@@ -4,7 +4,6 @@
 /** @typedef {import('@adonisjs/session/src/Session')} Session */
 
 const Organization = use('App/Models/Organization')
-const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
 class OrganizationMiddleware {
   /**
@@ -17,9 +16,8 @@ class OrganizationMiddleware {
    * @param {Session} ctx.session
    * @param {Parameters} ctx.params
    * @param {Function} next
-   * @param {Array} props An array of properties passed to the middleware, in which ['auth'] for check if the user is
    */
-  async handle({ request, response, session, params, view, auth }, next) {
+  async handle({ request, response, session, params, view }, next) {
     const organization = await Organization.query()
       .where('slug', params.organization)
       .first()
@@ -40,10 +38,6 @@ class OrganizationMiddleware {
     // Provide the organization object on the view and request object
     view.share({ organization })
     request.organization = organization
-
-    if (auth.user && auth.user.organization_id !== organization.id) {
-      throw new ForbiddenException()
-    }
 
     await next()
   }

@@ -48,7 +48,7 @@ Route.group(() => {
   ).middleware('IsAdmin')
 })
   .prefix('organization/:organization')
-  .middleware(['auth', 'organization'])
+  .middleware(['organization', 'auth', 'within'])
 
 /**
  * Public Routes
