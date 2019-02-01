@@ -23,9 +23,6 @@ beforeEach(async () => {
   next = sinon.fake()
 
   handle = {
-    auth: {
-      user: null
-    },
     request: {},
     response: {
       redirect: sinon.fake()
@@ -72,36 +69,4 @@ test('makes sure the middleware redirects when no organization is found', async 
 
   assert.isTrue(handle.response.redirect.called)
   assert.isTrue(flashAll.called)
-})
-
-test('makes sure the authenticated user is part of the same organization', async ({
-  assert
-}) => {
-  handle.params.organization = organization.slug
-  handle.auth = {
-    user: { organization_id: organization.id }
-  }
-
-  await middleware.handle(handle, next)
-  assert.isTrue(next.called, 'next() was not called')
-})
-
-test('makes sure the authenticated user is part of the same organization', async ({
-  assert
-}) => {
-  handle.params.organization = organization.slug
-  handle.auth = {
-    user: { organization_id: -1 }
-  }
-
-  let pass = true
-  try {
-    await middleware.handle(handle, next)
-    pass = false
-  } catch (e) {
-    // continue regardless of error
-  }
-
-  assert.isOk(pass, 'middleware did not prevent user from accessing resource')
-  assert.isFalse(next.called, 'next() was not called')
 })
