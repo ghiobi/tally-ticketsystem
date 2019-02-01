@@ -27,13 +27,6 @@ Route.group(() => {
   .middleware(['organization', 'guest'])
 
 /**
- * Authenticated Organization API Routes
- */
-Route.group(() => {})
-  .prefix('organization/:organization/api')
-  .middleware(['organization', 'api'])
-
-/**
  * Authenticated Organization Routes
  */
 Route.group(() => {
@@ -58,6 +51,18 @@ Route.group(() => {
   .middleware(['auth', 'organization'])
 
 /**
+ * Authenticated Organization API Routes
+ */
+Route.group(() => {
+  Route.get(
+    '/tickets/:ticketId/messages',
+    'Ticket/MessageController.getTicketMessages'
+  )
+})
+  .prefix('organization/:organization/api')
+  .middleware(['organization', 'api'])
+
+/**
  * Public Routes
  */
 Route.group(() => {
@@ -72,8 +77,3 @@ Route.group(() => {
   Route.get('/oauth', 'Auth/SlackOAuthController.redirect')
   Route.get('/oauth/authenticate', 'Auth/SlackOAuthController.authenticate')
 }).middleware(['guest'])
-
-Route.get(
-  '/api/tickets/:ticketId/messages',
-  'Ticket/MessageController.getTicketMessages'
-)

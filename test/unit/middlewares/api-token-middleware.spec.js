@@ -1,7 +1,7 @@
 'use strict'
 const sinon = require('sinon')
 
-const { test, before } = use('Test/Suite')('Api Token Middleware')
+const { test } = use('Test/Suite')('Api Token Middleware')
 const { OrganizationFactory } = models
 
 const ApiAuth = use('App/Middleware/ApiAuth')

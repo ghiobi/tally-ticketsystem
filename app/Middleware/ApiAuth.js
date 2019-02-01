@@ -3,7 +3,6 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-const Organization = use('App/Models/Organization')
 const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
 class ApiAuth {
@@ -16,7 +15,7 @@ class ApiAuth {
     const token = request.input('token')
     const { organization } = request
 
-    if (!token || organization.api_token !== token) {
+    if (!token || !organization.api_token || organization.api_token !== token) {
       throw new ForbiddenException()
     }
 

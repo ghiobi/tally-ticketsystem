@@ -43,7 +43,8 @@ const namedMiddleware = {
   organization: 'App/Middleware/Organization',
   'feedback.belongs.to.user': 'App/Middleware/FeedbackBelongsToUser',
   IsSelfOrAdmin: 'App/Middleware/IsSelfOrAdmin',
-  IsAdmin: 'App/Middleware/IsAdmin'
+  IsAdmin: 'App/Middleware/IsAdmin',
+  api: 'App/Middleware/ApiAuth'
 }
 
 /*
