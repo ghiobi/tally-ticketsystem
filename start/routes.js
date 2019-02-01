@@ -24,7 +24,7 @@ Route.group(() => {
   Route.post('/login', 'Auth/LoginController.login')
 })
   .prefix('organization/:organization')
-  .middleware(['set.organization', 'guest'])
+  .middleware(['organization', 'guest'])
 
 /**
  * Authenticated Organization Routes
@@ -48,7 +48,7 @@ Route.group(() => {
   ).middleware('IsAdmin')
 })
   .prefix('organization/:organization')
-  .middleware(['set.organization', 'auth'])
+  .middleware(['auth', 'organization'])
 
 /**
  * Public Routes

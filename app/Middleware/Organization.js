@@ -4,8 +4,9 @@
 /** @typedef {import('@adonisjs/session/src/Session')} Session */
 
 const Organization = use('App/Models/Organization')
+const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
-class SetOrganizationToRequest {
+class OrganizationMiddleware {
   /**
    * Whenever a user enters an organization url, the organization is found and set to globally to the view and request
    * object. If no organization is found, they are redirected back to the organization page.
@@ -16,8 +17,9 @@ class SetOrganizationToRequest {
    * @param {Session} ctx.session
    * @param {Parameters} ctx.params
    * @param {Function} next
+   * @param {Array} props An array of properties passed to the middleware, in which ['auth'] for check if the user is
    */
-  async handle({ request, response, session, params, view }, next) {
+  async handle({ request, response, session, params, view, auth }, next) {
     const organization = await Organization.query()
       .where('slug', params.organization)
       .first()
@@ -35,12 +37,16 @@ class SetOrganizationToRequest {
       return response.redirect('/organization')
     }
 
-    // Provide the organization object on the view.
+    // Provide the organization object on the view and request object
     view.share({ organization })
-
     request.organization = organization
+
+    if (auth.user && auth.user.organization_id !== organization.id) {
+      throw new ForbiddenException()
+    }
+
     await next()
   }
 }
 
-module.exports = SetOrganizationToRequest
+module.exports = OrganizationMiddleware
