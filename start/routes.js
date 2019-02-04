@@ -48,7 +48,7 @@ Route.group(() => {
   ).middleware('IsAdmin')
 })
   .prefix('organization/:organization')
-  .middleware(['organization', 'auth'])
+  .middleware(['organization', 'auth', 'within'])
 
 /**
  * Authenticated Organization Routes on Admin
@@ -58,7 +58,7 @@ Route.group(() => {
   Route.post('/token', 'Admin/ApiTokenController.generate')
 })
   .prefix('organization/:organization/admin')
-  .middleware(['auth', 'organization', 'IsAdmin'])
+  .middleware(['organization', 'auth', 'within', 'IsAdmin'])
 
 /**
  * Authenticated Organization API Routes
