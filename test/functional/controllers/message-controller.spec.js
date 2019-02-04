@@ -21,7 +21,9 @@ let message2 = null
 let message3 = null
 
 before(async () => {
-  organization = await OrganizationFactory.create()
+  organization = await OrganizationFactory.create({
+    api_token: 'someRandomAPIToken'
+  })
 
   user1 = await UserFactory.make()
   userAdmin = await UserFactory.make()
@@ -51,7 +53,13 @@ before(async () => {
 })
 
 test('check messages of a ticket can be retrieved', async ({ client }) => {
-  const response = await client.get(`api/tickets/${ticket.id}/messages`).end()
+  const response = await client
+    .get(
+      `/organization/${organization.slug}/api/tickets/${
+        ticket.id
+      }/messages?token=${organization.api_token}`
+    )
+    .end()
 
   response.assertStatus(200)
   response.assertJSONSubset([

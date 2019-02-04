@@ -28,6 +28,7 @@ Factory.blueprint('App/Models/User', (faker, i, data) => {
 Factory.blueprint('App/Models/Organization', (faker, i, data) => {
   return {
     external_id: faker.string(),
+    api_token: faker.string({ length: 255 }),
     name: faker.sentence({ words: 3 }),
     slug: faker.word({ length: faker.integer({ min: 5, max: 30 }) }),
     ...data
