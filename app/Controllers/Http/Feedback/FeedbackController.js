@@ -2,6 +2,7 @@
 
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
+const EmailService = use('App/Services/EmailService')
 
 const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
@@ -36,6 +37,11 @@ class FeedbackController {
       ticket_id: ticket.id,
       body: reply
     })
+
+    // Notify ticket owner
+    if (await auth.user.hasRole('admin')) {
+      EmailService.sendReplyNotification(ticket)
+    }
 
     return response.redirect('back')
   }

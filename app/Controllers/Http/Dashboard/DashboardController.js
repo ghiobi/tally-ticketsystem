@@ -1,5 +1,4 @@
 'use strict'
-
 class DashboardController {
   async index({ view, auth, request }) {
     if (await auth.user.hasRole('admin')) {
