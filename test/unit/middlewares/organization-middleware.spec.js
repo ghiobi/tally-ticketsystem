@@ -54,7 +54,8 @@ test('makes sure the middleware finds the specific organization and sets it to t
   assert.isFalse(flashAll.called, 'flash should not have happened')
 
   assert.deepEqual(handle.view.share.args[0][0], {
-    organization
+    organization,
+    organizationRoute: `/organization/${organization.slug}`
   })
 })
 
