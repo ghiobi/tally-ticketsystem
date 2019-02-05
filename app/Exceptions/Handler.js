@@ -23,12 +23,15 @@ class ExceptionHandler extends BaseExceptionHandler {
   async handle(error, { request, response, view, auth }) {
     switch (error.name) {
       case 'InvalidSessionException':
-        return response.redirect(
-          `/organization/${request.organization.slug}/login`
-        )
+        if (request.organization) {
+          return response.redirect(
+            `/organization/${request.organization.slug}/login`
+          )
+        }
+        return response.redirect('/organization')
       case 'HttpException':
         if (error.status === 404) {
-          return response.send(view.render('404'))
+          return response.status(404).send(view.render('404'))
         }
         if (error.message.indexOf('E_GUEST_ONLY') > -1) {
           const organization = await auth.user.organization().fetch()
@@ -36,7 +39,7 @@ class ExceptionHandler extends BaseExceptionHandler {
         }
     }
 
-    response.status(error.status).send(error.message)
+    super.handle(...arguments)
   }
 }
 

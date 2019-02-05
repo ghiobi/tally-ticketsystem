@@ -48,7 +48,29 @@ Route.group(() => {
   ).middleware('IsAdmin')
 })
   .prefix('organization/:organization')
-  .middleware(['auth', 'organization'])
+  .middleware(['organization', 'auth', 'within'])
+
+/**
+ * Authenticated Organization Routes on Admin
+ */
+Route.group(() => {
+  Route.get('/token', 'Admin/ApiTokenController.index')
+  Route.post('/token', 'Admin/ApiTokenController.generate')
+})
+  .prefix('organization/:organization/admin')
+  .middleware(['organization', 'auth', 'within', 'IsAdmin'])
+
+/**
+ * Authenticated Organization API Routes
+ */
+Route.group(() => {
+  Route.get(
+    '/tickets/:ticketId/messages',
+    'Ticket/MessageController.getTicketMessages'
+  )
+})
+  .prefix('organization/:organization/api')
+  .middleware(['organization', 'api'])
 
 /**
  * Public Routes
@@ -65,8 +87,3 @@ Route.group(() => {
   Route.get('/oauth', 'Auth/SlackOAuthController.redirect')
   Route.get('/oauth/authenticate', 'Auth/SlackOAuthController.authenticate')
 }).middleware(['guest'])
-
-Route.get(
-  '/api/tickets/:ticketId/messages',
-  'Ticket/MessageController.getTicketMessages'
-)

@@ -41,9 +41,11 @@ const namedMiddleware = {
   auth: 'Adonis/Middleware/Auth',
   guest: 'Adonis/Middleware/AllowGuestOnly',
   organization: 'App/Middleware/Organization',
+  within: 'App/Middleware/WithinOrganization',
   'feedback.belongs.to.user': 'App/Middleware/FeedbackBelongsToUser',
   IsSelfOrAdmin: 'App/Middleware/IsSelfOrAdmin',
-  IsAdmin: 'App/Middleware/IsAdmin'
+  IsAdmin: 'App/Middleware/IsAdmin',
+  api: 'App/Middleware/ApiAuth'
 }
 
 /*
