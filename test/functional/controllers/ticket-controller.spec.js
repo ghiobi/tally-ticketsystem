@@ -1,128 +1,55 @@
 'use strict'
 
 const { test, trait, before } = use('Test/Suite')('Ticket Controller')
-const { OrganizationFactory, UserFactory, TicketFactory } = models
+const { OrganizationFactory, UserFactory, TicketFactory, Message } = models
 
 trait('Test/ApiClient')
 trait('Auth/Client')
 trait('Session/Client')
 
 let organization = null
-let user1 = null
-let user2 = null
-let userAdmin = null
-let ticket1 = null
-let ticket2 = null
-let ticket3 = null
-let ticket4 = null
+let user = null
+let ticket = null
 
 before(async () => {
-  organization = await OrganizationFactory.create()
+  organization = await OrganizationFactory.create({
+    slug: 'ticket-controller-test'
+  })
 
-  user1 = await UserFactory.make()
-  user2 = await UserFactory.make()
-  userAdmin = await UserFactory.make()
+  user = await UserFactory.make({
+    email: 'ticket-controller-test@email.com',
+    password: 'password'
+  })
 
-  await organization.users().save(user1)
-  await organization.users().save(user2)
-  await organization.users().save(userAdmin)
+  await organization.users().save(user)
 
-  await userAdmin.setRole('admin')
-
-  ticket1 = await TicketFactory.make()
-  ticket2 = await TicketFactory.make()
-  ticket3 = await TicketFactory.make()
-  ticket4 = await TicketFactory.make()
-
-  await ticket1.user().associate(user1)
-  await ticket2.user().associate(user1)
-  await ticket3.user().associate(user2)
-  await ticket4.user().associate(user2)
+  ticket = await TicketFactory.make()
+  await ticket.user().associate(user)
 })
 
-test('check that a users can retrieve their tickets', async ({ client }) => {
-  const response = await client
-    .get(`/organization/${organization.slug}/api/tickets/user/${user2.id}`)
-    .loginVia(user2)
-    .end()
-
-  response.assertStatus(200)
-  response.assertJSONSubset([
-    {
-      id: ticket3.id,
-      user_id: user2.id
-    },
-    {
-      id: ticket4.id,
-      user_id: user2.id
-    }
-  ])
-})
-
-test('check if all tickets from an organization can be retrieved', async ({
+test('Make sure user is redirected back after submitting reply', async ({
   client
 }) => {
   const response = await client
-    .get(`/organization/${organization.slug}/api/tickets`)
-    .loginVia(userAdmin)
+    .post(`organization/${organization.slug}/ticket/${ticket.id}`)
+    .send({ reply: 'test' })
+    .loginVia(user)
     .end()
 
-  response.assertStatus(200)
-  response.assertJSONSubset([
-    {
-      id: ticket1.id
-    },
-    {
-      id: ticket2.id
-    },
-    {
-      id: ticket3.id
-    },
-    {
-      id: ticket4.id
-    }
-  ])
+  response.assertRedirect('/')
 })
 
-test('check that a user cannot see all tickets of an organization', async ({
-  client
-}) => {
-  const response = await client
-    .get(`/organization/${organization.slug}/api/tickets`)
-    .loginVia(user2)
+test('Make sure Message is persisted', async ({ client, assert }) => {
+  await client
+    .post(`organization/${organization.slug}/ticket/${ticket.id}`)
+    .send({ reply: 'ASDFGHJKL' })
+    .loginVia(user)
     .end()
 
-  response.assertStatus(403)
-})
+  const message = await Message.query()
+    .where('body', 'ASDFGHJKL')
+    .where('user_id', user.id)
+    .first()
 
-test('check that a user cannot see tickets opened by other users', async ({
-  client
-}) => {
-  const response = await client
-    .get(`organization/${organization.slug}/api/tickets/user/${user2.id}`)
-    .loginVia(user1)
-    .end()
-
-  response.assertStatus(403)
-})
-
-test('check that an admin can see tickets belonging to a user', async ({
-  client
-}) => {
-  const response = await client
-    .get(`organization/${organization.slug}/api/tickets/user/${user2.id}`)
-    .loginVia(userAdmin)
-    .end()
-
-  response.assertStatus(200)
-  response.assertJSONSubset([
-    {
-      id: ticket3.id,
-      user_id: user2.id
-    },
-    {
-      id: ticket4.id,
-      user_id: user2.id
-    }
-  ])
+  assert.isNotNull(message)
 })

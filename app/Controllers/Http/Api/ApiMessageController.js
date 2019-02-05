@@ -2,7 +2,7 @@
 
 const Ticket = use('App/Models/Ticket')
 
-class MessageController {
+class ApiMessageService {
   async getTicketMessages({ response, params }) {
     let ticket = await Ticket.find(params.ticketId)
 
@@ -15,4 +15,4 @@ class MessageController {
   }
 }
 
-module.exports = MessageController
+module.exports = ApiMessageService

@@ -2,11 +2,9 @@
 const sinon = require('sinon')
 const { UserFactory, TicketFactory, OrganizationFactory } = models
 
-const { test, before, beforeEach } = use('Test/Suite')(
-  'Feedback belongs to user'
-)
+const { test, before, beforeEach } = use('Test/Suite')('Ticket belongs to user')
 
-const FeedbackBelongsToUser = use('App/Middleware/FeedbackBelongsToUser')
+const TicketBelongsToUser = use('App/Middleware/TicketBelongsToUser')
 
 let middleware = null
 let next = null
@@ -63,28 +61,28 @@ before(async () => {
       user: user2 // user2 is a regular user
     },
     params: {
-      feedback_id: null
+      ticket_id: null
     }
   }
 })
 
 beforeEach(async () => {
-  middleware = new FeedbackBelongsToUser()
+  middleware = new TicketBelongsToUser()
 })
 
-test('make sure users can only access feedbacks belonging to them', async ({
+test('make sure users can only access tickets belonging to them', async ({
   assert
 }) => {
   //allowed to view tickets that belong to them
-  handle.params.feedback_id = ticket2.id
+  handle.params.ticket_id = ticket2.id
   await middleware.handle(handle, next)
   assert.isTrue(
     next.called,
-    'next() was not called when feedback belonged to user'
+    'next() was not called when ticket belonged to user'
   )
   next = sinon.fake()
   //not allowed to view tickets not belonging to them
-  handle.params.feedback_id = ticket1.id
+  handle.params.ticket_id = ticket1.id
 
   let pass = true
   try {
@@ -93,20 +91,20 @@ test('make sure users can only access feedbacks belonging to them', async ({
   } catch (e) {
     // continue regardless of error
   }
-  assert.isOk(pass, 'feedback belongs to user')
+  assert.isOk(pass, 'ticket belongs to user')
 
   assert.isFalse(
     next.called,
-    'next() was called when it feedback did not belong to user'
+    'next() was called when it ticket did not belong to user'
   )
 })
 
-test('make sure admin can access all feedbacks in their organization', async ({
+test('make sure admin can access all tickets in their organization', async ({
   assert
 }) => {
-  // allow admin/owner to access any feedback in their organization
+  // allow admin/owner to access any ticket in their organization
   handle.auth.user = user
-  handle.params.feedback_id = ticket2.id
+  handle.params.ticket_id = ticket2.id
 
   await middleware.handle(handle, next)
   assert.isTrue(
@@ -115,8 +113,8 @@ test('make sure admin can access all feedbacks in their organization', async ({
   )
   next = sinon.fake()
 
-  // disallow admin/owner to access any feedback that is not in their organization
-  handle.params.feedback_id = ticket3.id
+  // disallow admin/owner to access any ticket that is not in their organization
+  handle.params.ticket_id = ticket3.id
 
   let pass = true
   try {
