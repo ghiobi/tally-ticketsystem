@@ -1,5 +1,7 @@
 'use strict'
 
+const chance = new (require('chance'))()
+
 /*
 |--------------------------------------------------------------------------
 | FakeOrganizationrSeeder
@@ -13,112 +15,90 @@
 const Role = use('App/Models/Role')
 const Factory = use('Factory')
 
+const OrganizationFactory = Factory.model('App/Models/Organization')
+const UserFactory = Factory.model('App/Models/User')
+const TicketFactory = Factory.model('App/Models/Ticket')
+const MessageFactory = Factory.model('App/Models/Message')
+
 class DemoSeeder {
   async run() {
-    const organization = await Factory.model('App/Models/Organization').create({
-      name: 'Tally Inc.',
-      slug: 'tally'
-    })
     /**
-      Seed the roles
+     Seed the roles
      */
     await Role.createMany([
       { key: 'owner', display_name: 'Organization Owner' },
       { key: 'admin', display_name: 'Organization Administrator' }
     ])
+
+    const organization = await OrganizationFactory.create({
+      name: 'Tally Inc.',
+      slug: 'tally'
+    })
+
     /**
       Seed an admin/owner
      */
-    const user = await Factory.model('App/Models/User').create({
+    const admin = await UserFactory.create({
       email: 'owner@tally.com',
-      name: 'Owner',
+      name: 'Owner ',
       password: 'password'
     })
-    await organization.users().save(user)
-    await user.setRole('owner')
-    await user.setRole('admin')
+    await organization.users().save(admin)
+    await admin.setRole('owner')
+    await admin.setRole('admin')
 
     /**
       Seed more users
      */
-    const user2 = await Factory.model('App/Models/User').create({
-      email: 'tally.feedback2@gmail.com',
-      name: 'John Doe',
-      password: 'nimda'
+    await UserFactory.create({
+      email: 'user@tally.com',
+      name: 'User',
+      password: 'password'
     })
-    const user3 = await Factory.model('App/Models/User').create()
+    await UserFactory.createMany(13)
 
     /**
       Seed some tickets
      */
-    const ticket = await Factory.model('App/Models/Ticket').make()
-    await ticket.user().associate(user2)
-
-    const ticket2 = await Factory.model('App/Models/Ticket').make()
-    await ticket2.user().associate(user2)
-
-    const ticket3 = await Factory.model('App/Models/Ticket').make({
-      status: 'replied'
-    })
-    await ticket3.user().associate(user3)
-
-    const ticket4 = await Factory.model('App/Models/Ticket').make({
-      status: 'replied'
-    })
-    await ticket4.user().associate(user2)
-
-    const ticket5 = await Factory.model('App/Models/Ticket').make({
-      status: 'replied'
-    })
-    await ticket5.user().associate(user2)
-
-    const ticket6 = await Factory.model('App/Models/Ticket').make({
-      status: 'replied'
-    })
-    await ticket6.user().associate(user3)
-
-    const ticket7 = await Factory.model('App/Models/Ticket').make({
-      status: 'replied'
-    })
-    await ticket7.user().associate(user3)
-
-    const ticket8 = await Factory.model('App/Models/Ticket').make({
-      status: 'closed'
-    })
-    await ticket8.user().associate(user)
+    const tickets = []
+    for (let i = 0; i < 50; i++) {
+      for (let j = 0; j < chance.integer({ min: 0, max: 10 }); j++) {
+        tickets.push(
+          await TicketFactory.create({
+            user_id: chance.integer({ min: 2, max: 15 }),
+            status: this.getRandomStatus(),
+            assigned_to: chance.bool() ? admin.id : null
+          })
+        )
+      }
+    }
 
     /**
-      Seed some messages to ticket
+     Seed some Messages
      */
-    await Factory.model('App/Models/Message').create({
-      user_id: user.id,
-      ticket_id: ticket.id
-    })
+    for (const ticket of tickets) {
+      await MessageFactory.create({
+        ticket_id: ticket.id,
+        user_id: ticket.user_id
+      })
+      for (let i = 0; i < chance.integer({ min: 0, max: 4 }); i++) {
+        await MessageFactory.create({
+          ticket_id: ticket.id,
+          user_id: chance.bool() ? ticket.user_id : admin.id
+        })
+      }
+    }
+  }
 
-    await Factory.model('App/Models/Message').create({
-      user_id: user2.id,
-      ticket_id: ticket.id
-    })
-
-    await Factory.model('App/Models/Message').create({
-      user_id: user.id,
-      ticket_id: ticket.id
-    })
-
-    await Factory.model('App/Models/Message').create({
-      user_id: user2.id,
-      ticket_id: ticket.id
-    })
-
-    await Factory.model('App/Models/Message').create({
-      user_id: user2.id,
-      ticket_id: ticket2.id
-    })
-
-    await Factory.model('App/Models/Message').create({
-      user_id: user2.id,
-      ticket_id: ticket2.id
-    })
+  getRandomStatus() {
+    switch (chance.integer({ min: 0, max: 2 })) {
+      case 0:
+        return 'submitted'
+      case 1:
+        return 'replied'
+      case 2:
+        return 'closed'
+    }
   }
 }
 

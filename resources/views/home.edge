@@ -1,54 +1,21 @@
 @layout('layouts.index')
 
 @section('content')
-  @set('title', 'Welcome')
 
-<!-- Header -->
-<header id="header" class="header-transparent dark">
-  <div id="header-wrap">
-    <div class="container">
-      <!--Logo-->
-      <div id="logo">
-        <a href="index.html" class="logo" data-dark-logo="images/logo-dark.png">
-          <img src="images/logo.png" alt="Polo Logo">
-        </a>
-      </div>
-      <!--End: Logo-->
-
-      <!--Navigation Resposnive Trigger-->
-      <div id="mainMenu-trigger">
-        <button class="lines-button x"> <span class="lines"></span> </button>
-      </div>
-      <!--end: Navigation Resposnive Trigger-->
-
-      <!--Navigation-->
-      <div id="mainMenu" class="light">
-        <div class="container">
-          <nav>
-            <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/organization">Sign In</a></li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-      <!--end: Navigation-->
-    </div>
-  </div>
-</header>
-<!-- end: Header -->
-
+@set('title', 'Welcome')
+@set('isHomepage', true)
+@include('partials.header')
 
 <!-- Inspiro Slider -->
 <div id="slider" class="inspiro-slider slider-fullscreen arrows-large arrows-creative dots-creative" data-height-xs="360">
   <!-- Slide 1 -->
-  <div class="slide background-overlay-dark kenburns" data-parallax-image="images/parallax/3.jpg">
+  <div class="slide background-overlay-dark kenburns" data-parallax-image="/images/pattern-icons/5.png">
     <div class="container">
       <div class="slide-captions text-light">
         <!-- Captions -->
         <span data-animation="fadeInUp" data-animation-delay="300" class="strong" style="padding-top:16%;"><a href="#" class="business"><span class="business">Let's Do This</span></a>
                         </span>
-        <h1 data-animation="fadeInUp" data-animation-delay="600">We’re Tally, A Creative<br>Startup Based in Montreal</h1>
+        <h1 data-animation="fadeInUp" data-animation-delay="600">We’re Tally, A Bot<br>To Manage Expenses</h1>
         <div data-animation="fadeInUp" data-animation-delay="900">
           <button type="button" class="btn btn-rounded btn-reveal btn-reveal-left"><span>Learn More</span><i class="fa fa-arrow-right"></i></button>
         </div>
@@ -77,74 +44,6 @@
   <!-- end: Slide 1 -->
 </div>
 <!--end: Inspiro Slider -->
-
-<!-- About us -->
-<section class="p-t-120 p-b-120">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 center">
-        <div class="heading section-title" data-animation="fadeInUp">
-          <h4>Be The First</h4>
-          <h2 class="m-b-20">Set your goals high, and don't stop till you get there.</h2>
-          <p class="lead">Nulla varius consequat magna, id molestie ipsum volutpat quis. Suspendisse consectetur fringilla luctus. Fusce id mi diam, non ornare.</p>
-          <a href="https://www.youtube.com/watch?v=nrJtHemSPW4" data-lightbox="iframe" class="play-button dark"><i class="fa fa-play"></i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- end: About us -->
-
-<!-- Text Boxes -->
-<section class="no-padding equalize" data-equalize-item=".text-box">
-  <div class="row col-no-margin">
-    <!--Box 1-->
-    <div class="col-lg-3" style="background-color: #2F2F2F;">
-      <div class="text-box">
-        <a href="#">
-          <i class="fa fa-paper-plane"></i>
-          <h3>Tags &amp; Models </h3>
-          <p>Ispendisse consectetur fringilla luctus usce id mi diam, non ornare.</p>
-        </a>
-      </div>
-    </div>
-    <!--End: Box 1-->
-    <!--Box 2-->
-    <div class="col-lg-3" style="background-color: #383838;">
-      <div class="text-box">
-        <a href="#">
-          <i class="fas fa-chart-pie"></i>
-          <h3>Our charts </h3>
-          <p>Ispendisse consectetur fringilla luctus usce id mi diam, non ornare.</p>
-        </a>
-      </div>
-    </div>
-    <!--End: Box 2-->
-    <!--Box 3-->
-    <div class="col-lg-3" style="background-color: #313131;">
-      <div class="text-box">
-        <a href="#">
-          <i class="far fa-lightbulb"></i>
-          <h3>Light &amp; Dark</h3>
-          <p>Ispendisse consectetur fringilla luctus usce id mi diam, non ornare.</p>
-        </a>
-      </div>
-    </div>
-    <!--End: Box 3-->
-    <!--Box 4-->
-    <div class="col-lg-3" style="background-color: #383838;">
-      <div class="text-box">
-        <a href="#">
-          <i class="fa fa-language"></i>
-          <h3>RTL Support</h3>
-          <p>Ispendisse consectetur fringilla luctus usce id mi diam, non ornare.</p>
-        </a>
-      </div>
-    </div>
-    <!--End: Box 4-->
-  </div>
-</section>
-<!-- end: Text Boxes -->
 
 <!-- Pricing Table -->
 <section id="section3" class="background-grey p-t-120 p-b-120">
@@ -236,121 +135,6 @@
 </section>
 <!-- end: Pricing Table -->
 
-<!-- Know more -->
-<section class="p-t-120 p-b-120">
-  <div class="container">
-    <div class="col-lg-8 m-b-100 center">
-      <div class="heading section-title">
-        <h4>Know More</h4>
-        <h2>About Our Company</h2>
-        <p>Aenean sollicitudin, lorem quis bibendum auctor, nisi elit consequat ipsum, nec sagittis sem nibh id elit. Proin gravida nibh vel velit auctor Aenean sollicitudin, adipisicing elit sed lorem quis bibendum auctor.</p>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-lg-4">
-        <h4 class="m-b-20">We are making progress</h4>
-
-        <div class="progress-bar-container title-up small color">
-          <div class="progress-bar" data-percent="100" data-delay="0" data-type="%">
-            <div class="progress-title">HTML5</div>
-          </div>
-        </div>
-
-        <div class="progress-bar-container title-up small color">
-          <div class="progress-bar" data-percent="94" data-delay="100" data-type="%">
-            <div class="progress-title">CSS3</div>
-          </div>
-        </div>
-
-        <div class="progress-bar-container title-up small color">
-          <div class="progress-bar" data-percent="89" data-delay="200" data-type="%">
-            <div class="progress-title">JQUERY</div>
-          </div>
-        </div>
-
-        <div class="progress-bar-container title-up small color">
-          <div class="progress-bar" data-percent="78" data-delay="300" data-type="%">
-            <div class="progress-title">MYSQL</div>
-          </div>
-        </div>
-
-        <div class="progress-bar-container title-up small color">
-          <div class="progress-bar" data-percent="75" data-delay="400" data-type="%">
-            <div class="progress-title">PHP</div>
-          </div>
-        </div>
-        <p class="lead">Nulla varius consequat magna, id molestie ipsum volutpat quis. Suspendisse consectetur fringilla luctus.</p>
-      </div>
-      <div class="col-lg-4">
-        <h4 class="m-b-20">Best services around</h4>
-        <div class="accordion fancy radius clean">
-          <div class="ac-item ac-active">
-            <h5 class="ac-title"><i class="fa fa-rocket"></i>Suscipit laboriosam</h5>
-            <div class="ac-content ac-active">We’re POLO, a creative agency located in the heart of New York city. Suspendisse consectetur fringilla luctus.
-              <br />
-              <br /> Fusce id mi diam, Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora</div>
-          </div>
-          <div class="ac-item">
-            <h5 class="ac-title"><i class="fa fa-heart"></i>Aliquam voluptatem</h5>
-            <div class="ac-content">Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam
-              <br />
-              <br /> Fusce id mi diam, Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora</div>
-          </div>
-          <div class="ac-item">
-            <h5 class="ac-title"><i class="fa fa-shopping-cart"></i>Labore et dolore</h5>
-            <div class="ac-content">Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-              <br />
-              <br /> Fusce id mi diam, Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet</div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-4">
-        <h4 class="m-b-20">Latest from Blog</h4>
-        <div class="post-thumbnail-list">
-          <div class="post-thumbnail-entry">
-            <img src="homepages/corporate-v7/images/blog/5.jpg" alt="">
-            <div class="post-thumbnail-content">
-              <a href="#">Suspendisse consectetur fringilla</a>
-              <span class="post-date"><i class="far fa-clock"></i> 6m ago</span>
-              <span class="post-category"><i class="fa fa-tag"></i> Technology</span>
-            </div>
-          </div>
-          <div class="post-thumbnail-entry">
-            <img src="homepages/corporate-v7/images/blog/6.jpg" alt="">
-            <div class="post-thumbnail-content">
-              <a href="#">Consectetur adipiscing elit</a>
-              <span class="post-date"><i class="far fa-clock"></i> 24h ago</span>
-              <span class="post-category"><i class="fa fa-tag"></i> Lifestyle</span>
-            </div>
-          </div>
-          <div class="post-thumbnail-entry">
-            <img src="homepages/corporate-v7/images/blog/7.jpg" alt="">
-            <div class="post-thumbnail-content">
-              <a href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit</a>
-              <span class="post-date"><i class="far fa-clock"></i> 11h ago</span>
-              <span class="post-category"><i class="fa fa-tag"></i> Lifestyle</span>
-            </div>
-          </div>
-          <div class="post-thumbnail-entry">
-            <img src="homepages/corporate-v7/images/blog/8.jpg" alt="">
-            <div class="post-thumbnail-content">
-              <a href="#">Fringilla Lorem ipsum dolor sit amet</a>
-              <span class="post-date"><i class="far fa-clock"></i> 11h ago</span>
-              <span class="post-category"><i class="fa fa-tag"></i> Lifestyle</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-    </div>
-  </div>
-
-
-</section>
-<!-- end: Know more -->
-
 <!-- Subscribe form -->
 <section class="background-colored text-center p-t-80  p-b-30">
   <div class="container">
@@ -389,7 +173,7 @@
 <!-- end: Subscribe form -->
 
 <!-- Contact -->
-<section class="p-t-150 p-b-200" style="background-image:url(homepages/branding/images/background-4.png); background-position:71% 22%;">
+<section class="p-t-150 p-b-200" style="background-image:url(/images/pattern/pattern22.png); background-position:71% 22%;">
   <div class="container">
     <div class="row">
       <div class="col-lg-6">
@@ -473,107 +257,6 @@
 </section>
 <!-- end: Contact -->
 
-<!-- Footer -->
-<footer id="footer" class="footer-light">
-  <div class="footer-content">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4">
-          <!-- Footer widget area 1 -->
-          <div class="widget clearfix widget-contact-us" style="background-image: url('images/world-map-dark.png'); background-position: 50% 20px; background-repeat: no-repeat">
-            <h4>About POLO</h4>
-            <ul class="list-icon">
-              <li><i class="fa fa-map-marker-alt"></i> 795 Folsom Ave, Suite 600
-                <br>San Francisco, CA 94107</li>
-              <li><i class="fa fa-phone"></i> (123) 456-7890 </li>
-              <li><i class="far fa-envelope"></i> <a href="mailto:first.last@example.com">first.last@example.com</a>
-              </li>
-              <li>
-                <br><i class="far fa-clock"></i>Monday - Friday: <strong>08:00 - 22:00</strong>
-                <br>Saturday, Sunday: <strong>Closed</strong>
-              </li>
-            </ul>
-            <!-- Social icons -->
-            <div class="social-icons social-icons-border float-left m-t-20">
-              <ul>
-                <li class="social-rss"><a href="#"><i class="fa fa-rss"></i></a></li>
-                <li class="social-facebook"><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                <li class="social-twitter"><a href="#"><i class="fab fa-twitter"></i></a></li>
-                <li class="social-vimeo"><a href="#"><i class="fab fa-vimeo"></i></a></li>
-                <li class="social-youtube"><a href="#"><i class="fab fa-youtube"></i></a></li>
-                <li class="social-pinterest"><a href="#"><i class="fab fa-pinterest"></i></a></li>
-                <li class="social-gplus"><a href="#"><i class="fab fa-google-plus-g"></i></a></li>
-              </ul>
-            </div>
-            <!-- end: Social icons -->
-          </div>
-          <!-- end: Footer widget area 1 -->
-        </div>
-        <div class="col-lg-2">
-          <!-- Footer widget area 2 -->
-          <div class="widget">
-            <h4>Quick LInks</h4>
-            <ul class="list-icon list-icon-arrow">
-              <li><a href="#">About</a></li>
-              <li><a href="#">Contact</a></li>
-              <li><a href="#">Home</a></li>
-              <li><a href="#">Blog</a></li>
-              <li><a href="#">Portfolio</a></li>
-              <li><a href="#">Shortcodes</a></li>
-            </ul>
-          </div>
-          <!-- end: Footer widget area 2 -->
-        </div>
-        <div class="col-lg-3">
-          <!-- Footer widget area 3 -->
-          <div class="widget">
-            <h4>Latest From Our Blog</h4>
-            <div class="post-thumbnail-list">
-              <div class="post-thumbnail-entry">
-
-                <div class="post-thumbnail-content">
-                  <a href="#">Suspendisse consectetur fringilla luctus</a>
-                  <span class="post-date"><i class="far fa-clock"></i> 6m ago</span>
-                  <span class="post-category"><i class="fa fa-tag"></i> Technology</span>
-                </div>
-              </div>
-              <div class="post-thumbnail-entry">
-
-                <div class="post-thumbnail-content">
-                  <a href="#">Consectetur adipiscing elit</a>
-                  <span class="post-date"><i class="far fa-clock"></i> 24h ago</span>
-                  <span class="post-category"><i class="fa fa-tag"></i> Lifestyle</span>
-                </div>
-              </div>
-              <div class="post-thumbnail-entry">
-
-                <div class="post-thumbnail-content">
-                  <a href="#">Lorem ipsum dolor sit amet, consectetur adipiscing elit</a>
-                  <span class="post-date"><i class="far fa-clock"></i> 11h ago</span>
-                  <span class="post-category"><i class="fa fa-tag"></i> Lifestyle</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- end: Footer widget area 3 -->
-        </div>
-        <div class="col-lg-3">
-          <!-- Footer widget area 4 -->
-          <div class="widget widget-tweeter" data-username="ardianmusliu" data-limit="2">
-            <h4>Recent Tweets</h4>
-          </div>
-          <!-- end: Footer widget area 4 -->
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="copyright-content">
-    <div class="container">
-      <div class="copyright-text text-center">&copy; 2018 POLO -  Responsive Multi-Purpose HTML5 Template. All Rights Reserved.<a href="http://www.inspiro-media.com" target="_blank">INSPIRO</a>
-      </div>
-    </div>
-  </div>
-</footer>
-<!-- end: Footer -->
+@include('partials.footer')
 
 @endsection

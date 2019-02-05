@@ -38,7 +38,10 @@ class OrganizationMiddleware {
     }
 
     // Provide the organization object on the view and request object
-    view.share({ organization })
+    view.share({
+      organization,
+      organizationRoute: `/organization/${organization.slug}`
+    })
     request.organization = organization
 
     if (auth.user && auth.user.organization_id !== organization.id) {

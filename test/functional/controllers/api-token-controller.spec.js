@@ -50,6 +50,6 @@ beforeEach(async () => {
 
 test('Make sure token api page is displayed for admin', async ({ assert }) => {
   await controller.index(handle)
-  assert.equal(handle.view.render.args[0][0], 'admin.token')
+  assert.equal(handle.view.render.args[0][0], 'admin.panel')
   assert.isTrue(handle.view.render.called)
 })

@@ -14,8 +14,7 @@ class FeedbackController {
       .with('user') // returns who submited the ticket
       .first()
 
-    const data = { ticket: ticket.toJSON() }
-    return view.render('feedback.main', data)
+    return view.render('ticket.index', { ticket: ticket.toJSON() })
   }
 
   async reply({ response, request, auth, params }) {

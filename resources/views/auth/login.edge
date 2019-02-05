@@ -3,24 +3,43 @@
 @section('content')
 @set('title', 'Sign Into Your Account')
 
-{{ organization.name }}
-
-Sign In
-
-@if(hasErrorFor('invalid'))
-  <div class="alert alert-danger" role="alert">
-    {{ getErrorFor('invalid') }}
+<!-- Section -->
+<section class="fullscreen" style="background: url(https://source.unsplash.com/random) no-repeat; background-size: cover">
+  <div class="container container-fullscreen">
+    <div class="text-middle">
+      <div class="text-center m-b-30">
+        <a href="/" class="logo">
+          <img id="login-logo" src="/images/logo-dark.png" alt="Polo Logo">
+        </a>
+      </div>
+      <div class="row">
+        <div class="col-lg-5 center p-50 background-white b-r-6">
+          @if(hasErrorFor('invalid'))
+          <div class="alert alert-danger" role="alert">
+            {{ getErrorFor('invalid') }}
+          </div>
+          @endif
+          <h3 class="mb-0">Sign into your account.</h3>
+          <p class="mb-3">{{ organization.name }}</p>
+          <form action="/organization/{{ organization.slug }}/login" method="post">
+            {{ csrfField() }}
+            @!component('partials.forms.input', config = {label: 'Email', key: 'email'}, error = getErrorFor, old = old )
+            @!component('partials.forms.input', config = {label: 'Password', key: 'password', type: 'password'}, error = getErrorFor )
+            <div class="text-left form-group">
+              <button type="submit" class="btn btn-block">Sign In</button>
+            </div>
+          </form>
+          <div class="seperator mb-3 mt-3">
+            <span>Or</span>
+          </div>
+          <div class="text-center">
+            @include('partials.slack-oauth')
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-@endif
-<form action="/organization/{{ organization.slug }}/login" method="post">
-  {{ csrfField() }}
-  @!component('partials.forms.input', config = {label: 'Email', key: 'email'}, error = getErrorFor, old = old )
-  @!component('partials.forms.input', config = {label: 'Password', key: 'password', type: 'password'}, error = getErrorFor )
-  <button class="btn btn-primary" type="submit">Sign In</button>
-</form>
+</section>
+<!-- end: Section -->
 
-<div>
-  Or
-  @include('partials.oauth-button')
-</div>
 @endsection

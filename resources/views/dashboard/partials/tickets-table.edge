@@ -1,0 +1,20 @@
+
+<table class="table">
+  <tr>
+    <th>
+      Tickets
+    </th>
+    <th>
+      Created By
+    </th>
+    <th>
+      Created
+    </th>
+    <th>
+      Taken Care Of By
+    </th>
+  </tr>
+  @each(ticket in tickets)
+    @include('dashboard.partials.ticket-item')
+  @endeach
+</table>
