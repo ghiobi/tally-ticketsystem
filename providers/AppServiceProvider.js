@@ -1,4 +1,5 @@
 'use strict'
+const moment = require('moment')
 
 const path = require('path')
 const { promisify } = require('util')
@@ -37,6 +38,12 @@ class AppServiceProvider extends ServiceProvider {
       this.app.singleton(`App/Services/${service}`, () => {
         return new (require(`../app/Services/${service}`))()
       })
+    })
+
+    const View = use('View')
+
+    View.global('humanTime', (dateTime) => {
+      return moment(dateTime).fromNow()
     })
   }
 }

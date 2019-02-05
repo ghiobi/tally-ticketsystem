@@ -1,0 +1,53 @@
+@layout('layouts.index')
+
+@section('content')
+@set('title', ticket.title + ' - Ticket')
+
+@include('partials.header')
+
+<!-- Page title -->
+<section id="page-title" class="page-title-classic">
+  <div class="container">
+    <div class="page-title">
+      <p class="mb-3"><small><a href="{{ organizationRoute }}"><i class="fa fa-chevron-left"></i> Back</a></small></p>
+      <h1 class="mb-2">{{ ticket.title }}</h1>
+      <p class="mb-0">
+        <small>Opened By:</small> <span class="text-bold">{{ ticket.user.name }}</span>
+      </p>
+      <p>
+        <small>Status:</small>
+        @!component('partials.ticket.status', ticket = ticket)
+      </p>
+    </div>
+  </div>
+</section>
+<!-- end: Page title -->
+
+<section id="page-content">
+  <div class="container">
+    <h6>MESSAGES</h6>
+    <div class="list-group list-group-flush mb-3">
+      @each(message in ticket.messages)
+      <div class="list-group-item">
+        <p class="mb-0"><span class="text-bold">{{ message.user.name }}</span><small class="text-muted float-right">{{ humanTime(message.created_at) }}</small></p>
+        <p class="mb-0">{{ message.body }}</p>
+      </div>
+      @endeach
+    </div>
+    <form method="post" action="">
+      {{ csrfField() }}
+      <div class="form-group">
+        <label for="form_reply">Reply</label>
+        <div class="input-group">
+          <textarea name="reply" class="form-control" rows="5" id="form_reply" placeholder="Leave a reply ..."></textarea>
+          <div class="input-group-prepend">
+            <button class="btn btn-outline-secondary h-100" type="submit">Reply</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+@include('partials.footer')
+@endsection

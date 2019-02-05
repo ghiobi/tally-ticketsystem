@@ -3,27 +3,40 @@
 class DashboardController {
   async index({ view, auth, request }) {
     if (await auth.user.hasRole('admin')) {
-      const tickets = await request.organization.tickets().fetch()
+      let { organization } = request
+      let show = request.input('show')
+      let tickets = null
 
-      const data = {
-        open: [],
-        inprogress: [],
-        closed: []
+      switch (show) {
+        case 'closed':
+          tickets = await this.getTickets(organization)
+            .where('status', 'closed')
+            .fetch()
+          break
+        case 'mine':
+          tickets = await this.getTickets(organization)
+            .whereNot({ status: 'closed' })
+            .where('assigned_to', auth.user.id)
+            .fetch()
+          break
+        default:
+          show = 'all'
+          tickets = await this.getTickets(organization)
+            .whereNot({ status: 'closed' })
+            .fetch()
       }
 
-      for (const ticket of tickets.toJSON()) {
-        if (ticket.status === 'submitted') {
-          data['open'].push(ticket)
-        } else if (ticket.status === 'replied') {
-          data['inprogress'].push(ticket)
-        } else if (ticket.status === 'closed') {
-          data['closed'].push(ticket)
-        }
-      }
-      return view.render('dashboard.admin', data)
+      return view.render('dashboard.admin', { tickets: tickets.toJSON(), show })
     }
     const tickets = await auth.user.tickets().fetch()
     return view.render('dashboard.main', { tickets })
+  }
+
+  getTickets(organization) {
+    return organization
+      .tickets()
+      .with('user')
+      .with('assignedTo')
   }
 }
 

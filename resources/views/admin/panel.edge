@@ -1,0 +1,31 @@
+@layout('layouts.index')
+
+@section('content')
+  @set('title', 'Api Token - Admin')
+  @include('partials.header')
+
+  <!-- Page title -->
+  <section id="page-title" class="page-title-classic">
+    <div class="container">
+      <div class="page-title">
+        <h1>Administrative Panel</h1>
+      </div>
+    </div>
+  </section>
+  <!-- end: Page title -->
+
+  <section class="flex-grow-1">
+    <div class="container">
+      <div class="form-group">
+        <label for="form_api_token">Here is your api token:</label>
+        <input type="text" id="form_api_token" class="form-control" value="{{ organization.api_token ? organization.api_token : 'No token' }}" disabled>
+      </div>
+      <form action="{{ organizationRoute }}/admin/token" method="post">
+        {{ csrfField() }}
+        <button class="btn btn-primary" type="submit">Generate a new one!</button>
+      </form>
+    </div>
+  </section>
+
+  @include('partials.footer')
+@endsection

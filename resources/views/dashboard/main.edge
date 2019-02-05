@@ -2,8 +2,22 @@
 
 @section('content')
   @set('title', 'Dashboard')
-  @set('bodyCSS', 'full-screen')
   @include('partials.header')
-  {{ organization.name }}
-  Welcome {{ auth.user.name }}, you're a regular user
+
+  <!-- Page title -->
+  <section id="page-title" class="page-title-classic">
+    <div class="container">
+      <div class="page-title">
+        <h1>Welcome {{ auth.user.name }}</h1>
+        <span>You're a regular user.</span>
+      </div>
+    </div>
+  </section>
+  <!-- end: Page title -->
+
+  <section class="flex-grow-1">
+
+  </section>
+
+  @include('partials.footer')
 @endsection
