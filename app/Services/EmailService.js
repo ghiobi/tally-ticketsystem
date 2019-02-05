@@ -2,7 +2,7 @@ const Mail = use('Mail')
 
 class EmailService {
   async sendEmail(subject, view, data) {
-    await Mail.send(view, data, (message) => {
+    Mail.send(view, data, (message) => {
       message.to(data.user.email)
       message.subject(subject)
     })
@@ -16,7 +16,7 @@ class EmailService {
       user: null,
       messages: (builder) => builder.first()
     })
-    await this.sendEmail(subject, view, ticket.toJSON())
+    this.sendEmail(subject, view, ticket.toJSON())
   }
 
   //call this when an admin replies
@@ -27,7 +27,8 @@ class EmailService {
       user: null,
       messages: (builder) => builder.pickInverse(1)
     })
-    await this.sendEmail(subject, view, ticket.toJSON())
+
+    this.sendEmail(subject, view, ticket.toJSON())
   }
 }
 
