@@ -1,6 +1,6 @@
 'use strict'
 
-const { test, trait, before } = use('Test/Suite')('Message Controller')
+const { test, trait, before } = use('Test/Suite')('Api Message Controller')
 const {
   OrganizationFactory,
   UserFactory,

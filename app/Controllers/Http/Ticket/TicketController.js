@@ -1,21 +1,49 @@
 'use strict'
 
-const User = use('App/Models/User')
+const Ticket = use('App/Models/Ticket')
+const Message = use('App/Models/Message')
+const EmailService = use('App/Services/EmailService')
+
+const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
 class TicketController {
-  async getOrganizationTickets({ response, request }) {
-    return response.json(
-      await request.organization
-        .tickets()
-        .with('user')
-        .fetch()
-    )
+  async index({ view, params }) {
+    const ticket = await Ticket.query()
+      .where('id', params.ticket_id)
+      .with('messages.user') // returns messages linked to this ticket
+      .with('user') // returns who submited the ticket
+      .first()
+
+    return view.render('ticket.index', { ticket: ticket.toJSON() })
   }
 
-  async getUserTickets({ response, params }) {
-    const user = await User.find(params.userId)
+  async reply({ response, request, auth, params }) {
+    const ticket = await Ticket.find(params.ticket_id)
 
-    return response.json(await user.tickets().fetch())
+    if (
+      ticket.user_id !== auth.user.id &&
+      !(await auth.user.hasRole('admin'))
+    ) {
+      throw new ForbiddenException()
+    }
+
+    const reply = request.input('reply')
+    if (!reply) {
+      return response.redirect('back')
+    }
+
+    await Message.create({
+      user_id: auth.user.id,
+      ticket_id: ticket.id,
+      body: reply
+    })
+
+    // Notify ticket owner
+    if (await auth.user.hasRole('admin')) {
+      EmailService.sendReplyNotification(ticket)
+    }
+
+    return response.redirect('back')
   }
 }
 

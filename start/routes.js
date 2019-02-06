@@ -31,20 +31,22 @@ Route.group(() => {
  */
 Route.group(() => {
   Route.get('/logout', 'Auth/LogoutController.logout')
+
   Route.get('/', 'Dashboard/DashboardController.index')
 
-  Route.get(
-    '/feedback/:feedback_id',
-    'Feedback/FeedbackController.index'
-  ).middleware(['feedback.belongs.to.user'])
-  Route.post('/feedback/:feedback_id', 'Feedback/FeedbackController.reply')
+  Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware([
+    'ticket.belongs.to.user'
+  ])
+  Route.post('/ticket/:ticket_id', 'Ticket/TicketController.reply')
+
   Route.get(
     '/api/tickets/user/:userId',
-    'Ticket/TicketController.getUserTickets'
+    'Api/ApiTicketController.getUserTickets'
   ).middleware('IsSelfOrAdmin')
+
   Route.get(
     '/api/tickets',
-    'Ticket/TicketController.getOrganizationTickets'
+    'Api/ApiTicketController.getOrganizationTickets'
   ).middleware('IsAdmin')
 })
   .prefix('organization/:organization')
@@ -66,7 +68,7 @@ Route.group(() => {
 Route.group(() => {
   Route.get(
     '/tickets/:ticketId/messages',
-    'Ticket/MessageController.getTicketMessages'
+    'Api/ApiMessageController.getTicketMessages'
   )
 })
   .prefix('organization/:organization/api')

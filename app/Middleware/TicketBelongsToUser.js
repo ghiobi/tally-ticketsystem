@@ -5,7 +5,7 @@
 const Ticket = use('App/Models/Ticket')
 const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
-class FeedbackBelongsToUser {
+class TicketBelongsToUser {
   /**
    * @param {Response} ctx.reponse
    * @param {auth}
@@ -15,7 +15,7 @@ class FeedbackBelongsToUser {
   async handle({ auth, params }, next) {
     // call next to advance the request
     const ticket = await Ticket.query()
-      .where('id', params.feedback_id)
+      .where('id', params.ticket_id)
       .with('user')
       .first()
     if (ticket.user_id !== auth.user.id) {
@@ -30,4 +30,4 @@ class FeedbackBelongsToUser {
   }
 }
 
-module.exports = FeedbackBelongsToUser
+module.exports = TicketBelongsToUser

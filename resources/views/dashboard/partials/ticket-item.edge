@@ -15,7 +15,7 @@ See github issue for more details https://github.com/adonisjs/adonis-framework/i
 --}}
 <tr>
   <td>
-    <a href="{{ organizationRoute }}/feedback/{{ticket.id}}" class="d-block">
+    <a href="{{ organizationRoute }}/ticket/{{ticket.id}}" class="d-block">
       <span class="text">{{ ticket.title }}</span>
     </a>
     @!component('partials.ticket.status', ticket = ticket)
