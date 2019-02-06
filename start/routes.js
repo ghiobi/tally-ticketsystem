@@ -38,16 +38,6 @@ Route.group(() => {
     'ticket.belongs.to.user'
   ])
   Route.post('/ticket/:ticket_id', 'Ticket/TicketController.reply')
-
-  Route.get(
-    '/api/tickets/user/:userId',
-    'Api/ApiTicketController.getUserTickets'
-  ).middleware('IsSelfOrAdmin')
-
-  Route.get(
-    '/api/tickets',
-    '/Api/ApiTicketController.getOrganizationTickets'
-  ).middleware('IsAdmin')
 })
   .prefix('organization/:organization')
   .middleware(['organization', 'auth', 'within'])
@@ -70,8 +60,10 @@ Route.group(() => {
     '/tickets/:ticketId/messages',
     'Api/ApiMessageController.getTicketMessages'
   )
-
+  Route.get('/tickets/user/:userId', 'Api/ApiTicketController.getUserTickets')
+  Route.get('/tickets', 'Api/ApiTicketController.getOrganizationTickets')
   Route.post('/tickets', 'Api/ApiTicketController.createTicket')
+
 })
   .prefix('organization/:organization/api')
   .middleware(['organization', 'api'])
