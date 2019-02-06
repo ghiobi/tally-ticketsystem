@@ -1,7 +1,8 @@
 'use strict'
 
-const { test, trait, before } = use('Test/Suite')('Api Ticket Service')
-const { OrganizationFactory, UserFactory, TicketFactory } = models
+const { test, trait, before } = use('Test/Suite')('Api Ticket Controller')
+const { ioc } = use('@adonisjs/fold')
+const { OrganizationFactory, UserFactory, User, TicketFactory } = models
 
 trait('Test/ApiClient')
 trait('Auth/Client')
@@ -99,7 +100,7 @@ test('check that a user cannot see tickets opened by other users', async ({
   client
 }) => {
   const response = await client
-    .get(`organization/${organization.slug}/api/tickets/user/${user2.id}`)
+    .get(`/organization/${organization.slug}/api/tickets/user/${user2.id}`)
     .loginVia(user1)
     .end()
 
@@ -110,7 +111,7 @@ test('check that an admin can see tickets belonging to a user', async ({
   client
 }) => {
   const response = await client
-    .get(`organization/${organization.slug}/api/tickets/user/${user2.id}`)
+    .get(`/organization/${organization.slug}/api/tickets/user/${user2.id}`)
     .loginVia(userAdmin)
     .end()
 
@@ -125,4 +126,90 @@ test('check that an admin can see tickets belonging to a user', async ({
       user_id: user2.id
     }
   ])
+})
+
+test('createTicket api should create a new ticket and message in the database', async ({
+  assert,
+  client
+}) => {
+  const response = await client
+    .post(`/organization/${organization.slug}/api/tickets`)
+    .send({
+      token: organization.api_token,
+      user_id: user1.external_id,
+      title: 'testTitle',
+      body: 'this app is not good'
+    })
+    .end()
+
+  const ticket = await user1
+    .tickets()
+    .where('title', 'testTitle')
+    .first()
+  const message = await ticket
+    .messages()
+    .where('ticket_id', ticket.id)
+    .first()
+  const message_body = await ticket
+    .messages()
+    .where('body', 'this app is not good')
+    .first()
+
+  response.assertStatus(200)
+  assert.exists(ticket)
+  assert.exists(message)
+  assert.exists(message_body)
+})
+
+test('createTicket api should create a user if the user posting to /api/tickets does not exist yet', async ({
+  assert,
+  client
+}) => {
+  const SlackWebClient = {}
+  ioc.fake('Slack/WebClient', () => {
+    return {
+      create() {
+        return SlackWebClient
+      }
+    }
+  })
+
+  ioc.fake('App/Services/SlackService', () => {
+    return {
+      findOrCreateUser() {
+        return user1
+      }
+    }
+  })
+
+  const response = await client
+    .post(`/organization/${organization.slug}/api/tickets`)
+    .send({
+      token: organization.api_token,
+      user_id: user1.external_id,
+      title: 'testTitle2',
+      body: 'this app is soo good'
+    })
+    .end()
+
+  const user = await User.find(user1.id)
+
+  const ticket = await user
+    .tickets()
+    .where('title', 'testTitle2')
+    .first()
+  const message = await ticket
+    .messages()
+    .where('ticket_id', ticket.id)
+    .first()
+  const message_body = await ticket
+    .messages()
+    .where('body', 'this app is soo good')
+    .first()
+
+  response.assertStatus(200)
+  assert.exists(user)
+  assert.exists(ticket)
+  assert.exists(message)
+  assert.exists(message_body)
 })

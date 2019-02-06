@@ -1,10 +1,9 @@
 'use strict'
 
+const EmailService = use('App/Services/EmailService')
+const ForbiddenException = use('App/Exceptions/ForbiddenException')
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
-const EmailService = use('App/Services/EmailService')
-
-const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
 class TicketController {
   async index({ view, params }) {

@@ -46,7 +46,7 @@ Route.group(() => {
 
   Route.get(
     '/api/tickets',
-    'Api/ApiTicketController.getOrganizationTickets'
+    '/Api/ApiTicketController.getOrganizationTickets'
   ).middleware('IsAdmin')
 })
   .prefix('organization/:organization')
@@ -70,6 +70,8 @@ Route.group(() => {
     '/tickets/:ticketId/messages',
     'Api/ApiMessageController.getTicketMessages'
   )
+
+  Route.post('/tickets', 'Api/ApiTicketController.createTicket')
 })
   .prefix('organization/:organization/api')
   .middleware(['organization', 'api'])
