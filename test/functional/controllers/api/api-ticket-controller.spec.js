@@ -15,9 +15,12 @@ let ticket1 = null
 let ticket2 = null
 let ticket3 = null
 let ticket4 = null
+let wrongOrganization = 'wrongOrganization'
 
 before(async () => {
-  organization = await OrganizationFactory.create()
+  organization = await OrganizationFactory.create({
+    api_token: 'someRandomAPIToken'
+  })
 
   user1 = await UserFactory.make()
   user2 = await UserFactory.make()
@@ -40,30 +43,15 @@ before(async () => {
   await ticket4.user().associate(user2)
 })
 
-test('check that a users can retrieve their tickets', async ({ client }) => {
-  const response = await client
-    .get(`/organization/${organization.slug}/api/tickets/user/${user2.id}`)
-    .loginVia(user2)
-    .end()
-
-  response.assertStatus(200)
-  response.assertJSONSubset([
-    {
-      id: ticket3.id,
-      user_id: user2.id
-    },
-    {
-      id: ticket4.id,
-      user_id: user2.id
-    }
-  ])
-})
-
 test('check if all tickets from an organization can be retrieved', async ({
   client
 }) => {
   const response = await client
-    .get(`/organization/${organization.slug}/api/tickets`)
+    .get(
+      `/organization/${organization.slug}/api/tickets?token=${
+        organization.api_token
+      }`
+    )
     .loginVia(userAdmin)
     .end()
 
@@ -84,34 +72,15 @@ test('check if all tickets from an organization can be retrieved', async ({
   ])
 })
 
-test('check that a user cannot see all tickets of an organization', async ({
+test('check that tickets belonging to a user can be retrieved', async ({
   client
 }) => {
   const response = await client
-    .get(`/organization/${organization.slug}/api/tickets`)
-    .loginVia(user2)
-    .end()
-
-  response.assertStatus(403)
-})
-
-test('check that a user cannot see tickets opened by other users', async ({
-  client
-}) => {
-  const response = await client
-    .get(`organization/${organization.slug}/api/tickets/user/${user2.id}`)
-    .loginVia(user1)
-    .end()
-
-  response.assertStatus(403)
-})
-
-test('check that an admin can see tickets belonging to a user', async ({
-  client
-}) => {
-  const response = await client
-    .get(`organization/${organization.slug}/api/tickets/user/${user2.id}`)
-    .loginVia(userAdmin)
+    .get(
+      `organization/${organization.slug}/api/tickets/user/${user2.id}?token=${
+        organization.api_token
+      }`
+    )
     .end()
 
   response.assertStatus(200)
@@ -125,4 +94,32 @@ test('check that an admin can see tickets belonging to a user', async ({
       user_id: user2.id
     }
   ])
+})
+
+test('check that a wrong token prevents from retrieving all tickets', async ({
+  client
+}) => {
+  const response = await client
+    .get(
+      `/organization/${
+        organization.slug
+      }/api/tickets?token=${wrongOrganization}`
+    )
+    .end()
+
+  response.assertStatus(403)
+})
+
+test('check that a wrong token prevents from retrieving tickets belonging to a user', async ({
+  client
+}) => {
+  const response = await client
+    .get(
+      `organization/${organization.slug}/api/tickets/user/${
+        user2.id
+      }?token=${wrongOrganization}`
+    )
+    .end()
+
+  response.assertStatus(403)
 })
