@@ -18,8 +18,12 @@ class TicketSchema extends Schema {
         .unsigned()
         .references('id')
         .inTable('users')
+        .defaultTo(null)
       table.string('title', 80).notNullable()
-      table.enu('status', ['submitted', 'replied', 'closed']).notNullable()
+      table
+        .enu('status', ['submitted', 'replied', 'closed'])
+        .notNullable()
+        .defaultTo('submitted')
       table.timestamps()
     })
   }

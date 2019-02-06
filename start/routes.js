@@ -62,6 +62,8 @@ Route.group(() => {
   )
   Route.get('/tickets/user/:userId', 'Api/ApiTicketController.getUserTickets')
   Route.get('/tickets', 'Api/ApiTicketController.getOrganizationTickets')
+  Route.post('/tickets', 'Api/ApiTicketController.createTicket')
+
 })
   .prefix('organization/:organization/api')
   .middleware(['organization', 'api'])

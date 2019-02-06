@@ -12,11 +12,13 @@ test('make sure registration is satisfied', async ({ client, assert }) => {
       user: {
         name: 'Registration User',
         email: 'registration@email.com',
-        password: 'password'
+        password: 'password',
+        external_id: '123'
       },
       organization: {
         name: 'Organization',
-        slug: 'org4niz4t10n'
+        slug: 'org4niz4t10n',
+        external_id: 'waw'
       }
     })
     .end()
