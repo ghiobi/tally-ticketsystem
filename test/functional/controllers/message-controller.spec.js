@@ -52,7 +52,7 @@ before(async () => {
   await message3.ticket().associate(ticket)
 })
 
-test('check messages of a ticket can be retrieved', async ({ client }) => {
+test('check that messages of a ticket can be retrieved', async ({ client }) => {
   const response = await client
     .get(
       `/organization/${organization.slug}/api/tickets/${
@@ -62,21 +62,25 @@ test('check messages of a ticket can be retrieved', async ({ client }) => {
     .end()
 
   response.assertStatus(200)
-  response.assertJSONSubset([
-    {
-      id: message1.id,
-      user_id: user1.id,
-      ticket_id: ticket.id
-    },
-    {
-      id: message2.id,
-      user_id: user1.id,
-      ticket_id: ticket.id
-    },
-    {
-      id: message3.id,
-      user_id: user1.id,
-      ticket_id: ticket.id
-    }
-  ])
+  response.assertJSONSubset({
+    id: ticket.id,
+    user_id: user1.id,
+    messages: [
+      {
+        id: message1.id,
+        user_id: user1.id,
+        ticket_id: ticket.id
+      },
+      {
+        id: message2.id,
+        user_id: user1.id,
+        ticket_id: ticket.id
+      },
+      {
+        id: message3.id,
+        user_id: user1.id,
+        ticket_id: ticket.id
+      }
+    ]
+  })
 })

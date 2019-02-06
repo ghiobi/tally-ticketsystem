@@ -90,6 +90,10 @@ class User extends Model {
 
     await this.roles().attach([model.id])
   }
+
+  static get hidden() {
+    return ['password']
+  }
 }
 
 module.exports = User
