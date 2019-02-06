@@ -25,10 +25,14 @@ class DashboardController {
             .fetch()
       }
 
-      return view.render('dashboard.admin', { tickets: tickets.toJSON(), show })
+      return view.render('dashboard.admin', {
+        tickets: tickets.toJSON(),
+        isAdmin: true,
+        show
+      })
     }
     const tickets = await auth.user.tickets().fetch()
-    return view.render('dashboard.main', { tickets })
+    return view.render('dashboard.main', { tickets: tickets.toJSON() })
   }
 
   getTickets(organization) {

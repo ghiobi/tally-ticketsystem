@@ -20,13 +20,15 @@ See github issue for more details https://github.com/adonisjs/adonis-framework/i
     </a>
     @!component('partials.ticket.status', ticket = ticket)
   </td>
-  <td>
-    {{ ticket.user.name }}
-  </td>
+  @if(isAdmin)
+    <td>
+      {{ ticket.user.name }}
+    </td>
+  @endif
   <td>
     {{ humanTime(ticket.created_at) }}
   </td>
   <td>
-    {{ ticket.assignedTo ? ticket.assignedTo.name : '' }}
+    {{ ticket.assignedTo ? ticket.assignedTo.name : '-' }}
   </td>
 </tr>

@@ -4,9 +4,11 @@
     <th>
       Tickets
     </th>
-    <th>
-      Created By
-    </th>
+    @if(isAdmin)
+      <th >
+        Created By
+      </th>
+    @endif
     <th>
       Created
     </th>
