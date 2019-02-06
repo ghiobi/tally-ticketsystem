@@ -2,17 +2,15 @@
 
 const Ticket = use('App/Models/Ticket')
 
-class ApiMessageService {
+class ApiMessageController {
   async getTicketMessages({ response, params }) {
-    let ticket = await Ticket.find(params.ticketId)
-
     return response.json(
-      await ticket
-        .messages()
-        .with('user')
-        .fetch()
+      await Ticket.query()
+        .with('messages.user')
+        .where('id', params.ticketId)
+        .first()
     )
   }
 }
 
-module.exports = ApiMessageService
+module.exports = ApiMessageController
