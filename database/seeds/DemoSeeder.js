@@ -63,11 +63,12 @@ class DemoSeeder {
     const tickets = []
     for (let i = 0; i < 50; i++) {
       for (let j = 0; j < chance.integer({ min: 0, max: 10 }); j++) {
+        let assigned = chance.bool()
         tickets.push(
           await TicketFactory.create({
             user_id: chance.integer({ min: 2, max: 15 }),
-            status: this.getRandomStatus(),
-            assigned_to: chance.bool() ? admin.id : null
+            status: this.getStatus(assigned),
+            assigned_to: assigned ? admin.id : null
           })
         )
       }
@@ -90,13 +91,14 @@ class DemoSeeder {
     }
   }
 
-  getRandomStatus() {
-    switch (chance.integer({ min: 0, max: 2 })) {
+  getStatus(assigned) {
+    if (assigned) {
+      return 'replied'
+    }
+    switch (chance.integer({ min: 0, max: 1 })) {
       case 0:
         return 'submitted'
       case 1:
-        return 'replied'
-      case 2:
         return 'closed'
     }
   }
