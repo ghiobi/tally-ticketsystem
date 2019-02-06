@@ -9,14 +9,25 @@
     <div class="container">
       <div class="page-title">
         <h1>Welcome {{ auth.user.name }}</h1>
-        <span>You're a regular user.</span>
+        <span>View or Make Claims Here</span>
       </div>
     </div>
   </section>
   <!-- end: Page title -->
 
   <section class="flex-grow-1">
-
+    <div class="container">
+      @if(tickets.length)
+        @include('dashboard.partials.tickets-table')
+      @else
+        <div class="row">
+          <div class="col-md-6 offset-3 text-center">
+            <p class="text-bold mb-1">You don't have any tickets.</p>
+            <a href="#" class="btn btn-primary btn-sm">GET STARTED</a>
+          </div>
+        </div>
+      @endif
+    </div>
   </section>
 
   @include('partials.footer')

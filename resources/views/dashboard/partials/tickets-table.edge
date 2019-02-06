@@ -1,20 +1,42 @@
 
 <table class="table">
-  <tr>
+  <thead>
     <th>
       Tickets
     </th>
+    @if(request.url() !== '/organization/' + organization.slug)
     <th>
       Created By
     </th>
+    @endif
     <th>
       Created
     </th>
     <th>
       Taken Care Of By
     </th>
-  </tr>
-  @each(ticket in tickets)
-    @include('dashboard.partials.ticket-item')
-  @endeach
+  </thead>
+  <tbody>
+    @each(ticket in tickets)
+    <tr>
+      <td>
+        <a href="{{ organizationRoute }}/ticket/{{ticket.id}}" class="d-block">
+          <span class="text">{{ ticket.title }}</span>
+        </a>
+        @!component('partials.ticket.status', ticket = ticket)
+      </td>
+      @if(request.url() !== '/organization/' + organization.slug)
+      <td>
+        {{ ticket.user.name }}
+      </td>
+      @endif
+      <td>
+        {{ humanTime(ticket.created_at) }}
+      </td>
+      <td>
+        {{ ticket.assignedTo ? ticket.assignedTo.name : '' }}
+      </td>
+    </tr>
+    @endeach
+  </tbody>
 </table>

@@ -19,9 +19,9 @@
     <div class="container">
       <div class="row mb-2 align-items-center">
         <div class="col-sm-8">
-          <a href="{{ organizationRoute }}?show=all" class="btn btn-rounded {{ show === 'all' ? '' : 'btn-outline' }}">All Active</a>
-          <a href="{{ organizationRoute }}?show=mine" class="btn btn-rounded {{ show === 'mine' ? '' : 'btn-outline' }}">Mine</a>
-          <a href="{{ organizationRoute }}?show=closed" class="btn btn-rounded {{ show === 'closed' ? '' : 'btn-outline' }}">Closed</a>
+          <a href="{{ organizationRoute }}/admin?show=all" class="btn btn-rounded {{ show === 'all' ? '' : 'btn-outline' }}">All Active</a>
+          <a href="{{ organizationRoute }}/admin?show=mine" class="btn btn-rounded {{ show === 'mine' ? '' : 'btn-outline' }}">Assigned To Me</a>
+          <a href="{{ organizationRoute }}/admin?show=closed" class="btn btn-rounded {{ show === 'closed' ? '' : 'btn-outline' }}">Closed</a>
         </div>
         <div class="col-sm-4">
           <form>
