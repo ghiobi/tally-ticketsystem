@@ -1,6 +1,6 @@
 'use strict'
 class DashboardController {
-  async index({ view, auth, request }) {
+  async index({ view, auth }) {
     const tickets = await auth.user
       .tickets()
       .with('user')
