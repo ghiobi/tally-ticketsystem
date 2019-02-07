@@ -4,7 +4,7 @@
       <th>
          Tickets
       </th>
-      @if(request.url() !== '/organization/' + organization.slug)
+      @if(hasRole('admin'))
       <th>
          Created By
       </th>
