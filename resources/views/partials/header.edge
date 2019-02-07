@@ -10,11 +10,11 @@
       </div>
       <!--End: Logo-->
 
-      <!--Navigation Resposnive Trigger-->
+      <!--Navigation Responsive Trigger-->
       <div id="mainMenu-trigger">
         <button class="lines-button x"> <span class="lines"></span> </button>
       </div>
-      <!--end: Navigation Resposnive Trigger-->
+      <!--end: Navigation Responsive Trigger-->
 
       <!--Navigation-->
       <div id="mainMenu" class="light">
@@ -23,9 +23,16 @@
             <ul>
               @loggedIn
               <li>{{ organization.name }}</li>
+              @if(hasRole('admin'))
               <li class="dropdown">
-                <a href="{{ organizationRoute }}/admin/token">Admin Panel</a>
+                <a href="{{ organizationRoute }}/admin">Admin</a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li>
+                    <a href="{{ organizationRoute }}/admin/token">Admin Panel</a>
+                  </li>
+                </ul>
               </li>
+              @endif
               <li class="dropdown"> <a href="#"><i class="fa fa-user-circle"></i>{{ auth.user.name }}</a>
                 <ul class="dropdown-menu dropdown-menu-right">
                   <li>

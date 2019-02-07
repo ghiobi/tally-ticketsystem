@@ -39,6 +39,9 @@ class ExceptionHandler extends BaseExceptionHandler {
         }
     }
 
+    // Exception Handler swallowing errors logs.
+    /* eslint-disable no-console */
+    console.error(error)
     super.handle(...arguments)
   }
 }

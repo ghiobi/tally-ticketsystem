@@ -57,6 +57,12 @@ class LoginController {
      * Success
      */
     await auth.login(user)
+
+    if (await user.hasRole('admin')) {
+      return response.redirect(
+        `/organization/${request.organization.slug}/admin`
+      )
+    }
     return response.redirect(`/organization/${request.organization.slug}`)
   }
 

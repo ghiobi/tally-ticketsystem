@@ -46,6 +46,8 @@ Route.group(() => {
  * Authenticated Organization Routes on Admin
  */
 Route.group(() => {
+  Route.get('/', 'Admin/DashboardController.index')
+
   Route.get('/token', 'Admin/ApiTokenController.index')
   Route.post('/token', 'Admin/ApiTokenController.generate')
 })
