@@ -36,6 +36,42 @@ class TicketController {
       ticket_id: ticket.id,
       body: reply
     })
+    if (await auth.user.hasRole('admin')) {
+      // Set status to replied
+      if (ticket.status != 'replied') {
+        ticket.updateStatus('replied')
+        await ticket.save()
+      }
+      // Notify ticket owner
+      EmailService.sendReplyNotification(ticket)
+    }
+
+    return response.redirect('back')
+  }
+
+  async resolve({ response, request, auth, params }) {
+    const ticket = await Ticket.find(params.ticket_id)
+
+    if (
+      ticket.user_id !== auth.user.id &&
+      !(await auth.user.hasRole('admin'))
+    ) {
+      throw new ForbiddenException()
+    }
+
+    const reply = request.input('reply')
+    if (reply) {
+      await Message.create({
+        user_id: auth.user.id,
+        ticket_id: ticket.id,
+        body: reply
+      })
+    }
+
+    if (ticket.status != 'closed') {
+      ticket.updateStatus('closed')
+      await ticket.save()
+    }
 
     // Notify ticket owner
     if (await auth.user.hasRole('admin')) {
