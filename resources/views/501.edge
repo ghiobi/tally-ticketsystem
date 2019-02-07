@@ -1,0 +1,30 @@
+@layout('layouts.index')
+
+@section('content')
+@set('title', 'Welcome')
+
+@include('partials.header')
+
+<!-- 501 PAGE -->
+<section class="m-t-80 p-b-150">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="page-error-404">501</div>
+      </div>
+      <div class="col-lg-6">
+        <div class="text-left">
+          <h1 class="text-medium">Ooops, This Page Could Not Be Found!</h1>
+          <p class="lead">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+          <div class="seperator m-t-20 m-b-20"></div>
+          <p>Go back <a href="/">home</a></p>.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- end:  501 PAGE -->
+
+@include('partials.footer')
+
+@endsection

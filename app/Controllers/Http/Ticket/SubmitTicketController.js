@@ -1,8 +1,10 @@
 'use strict'
 
-const User = use('App/Models/User')
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
+const InternalServerErrorException = use(
+  'App/Exceptions/InternalServerErrorException'
+)
 
 class SubmitTicketController {
   async index({ view }) {
@@ -10,27 +12,28 @@ class SubmitTicketController {
   }
 
   async submit({ response, request, auth }) {
-    const { title, body } = request.post()
+    const title = request.input('title')
+    const body = request.input('body')
 
     const user = auth.user
 
-    let ticket = null
-    try {
-      ticket = await Ticket.create({
-        user_id: user.id,
-        title: title
-      })
-    } catch (e) {
-      return response.redirect('back', 501)
-    }
-
-    await Message.create({
+    const ticket = await Ticket.create({
       user_id: user.id,
-      ticket_id: ticket.id,
-      body: body
+      title: title,
+      status: 'submitted'
     })
 
-    return response.redirect('back', 200)
+    if (ticket) {
+      const message = await Message.create({
+        user_id: user.id,
+        ticket_id: ticket.id,
+        body: body
+      })
+    } else {
+      throw new InternalServerErrorException()
+    }
+
+    return response.redirect('back')
   }
 }
 
