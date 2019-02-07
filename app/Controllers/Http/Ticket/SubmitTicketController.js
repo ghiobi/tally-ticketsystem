@@ -5,35 +5,33 @@ const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
 
 class SubmitTicketController {
-    async index({ view, params }) {
-        return view.render('ticket.index', { ticket: ticket.toJSON() })
-      }
+  async index({ view }) {
+    return view.render('ticket.SubmitPage')
+  }
 
-    async submit({ response, request }) {
-        const { user_id, title, body } = request.post()
-        
-        let user = await User.query()
-        .where('user_id', user_id)
-        .first()
+  async submit({ response, request, auth }) {
+    const { title, body } = request.post()
 
-        const ticket
-        try {
-            ticket = await Ticket.create({
-            user_id: user.id,
-            title: title
-          })
-        } catch(e) {
-            return response.redirect('back', 501)
-        }
-      
-        await Message.create({
+    const user = auth.user
+
+    let ticket = null
+    try {
+      ticket = await Ticket.create({
         user_id: user.id,
-        ticket_id: ticket.id,
-        body: body
-        })
+        title: title
+      })
+    } catch (e) {
+      return response.redirect('back', 501)
+    }
 
-        return response.redirect('back', 200)
-      }
+    await Message.create({
+      user_id: user.id,
+      ticket_id: ticket.id,
+      body: body
+    })
+
+    return response.redirect('back', 200)
+  }
 }
 
 module.exports = SubmitTicketController

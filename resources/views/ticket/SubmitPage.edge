@@ -1,0 +1,35 @@
+@layout('layouts.index')
+
+@section('content')
+@set('title', 'Submit a new Ticket feedback')
+
+@include('partials.header')
+
+<section id="submit-ticket-content" class="flex-grow-1">
+    <div class="container">
+        <form method="post" action="">
+            {{ csrfField() }}
+            <div class="form-group">
+                <div id="submit-ticket-title-div" class="col-md-8">
+                    <label for="ticket_title">Ticket title</label>
+                    <input type="text" id="ticket_title" class="form-control" required minlength="1" maxlength="1000" placeholder="Title.." />
+                </div>
+                <div id="submit-ticket-body-div" class="col-md-10">
+                    <label for="ticket_body">Feedback</label>
+                    <textarea id="ticket_body" class="form-control" rows="5" placeholder="Feedback..." required></textarea>
+                </div>
+                <div class="col-md">
+                    <button class="btn btn-outline-secondary" type="submit">Submit</button>
+                    @if(hasRole('admin'))
+                        <button class="btn btn-light btn-outline-secondary" onclick="window.location.href='{{ organizationRoute }}/admin'">Cancel</button>
+                    @else
+                        <button class="btn btn-light btn-outline-secondary" onclick="window.location.href='{{ organizationRoute }}'">Cancel</button>
+                    @endif
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+@include('partials.footer')
+@endsection
