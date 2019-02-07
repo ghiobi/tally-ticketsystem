@@ -46,7 +46,7 @@ test('Make sure user is redirected back after submitting reply', async ({
   client
 }) => {
   const response = await client
-    .post(`organization/${organization.slug}/ticket/${ticket.id}`)
+    .post(`organization/${organization.slug}/ticket/${ticket.id}/reply`)
     .send({ reply: 'test' })
     .loginVia(user)
     .end()
@@ -56,7 +56,7 @@ test('Make sure user is redirected back after submitting reply', async ({
 
 test('Make sure Message is persisted', async ({ client, assert }) => {
   await client
-    .post(`organization/${organization.slug}/ticket/${ticket.id}`)
+    .post(`organization/${organization.slug}/ticket/${ticket.id}/reply`)
     .send({ reply: 'ASDFGHJKL' })
     .loginVia(user)
     .end()
@@ -74,7 +74,7 @@ test('Make sure Ticket Status is set to replied after admin reply', async ({
   assert
 }) => {
   await client
-    .post(`organization/${organization.slug}/ticket/${ticket.id}`)
+    .post(`organization/${organization.slug}/ticket/${ticket.id}/reply`)
     .send({ reply: 'ASDFGHJKL' })
     .loginVia(admin)
     .end()

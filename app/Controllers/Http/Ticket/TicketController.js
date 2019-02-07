@@ -40,7 +40,6 @@ class TicketController {
       // Set status to replied
       if (ticket.status != 'replied') {
         ticket.updateStatus('replied')
-        await ticket.save()
       }
       // Notify ticket owner
       EmailService.sendReplyNotification(ticket)
@@ -70,7 +69,30 @@ class TicketController {
 
     if (ticket.status != 'closed') {
       ticket.updateStatus('closed')
-      await ticket.save()
+    }
+
+    // Notify ticket owner
+    if (await auth.user.hasRole('admin')) {
+      EmailService.sendReplyNotification(ticket)
+    }
+
+    return response.redirect('back')
+  }
+
+  async reopen({ response, request, auth, params }) {
+    const ticket = await Ticket.find(params.ticket_id)
+
+    if (
+      ticket.user_id !== auth.user.id &&
+      !(await auth.user.hasRole('admin'))
+    ) {
+      throw new ForbiddenException()
+    }
+
+    if (ticket.status != 'closed') {
+      throw "Ticket that isn't closed can't be reopened"
+    } else {
+      ticket.updateStatus('replied')
     }
 
     // Notify ticket owner
