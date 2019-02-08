@@ -37,7 +37,9 @@ Route.group(() => {
   Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware([
     'ticket.belongs.to.user'
   ])
-  Route.post('/ticket/:ticket_id', 'Ticket/TicketController.reply')
+  Route.post('/ticket/:ticket_id/reply', 'Ticket/TicketController.reply')
+  Route.post('/ticket/:ticket_id/resolve', 'Ticket/TicketController.resolve')
+  Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen')
 })
   .prefix('organization/:organization')
   .middleware(['organization', 'auth', 'within'])
@@ -65,7 +67,6 @@ Route.group(() => {
   Route.get('/tickets/user/:userId', 'Api/ApiTicketController.getUserTickets')
   Route.get('/tickets', 'Api/ApiTicketController.getOrganizationTickets')
   Route.post('/tickets', 'Api/ApiTicketController.createTicket')
-
 })
   .prefix('organization/:organization/api')
   .middleware(['organization', 'api'])

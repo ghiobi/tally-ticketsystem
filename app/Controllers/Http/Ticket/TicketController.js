@@ -19,11 +19,10 @@ class TicketController {
   async reply({ response, request, auth, params }) {
     const ticket = await Ticket.find(params.ticket_id)
 
-    if (
-      ticket.user_id !== auth.user.id &&
-      !(await auth.user.hasRole('admin'))
-    ) {
-      throw new ForbiddenException()
+    this.authHelper(ticket, auth)
+
+    if (ticket.status === 'closed') {
+      return response.redirect('back')
     }
 
     const reply = request.input('reply')
@@ -36,6 +35,37 @@ class TicketController {
       ticket_id: ticket.id,
       body: reply
     })
+    if (await auth.user.hasRole('admin')) {
+      // Set status to replied
+      if (ticket.status !== 'replied') {
+        ticket.updateStatus('replied')
+      }
+      // Notify ticket owner
+      EmailService.sendReplyNotification(ticket)
+    }
+
+    return response.redirect('back')
+  }
+
+  async resolve({ response, request, auth, params }) {
+    const ticket = await Ticket.find(params.ticket_id)
+
+    this.authHelper(ticket, auth)
+
+    if (ticket.status === 'closed') {
+      return response.redirect('back')
+    }
+
+    ticket.updateStatus('closed')
+
+    const reply = request.input('reply')
+    if (reply) {
+      await Message.create({
+        user_id: auth.user.id,
+        ticket_id: ticket.id,
+        body: reply
+      })
+    }
 
     // Notify ticket owner
     if (await auth.user.hasRole('admin')) {
@@ -43,6 +73,34 @@ class TicketController {
     }
 
     return response.redirect('back')
+  }
+
+  async reopen({ response, auth, params }) {
+    const ticket = await Ticket.find(params.ticket_id)
+
+    this.authHelper(ticket, auth)
+
+    if (ticket.status !== 'closed') {
+      return response.redirect('back')
+    }
+
+    ticket.updateStatus('replied')
+
+    // Notify ticket owner
+    if (await auth.user.hasRole('admin')) {
+      EmailService.sendReplyNotification(ticket)
+    }
+
+    return response.redirect('back')
+  }
+
+  async authHelper(ticket, auth) {
+    if (
+      ticket.user_id !== auth.user.id &&
+      !(await auth.user.hasRole('admin'))
+    ) {
+      throw new ForbiddenException()
+    }
   }
 }
 
