@@ -26,6 +26,10 @@ class TicketController {
       throw new ForbiddenException()
     }
 
+    if (ticket.status == 'closed') {
+      return response.redirect('back')
+    }
+
     const reply = request.input('reply')
     if (!reply) {
       return response.redirect('back')
@@ -58,6 +62,12 @@ class TicketController {
       throw new ForbiddenException()
     }
 
+    if (ticket.status == 'closed') {
+      return response.redirect('back')
+    } else {
+      ticket.updateStatus('closed')
+    }
+
     const reply = request.input('reply')
     if (reply) {
       await Message.create({
@@ -65,10 +75,6 @@ class TicketController {
         ticket_id: ticket.id,
         body: reply
       })
-    }
-
-    if (ticket.status != 'closed') {
-      ticket.updateStatus('closed')
     }
 
     // Notify ticket owner
@@ -90,7 +96,7 @@ class TicketController {
     }
 
     if (ticket.status != 'closed') {
-      throw "Ticket that isn't closed can't be reopened"
+      return response.redirect('back')
     } else {
       ticket.updateStatus('replied')
     }
