@@ -79,29 +79,23 @@ test('Make sure Ticket Status is set to replied after admin reply', async ({
     .loginVia(admin)
     .end()
 
-  const createdTicket = await Ticket.query()
-    .where('id', ticket.id)
-    .first()
+  const createdTicket = await Ticket.find(ticket.id)
 
   assert.equal(createdTicket.status, 'replied')
 })
 
-test("Make sure ticket cannot be reopened if it isn't already closed", async ({
+test('Make sure ticket cannot be reopened if it isnt already closed', async ({
   client,
   assert
 }) => {
-  const prevTicket = await Ticket.query()
-    .where('id', ticket.id)
-    .first()
+  const prevTicket = await Ticket.find(ticket.id)
 
   await client
     .post(`organization/${organization.slug}/ticket/${ticket.id}/reopen`)
     .loginVia(user)
     .end()
 
-  const newTicket = await Ticket.query()
-    .where('id', ticket.id)
-    .first()
+  const newTicket = await Ticket.find(ticket.id)
 
   assert.notEqual(prevTicket.status, 'closed')
   assert.equal(prevTicket.status, newTicket.status)
@@ -116,9 +110,7 @@ test('Make sure ticket can be resolved/closed as admin', async ({
     .loginVia(admin)
     .end()
 
-  const currTicket = await Ticket.query()
-    .where('id', ticket.id)
-    .first()
+  const currTicket = await Ticket.find(ticket.id)
 
   assert.equal(currTicket.status, 'closed')
 })
@@ -127,18 +119,14 @@ test('Make sure ticket cannot close ticket that is already closed', async ({
   client,
   assert
 }) => {
-  const prevTicket = await Ticket.query()
-    .where('id', ticket.id)
-    .first()
+  const prevTicket = await Ticket.find(ticket.id)
 
   await client
     .post(`organization/${organization.slug}/ticket/${ticket.id}/resolve`)
     .loginVia(user)
     .end()
 
-  const newTicket = await Ticket.query()
-    .where('id', ticket.id)
-    .first()
+  const newTicket = await Ticket.find(ticket.id)
 
   assert.equal(prevTicket.status, 'closed')
   assert.equal(prevTicket.status, newTicket.status)
@@ -148,18 +136,14 @@ test('Make sure ticket cannot reply to ticket that is already closed', async ({
   client,
   assert
 }) => {
-  const prevTicket = await Ticket.query()
-    .where('id', ticket.id)
-    .first()
+  const prevTicket = await Ticket.find(ticket.id)
 
   await client
     .post(`organization/${organization.slug}/ticket/${ticket.id}/reply`)
     .loginVia(user)
     .end()
 
-  const newTicket = await Ticket.query()
-    .where('id', ticket.id)
-    .first()
+  const newTicket = await Ticket.find(ticket.id)
 
   assert.equal(prevTicket.status, 'closed')
   assert.equal(prevTicket.status, newTicket.status)
@@ -174,9 +158,7 @@ test('Make sure ticket can be reopened as admin or user', async ({
     .loginVia(user)
     .end()
 
-  const currTicket = await Ticket.query()
-    .where('id', ticket.id)
-    .first()
+  const currTicket = await Ticket.find(ticket.id)
 
   assert.equal(currTicket.status, 'replied')
 })

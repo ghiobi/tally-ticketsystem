@@ -19,14 +19,9 @@ class TicketController {
   async reply({ response, request, auth, params }) {
     const ticket = await Ticket.find(params.ticket_id)
 
-    if (
-      ticket.user_id !== auth.user.id &&
-      !(await auth.user.hasRole('admin'))
-    ) {
-      throw new ForbiddenException()
-    }
+    this.authHelper(ticket, auth)
 
-    if (ticket.status == 'closed') {
+    if (ticket.status === 'closed') {
       return response.redirect('back')
     }
 
@@ -42,7 +37,7 @@ class TicketController {
     })
     if (await auth.user.hasRole('admin')) {
       // Set status to replied
-      if (ticket.status != 'replied') {
+      if (ticket.status !== 'replied') {
         ticket.updateStatus('replied')
       }
       // Notify ticket owner
@@ -55,18 +50,13 @@ class TicketController {
   async resolve({ response, request, auth, params }) {
     const ticket = await Ticket.find(params.ticket_id)
 
-    if (
-      ticket.user_id !== auth.user.id &&
-      !(await auth.user.hasRole('admin'))
-    ) {
-      throw new ForbiddenException()
+    this.authHelper(ticket, auth)
+
+    if (ticket.status === 'closed') {
+      return response.redirect('back')
     }
 
-    if (ticket.status == 'closed') {
-      return response.redirect('back')
-    } else {
-      ticket.updateStatus('closed')
-    }
+    ticket.updateStatus('closed')
 
     const reply = request.input('reply')
     if (reply) {
@@ -85,21 +75,16 @@ class TicketController {
     return response.redirect('back')
   }
 
-  async reopen({ response, request, auth, params }) {
+  async reopen({ response, auth, params }) {
     const ticket = await Ticket.find(params.ticket_id)
 
-    if (
-      ticket.user_id !== auth.user.id &&
-      !(await auth.user.hasRole('admin'))
-    ) {
-      throw new ForbiddenException()
+    this.authHelper(ticket, auth)
+
+    if (ticket.status !== 'closed') {
+      return response.redirect('back')
     }
 
-    if (ticket.status != 'closed') {
-      return response.redirect('back')
-    } else {
-      ticket.updateStatus('replied')
-    }
+    ticket.updateStatus('replied')
 
     // Notify ticket owner
     if (await auth.user.hasRole('admin')) {
@@ -107,6 +92,15 @@ class TicketController {
     }
 
     return response.redirect('back')
+  }
+
+  async authHelper(ticket, auth) {
+    if (
+      ticket.user_id !== auth.user.id &&
+      !(await auth.user.hasRole('admin'))
+    ) {
+      throw new ForbiddenException()
+    }
   }
 }
 
