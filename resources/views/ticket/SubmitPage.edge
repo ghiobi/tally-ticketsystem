@@ -5,29 +5,41 @@
 
 @include('partials.header')
 
+<!-- Page title -->
+<section id="page-title" class="page-title-classic">
+<div class="container">
+    <div class="page-title">
+    <h1>Submit Ticket</h1>
+    <span>Submit a new ticket.</span>
+    </div>
+</div>
+</section>
+<!-- end: Page title -->
+
 <section id="submit-ticket-content" class="flex-grow-1">
     <div class="container">
-        <form id="submit_ticket_form">
-            {{ csrfField() }}
-            <div class="form-group">
-                <div id="submit-ticket-title-div" class="col-md-8">
-                    <label for="ticket_title">Ticket title</label>
-                    <input type="text" id="ticket_title" name="title" class="form-control" required minlength="1" maxlength="1000" placeholder="Title.." />
-                </div>
-                <div id="submit-ticket-body-div" class="col-md-10">
-                    <label for="ticket_body">Feedback</label>
-                    <textarea id="ticket_body" name="body" class="form-control" rows="5" placeholder="Feedback..." required></textarea>
-                </div>
-                <div class="col-md">
-                    <button id="user_submit_ticket_btn" class="btn btn-outline-secondary" type="submit">Submit</button>
+        @include('partials.alert')
+        <div class="row">
+            <div class="col-md-8">
+                <form method="post">
+                    {{ csrfField() }}
+                    <div class="form-group">
+                        <label for="ticket_title">Ticket title</label>
+                        <input type="text" id="ticket_title" name="title" class="form-control" required minlength="1" maxlength="1000" placeholder="Title.." />
+                    </div>
+                    <div class="form-group">
+                        <label for="ticket_body">Feedback</label>
+                        <textarea id="ticket_body" name="body" class="form-control" rows="5" placeholder="Feedback..." required></textarea>
+                    </div>
+                    <button class="btn btn-light btn-outline-secondary" type="submit">Submit</button>
                     @if(hasRole('admin'))
                         <a href="{{ organizationRoute }}/admin" class="btn btn-light btn-outline-secondary">Cancel</a>
                     @else
                         <a href="{{ organizationRoute }}" class="btn btn-light btn-outline-secondary">Cancel</a>
                     @endif
-                </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
 </section>
 
