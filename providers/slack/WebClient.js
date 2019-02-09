@@ -42,7 +42,7 @@ class WebClient {
    * @param accessToken
    * @returns {WebClient}
    */
-  create(accessToken) {
+  create(accessToken = this.tokens.accessToken) {
     return new this.WebClient(accessToken)
   }
 }
