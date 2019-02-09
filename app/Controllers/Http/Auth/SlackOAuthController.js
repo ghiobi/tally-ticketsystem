@@ -7,7 +7,7 @@ const Config = use('Config')
 
 class SlackOAuthController {
   redirect({ response }) {
-    const appUrl = Config.get('app.appUrl')
+    const externalAppUrl = Config.get('app.externalAppUrl')
     const clientId = Config.get('slack.clientId')
 
     return response.redirect(
@@ -16,7 +16,7 @@ class SlackOAuthController {
         clientId +
         '&scope=users.profile:read,users:read,users:read.email' +
         '&redirect_uri=' +
-        appUrl +
+        externalAppUrl +
         '/oauth/authenticate'
     )
   }

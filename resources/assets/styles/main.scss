@@ -22,7 +22,7 @@ $logo-height: 40px;
 
 .full-screen,
 .fullscreen {
-  height: 100vh !important;
+  min-height: 100vh !important;
 }
 
 #wrapper {

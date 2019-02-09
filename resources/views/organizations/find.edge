@@ -8,26 +8,30 @@
 <section id="find-organization--wrapper" class="flex-grow-1 d-flex align-items-center justify-content-center">
   <div class="container">
     <div class="row">
-      <div class="col-md-6 offset-3" id="find-organization--box">
+      <div class="col-md-6 offset-md-3" id="find-organization--box">
         @if(hasErrorFor('404'))
         <div class="alert alert-danger text-center" role="alert">
           {{ getErrorFor('404') }}
         </div>
         @endif
-          <div class="text-center">
-            <h4 class="mb-0">SIGN INTO YOUR ORGANIZATION</h4>
-            <p class="text-muted">Your workspace is unique to your company.</p>
+        <div class="text-center">
+          <h4 class="mb-0">SIGN INTO YOUR ORGANIZATION</h4>
+          <p class="text-muted mb-4">Your workspace is unique to your company.</p>
+        </div>
+        <form class="form-validation" action="/organization" method="post">
+          {{ csrfField() }}
+          <div class="d-flex align-items-center mb-4">
+            <span class="pr-2 text-bold">{{  request.protocol() + '://' + request.hostname() + request.originalUrl() }}/</span>
+            <input type="text" name="organization" class="form-control form-white placeholder" required>
           </div>
-          <form class="form-validation" action="/organization" method="post">
-            {{ csrfField() }}
-            <div class="form-group d-flex align-items-center">
-              <span>{{  request.protocol() + '://' + request.hostname() + request.originalUrl() }}/</span>
-              <input type="text" name="organization" class="form-control form-white placeholder" required>
-            </div>
-            <div class="text-center">
-              <button type="submit" class="btn">Sign In</button>
-            </div>
-          </form>
+          <div class="text-center">
+            <button type="submit" class="btn btn-icon-holder">Find Workspace <i class="fa fa-arrow-right"></i></button>
+          </div>
+        </form>
+        <div class="seperator mb-3 mt-3">
+          <span>Or</span>
+        </div>
+        @include('partials.slack-oauth')
       </div>
     </div>
   </div>
