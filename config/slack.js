@@ -32,5 +32,16 @@ module.exports = {
   | A token provided by slack for authenticating requests.
   |
   */
-  secret: Env.get('SLACK_SIGNING_SECRET')
+  secret: Env.get('SLACK_SIGNING_SECRET'),
+
+  /*
+  |--------------------------------------------------------------------------
+  | Slack Access Token
+  |--------------------------------------------------------------------------
+  |
+  | A token provided by slack for authenticating requests on behalf of the
+  | application.
+  |
+  */
+  accessToken: Env.get('SLACK_ACCESS_TOKEN')
 }
