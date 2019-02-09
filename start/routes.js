@@ -37,6 +37,10 @@ Route.group(() => {
   Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware([
     'ticket.belongs.to.user'
   ])
+  Route.get('/submit/ticket', 'Ticket/SubmitTicketController.index')
+  Route.post('/submit/ticket', 'Ticket/SubmitTicketController.submit')
+
+  Route.post('/ticket/:ticket_id', 'Ticket/TicketController.reply')
   Route.post('/ticket/:ticket_id/reply', 'Ticket/TicketController.reply')
   Route.post('/ticket/:ticket_id/resolve', 'Ticket/TicketController.resolve')
   Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen')
