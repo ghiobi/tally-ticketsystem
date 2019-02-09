@@ -38,6 +38,17 @@ module.exports = {
   */
   appUrl: Env.get('APP_URL'),
 
+  /*
+  |--------------------------------------------------------------------------
+  | App Url
+  |--------------------------------------------------------------------------
+  |
+  | The full external browser app url exposed to the public consisting of
+  | the protocol, domain and port.
+  |
+  */
+  externalAppUrl: Env.get('EXTERNAL_APP_URL', this.appUrl),
+
   http: {
     /*
     |--------------------------------------------------------------------------
