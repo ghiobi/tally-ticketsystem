@@ -15,10 +15,10 @@
   </section>
   <!-- end: Page title -->
 
-  <section class="flex-grow-1 section-body">
+  <section class="flex-grow-1">
     <div class="container">
       @if(tickets.length)
-        <div class="submit-btn-div">
+        <div>
             <a href="{{ organizationRoute }}/submit/ticket" class="btn btn-primary btn-sm">Submit a Ticket</a>
         </div>
         @include('dashboard.partials.tickets-table')

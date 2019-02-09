@@ -34,7 +34,9 @@
       </div>
       @endeach
     </div>
-    <form method="post" action="">
+
+  @if(ticket.status != "closed")
+  <form method="post" action="{{ organizationRoute }}/ticket/{{ ticket.id }}/reply">
       {{ csrfField() }}
       <div class="form-group">
         <label for="form_reply">Reply</label>
@@ -46,6 +48,24 @@
         </div>
       </div>
     </form>
+    <form method="post" action="{{ organizationRoute }}/ticket/{{ ticket.id }}/resolve">
+      {{ csrfField() }}
+      <div class="form-group">
+        <div class="input-group">
+          <button class="btn btn-outline-secondary h-100" type="submit">Resolve/Close</button>
+        </div>
+      </div>
+    </form>
+  @else
+  <form method="post" action="{{ organizationRoute }}/ticket/{{ ticket.id }}/reopen">
+      {{ csrfField() }}
+      <div class="form-group">
+        <div class="input-group">
+          <button class="btn btn-outline-secondary h-100" type="submit">Reopen</button>
+        </div>
+      </div>
+    </form>
+  @endif
   </div>
 </section>
 
