@@ -14,7 +14,7 @@ class EmailService {
     let view = 'emails.ticket-confirmation-email'
     await ticket.loadMany({
       user: null,
-      messages: (builder) => builder.first()
+      messages: (builder) => builder.with('user').pickInverse(1)
     })
     this.sendEmail(subject, view, ticket.toJSON())
   }
@@ -25,7 +25,7 @@ class EmailService {
     let view = 'emails.reply-notification-email'
     await ticket.loadMany({
       user: null,
-      messages: (builder) => builder.pickInverse(1)
+      messages: (builder) => builder.with('user').pickInverse(1)
     })
 
     this.sendEmail(subject, view, ticket.toJSON())

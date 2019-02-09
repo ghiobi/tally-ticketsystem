@@ -35,6 +35,7 @@ class TicketController {
       ticket_id: ticket.id,
       body: reply
     })
+
     if (await auth.user.hasRole('admin')) {
       // Set status to replied
       if (ticket.status !== 'replied') {
