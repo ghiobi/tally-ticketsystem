@@ -55,9 +55,9 @@ before(async () => {
 test('check that messages of a ticket can be retrieved', async ({ client }) => {
   const response = await client
     .get(
-      `/organization/${organization.slug}/api/tickets/${
-        ticket.id
-      }/messages?token=${organization.api_token}`
+      `/organization/${organization.slug}/api/tickets/${ticket.id}?token=${
+        organization.api_token
+      }`
     )
     .end()
 
