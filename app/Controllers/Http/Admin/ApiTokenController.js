@@ -9,7 +9,10 @@ class ApiTokenController {
   async generate({ request, response }) {
     const { organization } = request
 
-    organization.api_token = chance.string({ length: 75 })
+    organization.api_token = chance.string({
+      length: 75,
+      pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    })
     await organization.save()
 
     return response.redirect('back')
