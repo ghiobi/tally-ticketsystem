@@ -64,13 +64,11 @@ Route.group(() => {
  * Authenticated Organization API Routes
  */
 Route.group(() => {
-  Route.get(
-    '/tickets/:ticketId/messages',
-    'Api/ApiMessageController.getTicketMessages'
-  )
-  Route.get('/tickets/user/:userId', 'Api/ApiTicketController.getUserTickets')
-  Route.get('/tickets', 'Api/ApiTicketController.getOrganizationTickets')
-  Route.post('/tickets', 'Api/ApiTicketController.createTicket')
+  Route.post('/tickets', 'Api/ApiTicketController.create')
+  Route.get('/tickets/:ticket_id', 'Api/ApiTicketController.ticket')
+
+  Route.get('/tickets', 'Api/ApiTicketController.organizationTickets')
+  Route.get('/tickets/user/:user_id', 'Api/ApiTicketController.userTickets')
 })
   .prefix('organization/:organization/api')
   .middleware(['organization', 'api'])
