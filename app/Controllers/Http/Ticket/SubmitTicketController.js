@@ -2,6 +2,7 @@
 
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
+const EmailService = use('App/Services/EmailService')
 
 class SubmitTicketController {
   async index({ view }) {
@@ -13,12 +14,12 @@ class SubmitTicketController {
     const body = request.input('body')
 
     if (!title) {
-      session.flash({ notification: 'Missing title' })
+      session.flash({ error: 'Missing title' })
       return response.redirect('back')
     }
 
     if (!body) {
-      session.flash({ notification: 'Missing body' })
+      session.flash({ error: 'Missing body' })
       return response.redirect('back')
     }
 
@@ -36,7 +37,9 @@ class SubmitTicketController {
       body: body
     })
 
-    return response.redirect('back')
+    EmailService.sendTicketConfirmation(ticket)
+    session.flash({ success: 'Ticket has been created' })
+    return response.redirect('/organization/' + request.organization.slug)
   }
 }
 
