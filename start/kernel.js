@@ -15,7 +15,6 @@ const Server = use('Server')
 const globalMiddleware = [
   'Adonis/Middleware/BodyParser',
   'Adonis/Middleware/Session',
-  'Adonis/Middleware/Shield',
   'Adonis/Middleware/AuthInit',
   'App/Middleware/ConvertEmptyStringsToNull'
 ]
@@ -45,7 +44,8 @@ const namedMiddleware = {
   'ticket.belongs.to.user': 'App/Middleware/TicketBelongsToUser',
   IsSelfOrAdmin: 'App/Middleware/IsSelfOrAdmin',
   IsAdmin: 'App/Middleware/IsAdmin',
-  api: 'App/Middleware/ApiAuth'
+  api: 'App/Middleware/ApiAuth',
+  csrf: 'Adonis/Middleware/Shield'
 }
 
 /*

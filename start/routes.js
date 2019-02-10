@@ -24,7 +24,7 @@ Route.group(() => {
   Route.post('/login', 'Auth/LoginController.login')
 })
   .prefix('organization/:organization')
-  .middleware(['organization', 'guest'])
+  .middleware(['csrf', 'organization', 'guest'])
 
 /**
  * Authenticated Organization Routes
@@ -46,7 +46,7 @@ Route.group(() => {
   Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen')
 })
   .prefix('organization/:organization')
-  .middleware(['organization', 'auth', 'within'])
+  .middleware(['csrf', 'organization', 'auth', 'within'])
 
 /**
  * Authenticated Organization Routes on Admin
@@ -58,7 +58,7 @@ Route.group(() => {
   Route.post('/token', 'Admin/ApiTokenController.generate')
 })
   .prefix('organization/:organization/admin')
-  .middleware(['organization', 'auth', 'within', 'IsAdmin'])
+  .middleware(['csrf', 'organization', 'auth', 'within', 'IsAdmin'])
 
 /**
  * Authenticated Organization API Routes
@@ -87,4 +87,4 @@ Route.group(() => {
 
   Route.get('/oauth', 'Auth/SlackOAuthController.redirect')
   Route.get('/oauth/authenticate', 'Auth/SlackOAuthController.authenticate')
-}).middleware(['guest'])
+}).middleware(['csrf', 'guest'])
