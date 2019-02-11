@@ -11,7 +11,7 @@ trait('Test/Browser', {
     isMobile: false
   },
   headless: true,
-  slowMo: 100
+  slowMo: 500
 })
 
 let organization = null
@@ -22,7 +22,7 @@ let userTicket = null
 
 before(async () => {
   organization = await OrganizationFactory.create({
-    slug: 'e2e-test'
+    slug: 'e2e-test-webpages'
   })
 
   admin = await UserFactory.make({
@@ -48,7 +48,7 @@ before(async () => {
 test('Visit home page', async ({ browser }) => {
   const page = await browser.visit('/')
   await page.assertHas('Tally, A Bot')
-}).timeout(0)
+}).timeout(60000)
 
 test('Clicking "Sign in" on homepage redirects to organization sign in page', async ({
   browser
@@ -60,4 +60,4 @@ test('Clicking "Sign in" on homepage redirects to organization sign in page', as
     .waitFor(500)
     .assertPath('/organization')
     .assertHas('SIGN INTO YOUR ORGANIZATION')
-}).timeout(0)
+}).timeout(60000)

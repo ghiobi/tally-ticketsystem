@@ -59,7 +59,7 @@ test('Entering an organization and clicking "Find workspace" should lead to logi
     .assertPath('/organization/' + organization.slug + '/login')
     .assertHas('EMAIL')
     .assertHas('PASSWORD')
-}).timeout(0)
+}).timeout(60000)
 
 test('Leaving organization field empty should not lead to login page', async ({
   browser
@@ -71,7 +71,7 @@ test('Leaving organization field empty should not lead to login page', async ({
     .click('#organization-workspace-submit')
     .waitFor(500)
     .assertPath('/organization')
-}).timeout(0)
+}).timeout(60000)
 
 test('Login in with a user account should lead to the dashboard page', async ({
   browser
@@ -89,7 +89,7 @@ test('Login in with a user account should lead to the dashboard page', async ({
     .waitFor(500)
     .assertPath('/organization/' + organization.slug)
     .assertHas('View or Make Claims Here')
-}).timeout(0)
+}).timeout(60000)
 
 test('Login in with an admin account should lead to the dashboard page', async ({
   browser
@@ -107,4 +107,4 @@ test('Login in with an admin account should lead to the dashboard page', async (
     .waitFor(500)
     .assertPath('/organization/' + organization.slug + '/admin')
     .assertHas('Manage submitted tickets right here')
-}).timeout(0)
+}).timeout(60000)
