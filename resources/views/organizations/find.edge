@@ -22,10 +22,10 @@
           {{ csrfField() }}
           <div class="d-flex align-items-center mb-4">
             <span class="pr-2 text-bold">{{  request.protocol() + '://' + request.hostname() + request.originalUrl() }}/</span>
-            <input type="text" name="organization" class="form-control form-white placeholder" required>
+            <input id="organization-input" type="text" name="organization" class="form-control form-white placeholder" required>
           </div>
           <div class="text-center">
-            <button type="submit" class="btn btn-icon-holder">Find Workspace <i class="fa fa-arrow-right"></i></button>
+            <button id="organization-workspace-submit" type="submit" class="btn btn-icon-holder">Find Workspace <i class="fa fa-arrow-right"></i></button>
           </div>
         </form>
         <div class="seperator mb-3 mt-3">
