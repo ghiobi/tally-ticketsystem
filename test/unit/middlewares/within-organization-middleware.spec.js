@@ -29,7 +29,11 @@ beforeEach(async () => {
           return {
             fetch() {
               return {
-                rows: []
+                rows: [
+                  {
+                    key: 'admin'
+                  }
+                ]
               }
             }
           }
@@ -58,6 +62,9 @@ test('makes sure the authenticated user is part of the same organization', async
   const shareViewHasRole = share.args[0][0]
   assert.exists(shareViewHasRole)
   assert.exists(shareViewHasRole.hasRole)
+
+  assert.isTrue(shareViewHasRole.hasRole('admin'))
+  assert.isFalse(shareViewHasRole.hasRole('owner'))
 })
 
 test('makes sure the authenticated user does not access another organization', async ({

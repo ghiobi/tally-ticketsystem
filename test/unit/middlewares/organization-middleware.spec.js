@@ -86,23 +86,3 @@ test('makes sure the authenticated user is part of the same organization', async
   await middleware.handle(handle, next)
   assert.isTrue(next.called, 'next() was not called')
 })
-
-test('makes sure the authenticated user is part of the same organization', async ({
-  assert
-}) => {
-  handle.params.organization = organization.slug
-  handle.auth = {
-    user: { organization_id: -1 }
-  }
-
-  let pass = true
-  try {
-    await middleware.handle(handle, next)
-    pass = false
-  } catch (e) {
-    // continue regardless of error
-  }
-
-  assert.isOk(pass, 'middleware did not prevent user from accessing resource')
-  assert.isFalse(next.called, 'next() was not called')
-})
