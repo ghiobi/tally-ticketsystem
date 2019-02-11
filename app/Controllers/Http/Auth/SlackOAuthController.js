@@ -31,11 +31,10 @@ class SlackOAuthController {
     await auth.login(user)
 
     const organization = await user.organization().fetch()
-    if (auth.user.hasRole('admin')) {
+    if (await auth.user.hasRole('admin')) {
       return response.redirect(`/organization/${organization.slug}/admin`)
-    } else {
-      return response.redirect(`/organization/${organization.slug}`)
     }
+    return response.redirect(`/organization/${organization.slug}`)
   }
 }
 
