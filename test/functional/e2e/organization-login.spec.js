@@ -12,7 +12,8 @@ trait('Test/Browser', {
     height: 720,
     isMobile: false
   },
-  headless: false
+  headless: true,
+  slowMo: 100
 })
 
 let organization = null
