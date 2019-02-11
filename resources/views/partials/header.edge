@@ -23,7 +23,7 @@
             <ul>
               @loggedIn
               <li>{{ organization.name }}</li>
-              @if(hasRole('admin'))
+              @if(hasRole && hasRole('admin'))
               <li class="dropdown">
                 <a href="{{ organizationRoute }}/admin">Admin</a>
                 <ul class="dropdown-menu dropdown-menu-right">
