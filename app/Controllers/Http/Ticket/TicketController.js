@@ -38,11 +38,13 @@ class TicketController {
 
     if (await auth.user.hasRole('admin')) {
       // Set status to replied
-      if (ticket.status !== 'replied') {
-        ticket.updateStatus('replied')
+      if (auth.user.id !== ticket.user_id) {
+        if (ticket.status !== 'replied') {
+          ticket.updateStatus('replied')
+        }
+        // Notify ticket owner
+        EmailService.sendReplyNotification(ticket)
       }
-      // Notify ticket owner
-      EmailService.sendReplyNotification(ticket)
     }
 
     return response.redirect('back')
