@@ -35,37 +35,37 @@
       @endeach
     </div>
 
-  @if(ticket.status != "closed")
-  <form method="post" action="{{ organizationRoute }}/ticket/{{ ticket.id }}/reply">
-      {{ csrfField() }}
-      <div class="form-group">
-        <label for="form_reply">Reply</label>
-        <div class="input-group">
-          <textarea name="reply" class="form-control" rows="5" id="form_reply" placeholder="Leave a reply ..."></textarea>
-          <div class="input-group-prepend">
-            <button class="btn btn-outline-secondary h-100" type="submit">Reply</button>
+    @if(ticket.status !== "closed")
+      <form method="post" action="{{ organizationRoute }}/ticket/{{ ticket.id }}/reply">
+        {{ csrfField() }}
+        <div class="form-group">
+          <label for="form_reply">Reply</label>
+          <div class="input-group">
+            <textarea name="reply" class="form-control" rows="5" id="form_reply" placeholder="Leave a reply ..."></textarea>
+            <div class="input-group-prepend">
+              <button class="btn btn-outline-secondary h-100" type="submit">Reply</button>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
-    <form method="post" action="{{ organizationRoute }}/ticket/{{ ticket.id }}/resolve">
-      {{ csrfField() }}
-      <div class="form-group">
-        <div class="input-group">
-          <button class="btn btn-outline-secondary h-100" type="submit">Resolve/Close</button>
+      </form>
+      <form method="post" action="{{ organizationRoute }}/ticket/{{ ticket.id }}/resolve">
+        {{ csrfField() }}
+        <div class="form-group">
+          <div class="input-group">
+            <button class="btn btn-outline-secondary h-100" type="submit">Resolve/Close</button>
+          </div>
         </div>
-      </div>
-    </form>
-  @else
-  <form method="post" action="{{ organizationRoute }}/ticket/{{ ticket.id }}/reopen">
-      {{ csrfField() }}
-      <div class="form-group">
-        <div class="input-group">
-          <button class="btn btn-outline-secondary h-100" type="submit">Reopen</button>
+      </form>
+    @else
+      <form method="post" action="{{ organizationRoute }}/ticket/{{ ticket.id }}/reopen">
+        {{ csrfField() }}
+        <div class="form-group">
+          <div class="input-group">
+            <button class="btn btn-outline-secondary h-100" type="submit">Reopen</button>
+          </div>
         </div>
-      </div>
-    </form>
-  @endif
+      </form>
+    @endif
   </div>
 </section>
 

@@ -6,7 +6,7 @@ const EmailService = use('App/Services/EmailService')
 
 class SubmitTicketController {
   async index({ view }) {
-    return view.render('ticket.SubmitPage')
+    return view.render('ticket.create')
   }
 
   async submit({ response, request, auth, session }) {
