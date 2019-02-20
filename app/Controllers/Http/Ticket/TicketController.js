@@ -42,7 +42,7 @@ class TicketController {
           ticket.updateStatus('replied')
         }
         // Notify ticket owner
-        await EmailService.sendReplyNotification(ticket)
+        EmailService.sendReplyNotification(ticket).then()
       }
     }
 
@@ -69,7 +69,7 @@ class TicketController {
 
     // Notify ticket owner
     if (await auth.user.hasRole('admin')) {
-      await EmailService.sendReplyNotification(ticket)
+      EmailService.sendReplyNotification(ticket).then()
     }
 
     return response.redirect('back')
@@ -86,7 +86,7 @@ class TicketController {
 
     // Notify ticket owner
     if (await auth.user.hasRole('admin')) {
-      await EmailService.sendReplyNotification(ticket)
+      EmailService.sendReplyNotification(ticket).then()
     }
 
     return response.redirect('back')

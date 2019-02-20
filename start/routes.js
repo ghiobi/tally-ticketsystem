@@ -31,20 +31,16 @@ Route.group(() => {
  */
 Route.group(() => {
   Route.get('/logout', 'Auth/LogoutController.logout')
-  
+
   Route.get('/', 'Dashboard/DashboardController.index')
-
-  Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware('accessTicket')
-  Route.get('/submit/ticket', 'Ticket/SubmitTicketController.index')
-  Route.post('/submit/ticket', 'Ticket/SubmitTicketController.submit').validator('StoreTicket')
-
-  Route.post('/ticket/:ticket_id', 'Ticket/TicketController.reply')
-  Route.post('/ticket/:ticket_id/reply', 'Ticket/TicketController.reply')
-  Route.post('/ticket/:ticket_id/resolve', 'Ticket/TicketController.resolve')
-  Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen')
 
   Route.get('/account', 'Account/AccountController.index')
   Route.post('/account/password', 'Account/AccountController.password')
+
+  Route.get('/ticket/create', 'Ticket/SubmitTicketController.index')
+  Route.post('/ticket/create', 'Ticket/SubmitTicketController.submit').validator('StoreTicket')
+
+  Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware('accessTicket')
   Route.post('/ticket/:ticket_id', 'Ticket/TicketController.update').middleware('accessTicket')
   Route.post('/ticket/:ticket_id/reply', 'Ticket/TicketController.reply').middleware('accessTicket')
   Route.post('/ticket/:ticket_id/resolve', 'Ticket/TicketController.resolve').middleware('accessTicket')

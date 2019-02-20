@@ -54,8 +54,8 @@ before(async () => {
   await ticket3.user().associate(user3)
 
   handle = {
-    response: {
-      redirect: sinon.fake()
+    request: {
+      organization: organization
     },
     auth: {
       user: user2 // user2 is a regular user
@@ -96,5 +96,37 @@ test('make sure users can only access tickets belonging to them', async ({
   assert.isFalse(
     next.called,
     'next() was called when it ticket did not belong to user'
+  )
+})
+
+test('make sure admin can access all tickets in their organization', async ({
+  assert
+}) => {
+  // allow admin/owner to access any ticket in their organization
+  handle.auth.user = user
+  handle.params.ticket_id = ticket2.id
+
+  await middleware.handle(handle, next)
+  assert.isTrue(
+    next.called,
+    'next() was not not called even though user is admin'
+  )
+  next = sinon.fake()
+
+  // disallow admin/owner to access any ticket that is not in their organization
+  handle.params.ticket_id = ticket3.id
+
+  let pass = true
+  try {
+    await middleware.handle(handle, next)
+    pass = false
+  } catch (e) {
+    // continue regardless of error
+  }
+  assert.isOk(pass, '')
+
+  assert.isFalse(
+    next.called,
+    'next() was called even though ticket did not belong to admin organization'
   )
 })
