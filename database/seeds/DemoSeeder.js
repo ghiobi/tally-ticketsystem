@@ -38,13 +38,21 @@ class DemoSeeder {
     /**
       Seed an admin/owner
      */
-    const admin = await UserFactory.create({
+    const owner = await UserFactory.create({
       email: 'owner@tally.com',
-      name: 'Owner ',
+      name: 'Owner',
+      password: 'password'
+    })
+    await organization.users().save(owner)
+    await owner.setRole('owner')
+    await owner.setRole('admin')
+
+    const admin = await UserFactory.create({
+      email: 'admin@tally.com',
+      name: 'Administrator',
       password: 'password'
     })
     await organization.users().save(admin)
-    await admin.setRole('owner')
     await admin.setRole('admin')
 
     /**
@@ -66,9 +74,9 @@ class DemoSeeder {
         let assigned = chance.bool()
         tickets.push(
           await TicketFactory.create({
-            user_id: chance.integer({ min: 2, max: 15 }),
+            user_id: chance.integer({ min: 3, max: 15 }),
             status: this.getStatus(assigned),
-            assigned_to: assigned ? admin.id : null
+            assigned_to: assigned ? owner.id : null
           })
         )
       }
@@ -85,7 +93,7 @@ class DemoSeeder {
       for (let i = 0; i < chance.integer({ min: 0, max: 4 }); i++) {
         await MessageFactory.create({
           ticket_id: ticket.id,
-          user_id: chance.bool() ? ticket.user_id : admin.id
+          user_id: chance.bool() ? ticket.user_id : owner.id
         })
       }
     }

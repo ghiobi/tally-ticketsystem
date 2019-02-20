@@ -31,10 +31,10 @@ Route.group(() => {
  */
 Route.group(() => {
   Route.get('/logout', 'Auth/LogoutController.logout')
-
+  
   Route.get('/', 'Dashboard/DashboardController.index')
 
-  Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware(['ticket.belongs.to.user'])
+  Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware('accessTicket')
   Route.get('/submit/ticket', 'Ticket/SubmitTicketController.index')
   Route.post('/submit/ticket', 'Ticket/SubmitTicketController.submit').validator('StoreTicket')
 
@@ -45,6 +45,11 @@ Route.group(() => {
 
   Route.get('/account', 'Account/AccountController.index')
   Route.post('/account/password', 'Account/AccountController.password')
+  Route.post('/ticket/:ticket_id', 'Ticket/TicketController.update').middleware('accessTicket')
+  Route.post('/ticket/:ticket_id/reply', 'Ticket/TicketController.reply').middleware('accessTicket')
+  Route.post('/ticket/:ticket_id/resolve', 'Ticket/TicketController.resolve').middleware('accessTicket')
+  Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen').middleware('accessTicket')
+  Route.post('/ticket/:ticket_id/assign', 'Ticket/TicketController.assign').middleware('IsAdmin')
 })
   .prefix('organization/:organization')
   .middleware(['organization', 'auth', 'within'])

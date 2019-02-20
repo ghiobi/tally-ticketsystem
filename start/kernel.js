@@ -42,7 +42,7 @@ const namedMiddleware = {
   guest: 'Adonis/Middleware/AllowGuestOnly',
   organization: 'App/Middleware/Organization',
   within: 'App/Middleware/WithinOrganization',
-  'ticket.belongs.to.user': 'App/Middleware/TicketBelongsToUser',
+  accessTicket: 'App/Middleware/TicketBelongsToUser',
   IsSelfOrAdmin: 'App/Middleware/IsSelfOrAdmin',
   IsAdmin: 'App/Middleware/IsAdmin',
   api: 'App/Middleware/ApiAuth'

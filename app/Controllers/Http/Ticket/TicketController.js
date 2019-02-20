@@ -1,7 +1,7 @@
 'use strict'
 
 const EmailService = use('App/Services/EmailService')
-const ForbiddenException = use('App/Exceptions/ForbiddenException')
+const User = use('App/Models/User')
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
 
@@ -9,6 +9,7 @@ class TicketController {
   async index({ view, params }) {
     const ticket = await Ticket.query()
       .where('id', params.ticket_id)
+      .with('assignedTo') // returns messages linked to this ticket
       .with('messages.user') // returns messages linked to this ticket
       .with('user') // returns who submited the ticket
       .first()
@@ -18,8 +19,6 @@ class TicketController {
 
   async reply({ response, request, auth, params }) {
     const ticket = await Ticket.find(params.ticket_id)
-
-    this.authHelper(ticket, auth)
 
     if (ticket.status === 'closed') {
       return response.redirect('back')
@@ -43,7 +42,7 @@ class TicketController {
           ticket.updateStatus('replied')
         }
         // Notify ticket owner
-        EmailService.sendReplyNotification(ticket)
+        await EmailService.sendReplyNotification(ticket)
       }
     }
 
@@ -53,13 +52,11 @@ class TicketController {
   async resolve({ response, request, auth, params }) {
     const ticket = await Ticket.find(params.ticket_id)
 
-    this.authHelper(ticket, auth)
-
     if (ticket.status === 'closed') {
       return response.redirect('back')
     }
 
-    ticket.updateStatus('closed')
+    await ticket.updateStatus('closed')
 
     const reply = request.input('reply')
     if (reply) {
@@ -72,7 +69,7 @@ class TicketController {
 
     // Notify ticket owner
     if (await auth.user.hasRole('admin')) {
-      EmailService.sendReplyNotification(ticket)
+      await EmailService.sendReplyNotification(ticket)
     }
 
     return response.redirect('back')
@@ -81,29 +78,36 @@ class TicketController {
   async reopen({ response, auth, params }) {
     const ticket = await Ticket.find(params.ticket_id)
 
-    this.authHelper(ticket, auth)
-
     if (ticket.status !== 'closed') {
       return response.redirect('back')
     }
 
-    ticket.updateStatus('replied')
+    await ticket.updateStatus('replied')
 
     // Notify ticket owner
     if (await auth.user.hasRole('admin')) {
-      EmailService.sendReplyNotification(ticket)
+      await EmailService.sendReplyNotification(ticket)
     }
 
     return response.redirect('back')
   }
 
-  async authHelper(ticket, auth) {
-    if (
-      ticket.user_id !== auth.user.id &&
-      !(await auth.user.hasRole('admin'))
-    ) {
-      throw new ForbiddenException()
+  async assign({ request, response, params }) {
+    const ticket = await Ticket.find(params.ticket_id)
+
+    const user = await User.find(request.input('user_id'))
+
+    if (user && user.organization_id !== request.organization.id) {
+      return response.redirect('back')
     }
+
+    if (user) {
+      await ticket.assignedTo().associate(user)
+    } else {
+      await ticket.assignedTo().dissociate()
+    }
+
+    return response.redirect('back')
   }
 }
 

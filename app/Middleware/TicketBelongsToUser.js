@@ -13,19 +13,15 @@ class TicketBelongsToUser {
    * @param {Function} next
    */
   async handle({ auth, params }, next) {
-    // call next to advance the request
-    const ticket = await Ticket.query()
-      .where('id', params.ticket_id)
-      .with('user')
-      .first()
-    if (ticket.user_id !== auth.user.id) {
-      if (
-        !(await auth.user.hasRole('admin')) ||
-        ticket.toJSON().user.organization_id !== auth.user.organization_id
-      ) {
-        throw new ForbiddenException()
-      }
+    const ticket = await Ticket.find(params.ticket_id)
+
+    if (
+      ticket.user_id !== auth.user.id &&
+      !(await auth.user.hasRole('admin'))
+    ) {
+      throw new ForbiddenException()
     }
+
     await next()
   }
 }

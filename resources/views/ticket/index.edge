@@ -25,6 +25,23 @@
 
 <section id="page-content" class="flex-grow-1">
   <div class="container">
+    <div class="btn-group d-flex justify-content-end mb-4" role="group">
+      @if(ticket.status !== 'closed')
+        @if(hasRole('admin'))
+          <button type="button" class="btn btn-primary" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/assign?user_id=
+          @if(ticket.assigned_to)
+            0" data-toggle="tooltip" title="Unassign {{ ticket.assigned_to === auth.user.id ? 'Me' : ticket.assignedTo.name }}">Assigned To: {{ ticket.assignedTo.name }}
+          @else
+            {{ auth.user.id }}">Assign To Me
+          @endif
+          </button>
+        @endif
+        <button type="button" class="btn btn-danger" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/resolve">Close</button>
+      @else
+        <button type="button" class="btn btn-secondary" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/reopen">Reopen</button>
+      @endif
+    </div>
+
     <h6>MESSAGES</h6>
     <div class="list-group list-group-flush mb-3">
       @each(message in ticket.messages)
@@ -35,7 +52,7 @@
       @endeach
     </div>
 
-    @if(ticket.status !== "closed")
+    @if(ticket.status !== 'closed')
       <form method="post" action="{{ organizationRoute }}/ticket/{{ ticket.id }}/reply">
         {{ csrfField() }}
         <div class="form-group">
@@ -45,23 +62,6 @@
             <div class="input-group-prepend">
               <button class="btn btn-outline-secondary h-100" type="submit">Reply</button>
             </div>
-          </div>
-        </div>
-      </form>
-      <form method="post" action="{{ organizationRoute }}/ticket/{{ ticket.id }}/resolve">
-        {{ csrfField() }}
-        <div class="form-group">
-          <div class="input-group">
-            <button class="btn btn-outline-secondary h-100" type="submit">Resolve/Close</button>
-          </div>
-        </div>
-      </form>
-    @else
-      <form method="post" action="{{ organizationRoute }}/ticket/{{ ticket.id }}/reopen">
-        {{ csrfField() }}
-        <div class="form-group">
-          <div class="input-group">
-            <button class="btn btn-outline-secondary h-100" type="submit">Reopen</button>
           </div>
         </div>
       </form>
