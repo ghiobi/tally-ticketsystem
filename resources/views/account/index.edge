@@ -40,15 +40,8 @@
                 <div class="col">
                     <form action="{{ organizationRoute }}/account/password" method="POST">
                         {{ csrfField() }}
-                        <div class="form-group">
-                            <label for="newPassword">New Password</label>
-                            <input type="password" class="form-control" name="newPassword" id="newPassword" aria-describedby="passwordHelp" placeholder="Enter new password">
-                            <small id="passwordHelp" class="form-text text-muted">Enter a new password to change your current one</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="confirmPassword">Confirm Password</label>
-                            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password">
-                        </div>
+                        @!component('partials.forms.input', config = {label: 'New Password', key: 'newPassword', type:'password', detail:'Enter a new password to change your current one', placeholder:'Enter new password'}, error = getErrorFor, old = old )
+                        @!component('partials.forms.input', config = {label: 'Confirm Password', key: 'confirmPassword', type:'password', placeholder:'Confirm password'}, error = getErrorFor, old = old )
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
