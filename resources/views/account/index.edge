@@ -1,0 +1,60 @@
+@layout('layouts.index')
+
+@section('content')
+  @set('title', 'My Account')
+  @include('partials.header')
+  <!-- Page title -->
+   <section id="page-title" class="page-title-classic">
+    <div class="container">
+      <div class="page-title">
+        <h1>Hey {{ auth.user.name }}!</h1>
+        <span>Manage your account here</span>
+      </div>
+    </div>
+  </section>
+  <!-- end: Page title -->
+  <div class="container">
+    <ul class="list-group">
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-3">
+                    My Account Information
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" id="email" value="{{auth.user.email}}" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="organization">organization</label>
+                        <input type="text" class="form-control" id="organization" value="{{organization.slug}}" disabled>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-3">
+                    Change Password
+                </div>
+                <div class="col">
+                    <form action="{{ organizationRoute }}/account/password" method="POST">
+                        {{ csrfField() }}
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" class="form-control" name="newPassword" id="newPassword" aria-describedby="passwordHelp" placeholder="Enter new password">
+                            <small id="passwordHelp" class="form-text text-muted">Enter a new password to change your current one</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </li>
+    </ul>
+  </div>
+  @include('partials.footer')
+@endsection

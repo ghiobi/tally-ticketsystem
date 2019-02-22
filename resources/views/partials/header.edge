@@ -39,6 +39,12 @@
               <li class="dropdown"> <a href="#"><i class="fa fa-user-circle"></i>{{ auth.user.name }}</a>
                 <ul class="dropdown-menu dropdown-menu-right">
                   <li>
+                    <a href="{{ organizationRoute }}/account"><i class="fa fa-user"></i> My Account</a>
+                  </li>
+                  <li>
+                    <a href="{{ organizationRoute }}/claims"><i class="fa fa-clipboard"></i> My Claims</a>
+                  </li>
+                  <li>
                     <a href="{{ organizationRoute }}/logout"><i class="fa fa-sign-out-alt"></i> Logout</a>
                   </li>
                 </ul>
