@@ -7,7 +7,7 @@ class AccountController {
     return view.render('account.index')
   }
 
-  async password({ auth, session, request, response }) {
+  async password({ auth, response, request, session }) {
     const validation = await validateAll(request.post(), {
       newPassword: 'required|min:6'
     })
@@ -16,7 +16,6 @@ class AccountController {
       'newPassword',
       'confirmPassword'
     ])
-
     if (newPassword !== confirmPassword) {
       session.flash({ error: 'Passwords are not the same' })
     } else {
@@ -28,7 +27,7 @@ class AccountController {
       auth.user.password = newPassword
       await auth.user.save()
     }
-
+    session.flash({ success: 'Passwords was successfully changed' })
     return response.redirect('back')
   }
 }
