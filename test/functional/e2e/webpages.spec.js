@@ -10,8 +10,7 @@ trait('Test/Browser', {
     height: 720,
     isMobile: false
   },
-  headless: true,
-  slowMo: 500
+  headless: true
 })
 
 let organization = null
@@ -57,7 +56,7 @@ test('Clicking "Sign in" on homepage redirects to organization sign in page', as
   await page
     .waitForElement('#organization-signin')
     .click('#organization-signin')
-    .waitFor(500)
+    .waitForElement('#organization-input')
     .assertPath('/organization')
     .assertHas('SIGN INTO YOUR ORGANIZATION')
 }).timeout(60000)
