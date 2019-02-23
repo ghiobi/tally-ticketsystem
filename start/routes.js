@@ -34,11 +34,9 @@ Route.group(() => {
 
   Route.get('/', 'Dashboard/DashboardController.index')
 
-  Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware([
-    'ticket.belongs.to.user'
-  ])
+  Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware(['ticket.belongs.to.user'])
   Route.get('/submit/ticket', 'Ticket/SubmitTicketController.index')
-  Route.post('/submit/ticket', 'Ticket/SubmitTicketController.submit')
+  Route.post('/submit/ticket', 'Ticket/SubmitTicketController.submit').validator('StoreTicket')
 
   Route.post('/ticket/:ticket_id', 'Ticket/TicketController.reply')
   Route.post('/ticket/:ticket_id/reply', 'Ticket/TicketController.reply')
@@ -69,7 +67,7 @@ Route.group(() => {
  * Authenticated Organization API Routes
  */
 Route.group(() => {
-  Route.post('/tickets', 'Api/ApiTicketController.create')
+  Route.post('/tickets', 'Api/ApiTicketController.create').validator('StoreTicket')
   Route.get('/tickets/:ticket_id', 'Api/ApiTicketController.ticket')
 
   Route.get('/tickets', 'Api/ApiTicketController.organizationTickets')
