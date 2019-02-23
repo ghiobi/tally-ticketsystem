@@ -8,25 +8,26 @@ class AccountController {
   }
 
   async password({ auth, response, request, session }) {
-    const validation = await validateAll(request.post(), {
-      newPassword: 'required|min:6'
-    })
-
-    var { newPassword, confirmPassword } = request.only([
-      'newPassword',
-      'confirmPassword'
-    ])
-    if (newPassword !== confirmPassword) {
-      session.flash({ error: 'Passwords are not the same' })
-    } else {
-      if (validation.fails()) {
-        session.flash({ error: 'Passwords needs to be 6 in length' })
-        return response.redirect('back')
+    const validation = await validateAll(
+      request.post(),
+      {
+        newPassword: 'required|min:6',
+        confirmPassword: 'same:newPassword'
+      },
+      {
+        'newPassword.min': 'Passwords needs to be 6 in length',
+        'confirmPassword.same': 'Passwords are not the same'
       }
+    )
 
-      auth.user.password = newPassword
-      await auth.user.save()
+    var { newPassword } = request.only(['newPassword'])
+    if (validation.fails()) {
+      session.withErrors(validation.messages()).flashAll()
+      return response.redirect('back')
     }
+
+    auth.user.password = newPassword
+    await auth.user.save()
     session.flash({ success: 'Passwords was successfully changed' })
     return response.redirect('back')
   }

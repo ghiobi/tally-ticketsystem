@@ -8,6 +8,8 @@ const AccountController = use('App/Controllers/Http/Account/AccountController')
 const sinon = require('sinon')
 
 trait('Test/ApiClient')
+trait('Auth/Client')
+trait('Session/Client')
 
 let organization, admin, controller, handle
 
@@ -37,7 +39,7 @@ beforeEach(async () => {
       organization: organization
     },
     session: {
-      flash: sinon.fake()
+      withErrors: sinon.fake.returns({ flashAll: sinon.fake() })
     },
     response: {
       redirect: sinon.fake()
@@ -58,9 +60,13 @@ test('Make sure password is validated before saving', async ({ assert }) => {
     ...handle.request
   }
   await controller.password(handle)
-  assert.deepEqual(handle.session.flash.args[0][0], {
-    error: 'Passwords needs to be 6 in length'
-  })
+  assert.deepEqual(handle.session.withErrors.args[0][0], [
+    {
+      message: 'Passwords needs to be 6 in length',
+      field: 'newPassword',
+      validation: 'min'
+    }
+  ])
   assert.isTrue(handle.response.redirect.called)
 })
 
@@ -79,9 +85,37 @@ test('Make sure password and confirm password are the same before saving', async
     ...handle.request
   }
   await controller.password(handle)
-  assert.deepEqual(handle.session.flash.args[0][0], {
-    error: 'Passwords are not the same'
-  })
+  assert.deepEqual(handle.session.withErrors.args[0][0], [
+    {
+      message: 'Passwords are not the same',
+      field: 'confirmPassword',
+      validation: 'same'
+    }
+  ])
 
   assert.isTrue(handle.response.redirect.called)
+})
+
+test('Check that a user can reach my account page', async ({ client }) => {
+  const response = await client
+    .get(`organization/${organization.slug}/account`)
+    .loginVia(admin)
+    .end()
+
+  response.assertStatus(200)
+})
+
+test('CHeck that password can change', async ({ client, assert }) => {
+  const oldHash = admin.password
+  // console.log(currentHash)
+  await client
+    .post(`organization/${organization.slug}/account/password`)
+    .send({ newPassword: 'testing', confirmPassword: 'testing' })
+    .loginVia(admin)
+    .end()
+  await admin.reload()
+
+  const newHash = admin.password
+
+  assert.notEqual(oldHash, newHash)
 })
