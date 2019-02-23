@@ -1,0 +1,76 @@
+@layout('layouts.index')
+
+@section('content')
+  @set('title', 'Organization Users')
+  @include('partials.header')
+
+  <!-- Page title -->
+  <section id="page-title" class="page-title-classic">
+    <div class="container">
+      <div class="page-title">
+        <h1>Organization Users</h1>
+        <span>See all users in the current organization.</span>
+      </div>
+    </div>
+  </section>
+  <section style="min-height: 85vh">
+    <div class="container">
+      <div class="row mb-2 align-items-center">
+        <div class="col-sm-8">
+          <a href="{{ organizationRoute }}/admin/users?role=all" class="btn btn-rounded {{ role === 'all' ? '' : 'btn-outline' }}">All Users</a>
+          <a href="{{ organizationRoute }}/admin/users?role=admin" class="btn btn-rounded {{ role === 'admins' ? '' : 'btn-outline' }}">Admins</a>
+        </div>
+        <div class="col-sm-4">
+          <form>
+            <div class="input-group input-group-sm">
+              <input type="text" class="form-control" placeholder="Search Title">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary h-100" type="submit"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+<table class="table">
+    <thead>
+        <th>
+           Id
+        </th>
+        <th>
+           User
+        </th>
+        <th>
+            Email
+        </th>
+        <th>
+          Role(s)
+        </th>
+    </thead>
+    <tbody>
+      @each(user in users)
+        <tr>
+          <td>
+            {{ user.id }}
+          </td>
+          <td>
+            {{ user.name }}
+          </td>
+          <td>
+            {{ user.email }}
+          </td>
+          <td>
+            @each(role in user.roles)
+              @include('partials.user.roleBadge')
+            @endeach
+          </td>
+        </tr>
+      @endeach
+    </tbody>
+  </table>
+  
+    </div>
+  </section>
+  @include('partials.footer')
+@endsection
+            

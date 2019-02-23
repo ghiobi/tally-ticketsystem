@@ -56,6 +56,8 @@ Route.group(() => {
 
   Route.get('/token', 'Admin/ApiTokenController.index')
   Route.post('/token', 'Admin/ApiTokenController.generate')
+
+  Route.get('/users', 'Admin/UsersController.index')
 })
   .prefix('organization/:organization/admin')
   .middleware(['organization', 'auth', 'within', 'IsAdmin'])
