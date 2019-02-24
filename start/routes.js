@@ -44,6 +44,9 @@ Route.group(() => {
   Route.post('/ticket/:ticket_id/reply', 'Ticket/TicketController.reply')
   Route.post('/ticket/:ticket_id/resolve', 'Ticket/TicketController.resolve')
   Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen')
+
+  Route.get('/account', 'Account/AccountController.index')
+  Route.post('/account/password', 'Account/AccountController.password')
 })
   .prefix('organization/:organization')
   .middleware(['organization', 'auth', 'within'])

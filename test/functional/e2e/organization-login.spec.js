@@ -12,8 +12,7 @@ trait('Test/Browser', {
     height: 720,
     isMobile: false
   },
-  headless: true,
-  slowMo: 100
+  headless: true
 })
 
 let organization = null
@@ -88,7 +87,7 @@ test('Login in with a user account should lead to the dashboard page', async ({
     .click('#sign-in-btn')
     .waitFor(500)
     .assertPath('/organization/' + organization.slug)
-    .assertHas('View or Make Claims Here')
+    .assertHas('Create and track your tickets here')
 }).timeout(60000)
 
 test('Login in with an admin account should lead to the dashboard page', async ({
