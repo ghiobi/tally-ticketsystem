@@ -10,7 +10,7 @@
         <h1>Welcome {{ auth.user.name }}</h1>
         <span>Create and track your tickets here</span>
       </div>
-      <a href="{{ organizationRoute }}/submit/ticket" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>Submit a Ticket</a>
+      <a href="{{ organizationRoute }}/ticket/create" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>Submit a Ticket</a>
     </div>
   </section>
   <!-- end: Page title -->
@@ -23,7 +23,7 @@
         <div class="row">
           <div class="col-md-6 offset-3 text-center">
             <p class="text-bold mb-1">You don't have any tickets.</p>
-            <a href="{{ organizationRoute }}/submit/ticket" class="btn btn-primary btn-sm">Submit a Ticket</a>
+            <a href="{{ organizationRoute }}/ticket/create" class="btn btn-primary btn-sm">Submit a Ticket</a>
           </div>
         </div>
       @endif

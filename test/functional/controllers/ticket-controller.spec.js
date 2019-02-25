@@ -162,3 +162,34 @@ test('Make sure ticket can be reopened as admin or user', async ({
 
   assert.equal(currTicket.status, 'replied')
 })
+
+test('Make sure a ticket can be assigned to an adminstrator', async ({
+  client,
+  assert
+}) => {
+  await client
+    .post(
+      `organization/${organization.slug}/ticket/${ticket.id}/assign?user_id=${
+        admin.id
+      }`
+    )
+    .loginVia(admin)
+    .end()
+
+  const currTicket = await Ticket.find(ticket.id)
+
+  assert.equal(currTicket.assigned_to, admin.id)
+})
+
+test('Make sure a ticket can be unassigned', async ({ client, assert }) => {
+  await client
+    .post(
+      `organization/${organization.slug}/ticket/${ticket.id}/assign?user_id=0`
+    )
+    .loginVia(admin)
+    .end()
+
+  const currTicket = await Ticket.find(ticket.id)
+
+  assert.notExists(currTicket.assigned_to)
+})

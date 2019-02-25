@@ -38,7 +38,7 @@ test('Ensure ticket is created after user submits new ticket', async ({
   assert
 }) => {
   await client
-    .post(`organization/${organization.slug}/submit/ticket`)
+    .post(`organization/${organization.slug}/ticket/create`)
     .send({ title: 'Test ticket title', body: 'Random ticket message' })
     .loginVia(user)
     .end()
@@ -55,7 +55,7 @@ test('Ensure message is created after user submits new ticket', async ({
   assert
 }) => {
   await client
-    .post(`organization/${organization.slug}/submit/ticket`)
+    .post(`organization/${organization.slug}/ticket/create`)
     .send({ title: 'Random Title', body: 'foobar' })
     .loginVia(user)
     .end()
@@ -73,7 +73,7 @@ test('Ensure ticket is not created if missing title ', async ({
   assert
 }) => {
   await client
-    .post(`organization/${organization.slug}/submit/ticket`)
+    .post(`organization/${organization.slug}/ticket/create`)
     .send({ body: 'dfaf89s7D(*Adus980D9SAFKNAD;VKDAFA]}{PP{' })
     .loginVia(user)
     .end()
@@ -90,7 +90,7 @@ test('Ensure ticket is not created if missing message body', async ({
   assert
 }) => {
   await client
-    .post(`organization/${organization.slug}/submit/ticket`)
+    .post(`organization/${organization.slug}/ticket/create`)
     .send({ title: 'testTicket1' })
     .loginVia(user)
     .end()

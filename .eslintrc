@@ -19,6 +19,7 @@
   },
   "globals": {
     "use": true,
-    "models": true
+    "models": true,
+    "$": true
   }
 }

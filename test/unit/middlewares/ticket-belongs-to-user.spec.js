@@ -54,8 +54,8 @@ before(async () => {
   await ticket3.user().associate(user3)
 
   handle = {
-    response: {
-      redirect: sinon.fake()
+    request: {
+      organization: organization
     },
     auth: {
       user: user2 // user2 is a regular user
