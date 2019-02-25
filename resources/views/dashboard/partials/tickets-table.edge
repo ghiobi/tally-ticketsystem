@@ -1,4 +1,7 @@
 
+<div class="mb-2 m">
+  <small>Page: {{ tickets.page }}</small>
+</div>
 <table class="table">
   <thead>
       <th>
@@ -15,28 +18,37 @@
       </th>
   </thead>
   <tbody>
-    @each(ticket in tickets)
-      <tr>
-        <td>
-            <a href="{{ organizationRoute }}/ticket/{{ticket.id}}" class="d-block">
-              <span class="text">{{ ticket.title }}</span>
-            </a>
-            @!component('partials.ticket.status', ticket = ticket)
-        </td>
-        @if(request.url() == '/organization/' + organization.slug + '/admin' && hasRole('admin'))
-          <td>
-              {{ ticket.user.name }}
-          </td>
-        @else
-          <td>You</td>
-        @endif
-        <td>
-            {{ humanTime(ticket.created_at) }}
-        </td>
-        <td>
-            {{ ticket.assignedTo ? ticket.assignedTo.name : '' }}
-        </td>
-      </tr>
-    @endeach
+  @each(ticket in tickets.data)
+    <tr>
+      <td>
+        <a href="{{ organizationRoute }}/ticket/{{ticket.id}}" class="d-block">
+          <span class="text">{{ ticket.title }}</span>
+        </a>
+        @!component('partials.ticket.status', ticket = ticket)
+      </td>
+      @if(request.url() == '/organization/' + organization.slug + '/admin')
+      <td>
+        {{ ticket.user.name }}
+      </td>
+      @else
+      <td>You</td>
+      @endif
+      <td>
+        {{ humanTime(ticket.created_at) }}
+      </td>
+      <td>
+        {{ ticket.assignedTo ? ticket.assignedTo.name : '' }}
+      </td>
+    </tr>
+  @endeach
   </tbody>
 </table>
+
+@set('url', adminPaginateUrl ? adminPaginateUrl : '?')
+@!component('partials.components.pagination',
+  total = tickets.total,
+  page = tickets.page,
+  perPage = tickets.perPage,
+  lastPage = tickets.lastPage,
+  url = organizationRoute + url
+)

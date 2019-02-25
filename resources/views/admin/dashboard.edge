@@ -15,7 +15,7 @@
   </section>
   <!-- end: Page title -->
 
-  <section style="min-height: 85vh">
+  <section class="flex-grow-1">
     <div class="container">
       <div class="row mb-2 align-items-center">
         <div class="col-sm-8">
@@ -24,14 +24,22 @@
           <a href="{{ organizationRoute }}/admin?show=closed" class="btn btn-rounded {{ show === 'closed' ? '' : 'btn-outline' }}">Closed</a>
         </div>
         <div class="col-sm-4">
-          <form>
-            <div class="input-group input-group-sm">
-              <input type="text" class="form-control" placeholder="Search Title">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary h-100" type="submit"><i class="fa fa-search"></i></button>
-              </div>
+          @if(search)
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button type="button" class="btn" style="cursor: initial">Searched: {{ search }}</button>
+              <a type="button" class="btn btn-secondary" href="{{ organizationRoute }}/admin?show={{ show }}"><i class="fa fa-times"></i>Clear</a>
             </div>
-          </form>
+          @else
+            <form action="">
+              <div class="input-group input-group-sm">
+                <input type="text" class="form-control" name="search" placeholder="Search Title">
+                <input type="hidden" name="show" value="{{ show }}">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary h-100" type="submit"><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </form>
+          @endif
         </div>
       </div>
       @include('dashboard.partials.tickets-table')
