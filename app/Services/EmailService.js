@@ -1,3 +1,5 @@
+'use strict'
+
 const logger = use('App/Logger')
 const Mail = use('Mail')
 const Helpers = use('Helpers')
@@ -16,6 +18,23 @@ class EmailService {
     } catch (err) {
       logger.error(`Unable to send email to user ${data.user} (email: ${data.user.email}. \n${err})`)
     }
+  }
+
+  /**
+   * Sends an email using the Email Provider from AdonisJS
+   * @param user The user model.
+   * @param data JSON data.
+   * @param view The view template.
+   * @param {string} subject A email subject.
+   */
+  send(user, data, view, subject) {
+    return Mail.send(view, { ...data, user }, (message) => {
+      message.to(user.email)
+      message.subject(`${Config.get('app.name')}${subject ? ' - ' + subject : ''}`)
+      message.embed(Helpers.publicPath('/images/logo.png'), 'logo')
+    }).catch((error) => {
+      logger.error(`Unable to send email: ${error}`)
+    })
   }
 
   //call this when a ticket is created

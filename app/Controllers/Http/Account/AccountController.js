@@ -23,7 +23,7 @@ class AccountController {
       }
     )
 
-    var { newPassword } = request.only(['newPassword'])
+    const { newPassword } = request.only(['newPassword'])
     if (validation.fails()) {
       session.withErrors(validation.messages()).flashAll()
       return response.redirect('back')
@@ -38,6 +38,15 @@ class AccountController {
 
     session.flash({ success: 'Passwords was successfully changed' })
     return response.redirect('back')
+  }
+
+  async clearNotifications({ auth }) {
+    await auth.user
+      .notifications()
+      .where('read', false)
+      .update({ read: true })
+
+    return 'ok'
   }
 }
 

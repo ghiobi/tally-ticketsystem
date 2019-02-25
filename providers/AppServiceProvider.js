@@ -26,9 +26,9 @@ class AppServiceProvider extends ServiceProvider {
    * @return {void}
    */
   async register() {
-    this.registerViewGlobals()
+    await this.registerViewGlobals()
     await this.registerServices()
-    this.registerCache()
+    await this.registerCache()
   }
 
   registerViewGlobals() {
@@ -68,7 +68,7 @@ class AppServiceProvider extends ServiceProvider {
 
     this.app.singleton('Cache', () => {
       // TODO: Create Redis cache strategy.
-      const Engine = use('Cache/Engine')
+      const Engine = use('Cache/Strategy')
       return new (require('./cache/Cache'))(Engine)
     })
   }

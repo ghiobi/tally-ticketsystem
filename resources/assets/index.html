@@ -4,6 +4,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="CSRF_TOKEN" content="{{ csrfToken }}" />
+    @if(organization)
+    <meta name="ORGANIZATION_URI" content="{{ organization.slug }}" />
+    @endif
     <!-- Document title -->
     <title>{{ title ? title + ' - ' : '' }}Tally Ticketing</title>
     <!-- Stylesheets & Fonts -->
