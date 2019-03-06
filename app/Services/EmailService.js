@@ -30,6 +30,12 @@ class EmailService {
 
     this.sendEmail(subject, view, ticket.toJSON())
   }
+
+  async sendRequestToResetPassword(user, token) {
+    let subject = 'Tally Ticket - Recover Password'
+    let view = 'emails.reset-password'
+    this.sendEmail(subject, view, { user, token })
+  }
 }
 
 module.exports = EmailService
