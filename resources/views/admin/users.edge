@@ -18,57 +18,65 @@
       <div class="row mb-2 align-items-center">
         <div class="col-sm-8">
           <a href="{{ organizationRoute }}/admin/users?role=all" class="btn btn-rounded {{ role === 'all' ? '' : 'btn-outline' }}">All Users</a>
-          <a href="{{ organizationRoute }}/admin/users?role=admin" class="btn btn-rounded {{ role === 'admins' ? '' : 'btn-outline' }}">Admins</a>
+          <a href="{{ organizationRoute }}/admin/users?role=admin" class="btn btn-rounded {{ role === 'admin' ? '' : 'btn-outline' }}">Admins</a>
         </div>
-        <div class="col-sm-4">
-          <form>
-            <div class="input-group input-group-sm">
-              <input type="text" class="form-control" placeholder="Search Title">
+          @if(search)
+          <div class="col-sm-3 offset-sm-1">
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button type="button" class="btn" style="cursor: initial">Searched: {{ search }}</button>
+              <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ organizationRoute }}/admin/users?role={{ role }}'"><i class="fa fa-times"></i>Clear</button>
+            </div>
+          </div>
+          @else
+          <div class="col-sm-4">
+            <form action="">
+              <div class="input-group input-group-sm">
+                <input type="text" class="form-control" name="search" placeholder="Search by id, name or email">
+                <input type="hidden" name="role" value="{{ role }}">
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary h-100" type="submit"><i class="fa fa-search"></i></button>
                 </div>
-            </div>
-          </form>
-        </div>
+              </div>
+            </form>
+          </div>
+          @endif
       </div>
-      
-<table class="table">
-    <thead>
-        <th>
-           Id
-        </th>
-        <th>
-           User
-        </th>
-        <th>
-            Email
-        </th>
-        <th>
-          Role(s)
-        </th>
-    </thead>
-    <tbody>
-      @each(user in users)
-        <tr>
-          <td>
-            {{ user.id }}
-          </td>
-          <td>
-            {{ user.name }}
-          </td>
-          <td>
-            {{ user.email }}
-          </td>
-          <td>
-            @each(role in user.roles)
-              @include('partials.user.roleBadge')
+      <table class="table">
+          <thead>
+              <th>
+                Id
+              </th>
+              <th>
+                User
+              </th>
+              <th>
+                  Email
+              </th>
+              <th>
+                Role(s)
+              </th>
+          </thead>
+          <tbody>
+            @each(user in users)
+              <tr>
+                <td>
+                  {{ user.id }}
+                </td>
+                <td>
+                  {{ user.name }}
+                </td>
+                <td>
+                  {{ user.email }}
+                </td>
+                <td>
+                  @each(role in user.roles)
+                    @include('partials.user.roleBadge')
+                  @endeach
+                </td>
+              </tr>
             @endeach
-          </td>
-        </tr>
-      @endeach
-    </tbody>
-  </table>
-  
+          </tbody>
+        </table>
     </div>
   </section>
   @include('partials.footer')
