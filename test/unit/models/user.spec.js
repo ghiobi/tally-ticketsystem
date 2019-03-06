@@ -1,7 +1,7 @@
 'use strict'
 
 const { test, before } = use('Test/Suite')('User Model')
-const { User, Role, UserFactory, OrganizationFactory, TicketFactory } = models
+const { User, Role, UserFactory, OrganizationFactory, TicketFactory, NotificationFactory } = models
 
 let organization = null
 
@@ -9,9 +9,7 @@ before(async () => {
   organization = await OrganizationFactory.create()
 })
 
-test('make sure a user can be initialized with an organization', async ({
-  assert
-}) => {
+test('make sure a user can be initialized with an organization', async ({ assert }) => {
   await organization.users().save(
     await UserFactory.make({
       email: 'bob_marley@tally.com'
@@ -26,9 +24,7 @@ test('make sure a user can be initialized with an organization', async ({
   assert.exists(user)
 })
 
-test('make sure a user cannot be initialized with a non unique email in an organization', async ({
-  assert
-}) => {
+test('make sure a user cannot be initialized with a non unique email in an organization', async ({ assert }) => {
   await organization.users().save(
     await UserFactory.make({
       email: 'stephen.hawking@oxford.uk'
@@ -98,4 +94,26 @@ test('make sure a user can get their tickets', async ({ assert }) => {
 
   assert.equal(tickets.size(), 1)
   assert.deepEqual(tickets.first(), ticket)
+})
+
+test('make sure users can retrieve their own notifications', async ({ assert }) => {
+  const user = await UserFactory.create()
+
+  await NotificationFactory.create({
+    type: 'type',
+    read: false,
+    data: {
+      name: 'hey hey',
+      url: '/url-bla-bla'
+    },
+    user_id: user.id
+  })
+
+  const notifications = (await user.notifications().fetch()).rows
+
+  assert.equal(notifications.length, 1)
+  assert.deepEqual(notifications[0].data, {
+    name: 'hey hey',
+    url: '/url-bla-bla'
+  })
 })

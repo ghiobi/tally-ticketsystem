@@ -49,3 +49,13 @@ Factory.blueprint('App/Models/Message', (faker, i, data) => {
     ...data
   }
 })
+
+Factory.blueprint('App/Models/Notification', (faker, i, data) => {
+  return {
+    user_id: 1,
+    data: null,
+    type: 'message',
+    read: faker.bool(),
+    ...data
+  }
+})
