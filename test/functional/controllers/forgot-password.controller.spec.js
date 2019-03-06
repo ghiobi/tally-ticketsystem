@@ -1,0 +1,59 @@
+'use strict'
+
+const { test, trait, before } = use('Test/Suite')('Forgot-password Controller')
+const { OrganizationFactory, UserFactory } = models
+
+trait('Test/ApiClient')
+
+let organization = null
+let user = null
+
+before(async () => {
+  organization = await OrganizationFactory.create({
+    slug: 'Forgot-password-controller-test'
+  })
+
+  user = await UserFactory.make({
+    email: 'Forgot-password-controller-test@email.com',
+    password: 'password'
+  })
+
+  await organization.users().save(user)
+})
+
+test('Check that a user can reach forgot-password page', async ({ client }) => {
+  const response = await client.get(`organization/${organization.slug}/forgot-password`).end()
+
+  response.assertStatus(200)
+})
+
+test('make sure the user can request token to reset password', async ({ client }) => {
+  const response = await client
+    .post(`/organization/${organization.slug}/forgot-password`)
+    .send({
+      email: 'Forgot-password-controller-test@email.com'
+    })
+    .end()
+  response.assertRedirect('/')
+})
+
+test('Check that a user can reach reset-password page', async ({ client }) => {
+  const token = 'token-testing'
+  const response = await client.get(`/resetpassword/${token}`).end()
+
+  response.assertStatus(200)
+})
+
+test('Check that a user can submit new password', async ({ client }) => {
+  const token = 'token-testing'
+  const response = await client
+    .post('/resetpassword')
+    .send({
+      password: 'newpass',
+      password_confirmation: 'newpass',
+      token: token
+    })
+    .end()
+
+  response.assertRedirect('/')
+})

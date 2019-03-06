@@ -5,5 +5,5 @@ const service = new EmailService()
 Event.on('forgot::password', async ({ user, token }) => {
   // console.log(token)
   const encodedToken = encodeURIComponent(token)
-  await service.sendRequestToResetPassword(user, encodedToken)
+  await service.sendTokenToResetPassword(user, encodedToken)
 })
