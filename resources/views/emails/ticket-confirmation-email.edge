@@ -1,10 +1,13 @@
 @layout('layouts.email')
 
 @section('content')
- <div>
-     <h1>Your ticket has been submitted!</h1>
- </div>
- <div>
-     <h2>Title: {{title}}</h2>
- </div>
+    <div>
+        <p>You are getting this email as a confirmation that your ticket has been submitted!</p>
+        <p>If you would like to see your ticket, click <a href='{{appUrl}}/organization/{{user.organization.slug}}/ticket/{{id}}''>here</a></p>
+    </div>
+    <hr/>
+    <div>
+        <h2>Title: {{title}}</h2>
+        <p>"{{messages[0].body}}"</p>
+    </div>
 @endsection
