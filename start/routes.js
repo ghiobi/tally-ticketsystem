@@ -98,6 +98,6 @@ Route.group(() => {
   Route.get('/oauth', 'Auth/SlackOAuthController.redirect')
   Route.get('/oauth/authenticate', 'Auth/SlackOAuthController.authenticate')
 
-  Route.get('/resetpassword/:token', 'Auth/ForgotPasswordController.resetpage')
-  Route.post('/resetpassword', 'Auth/ForgotPasswordController.resetByToken')
+  Route.get('/resetpassword/:token', 'Auth/ForgotPasswordController.resetpage').middleware('resetpassword')
+  Route.post('/resetpassword', 'Auth/ForgotPasswordController.resetByToken').middleware('resetpassword')
 }).middleware(['guest'])
