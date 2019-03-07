@@ -7,6 +7,7 @@ const USER_MODEL = MODEL_DIR + 'User'
 const ROLE_MODEL = MODEL_DIR + 'Role'
 const TICKET_MODEL = MODEL_DIR + 'Ticket'
 const MESSAGE_MODEL = MODEL_DIR + 'Message'
+const TOKEN_MODEL = MODEL_DIR + 'Token'
 
 module.exports = {
   Organization: use(ORGANIZATION_MODEL),
@@ -21,5 +22,8 @@ module.exports = {
   Message: use(MESSAGE_MODEL),
   MessageFactory: Factory.model(MESSAGE_MODEL),
 
-  Role: use(ROLE_MODEL)
+  Role: use(ROLE_MODEL),
+
+  Token: use(TOKEN_MODEL),
+  TokenFactory: Factory.model(TOKEN_MODEL)
 }

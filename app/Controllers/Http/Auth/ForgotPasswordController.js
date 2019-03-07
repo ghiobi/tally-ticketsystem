@@ -19,6 +19,7 @@ class ForgotPasswordController {
       }
       await Persona.forgotPassword(request.input('email'))
     } catch (err) {
+      /* eslint-disable no-console */
       console.error(err)
     }
 

@@ -49,3 +49,7 @@ Factory.blueprint('App/Models/Message', (faker, i, data) => {
     ...data
   }
 })
+
+Factory.blueprint('App/Models/Token', (faker, i, data) => {
+  return { token: faker.string({ length: 32 }), type: 'test', ...data }
+})

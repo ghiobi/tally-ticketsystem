@@ -1,7 +1,7 @@
 'use strict'
 
 const { test, trait, before } = use('Test/Suite')('Forgot-password Controller')
-const { OrganizationFactory, UserFactory } = models
+const { OrganizationFactory, UserFactory, TokenFactory } = models
 
 trait('Test/ApiClient')
 
@@ -17,8 +17,12 @@ before(async () => {
     email: 'Forgot-password-controller-test@email.com',
     password: 'password'
   })
-
   await organization.users().save(user)
+
+  const token = await TokenFactory.make({
+    token: 'token-testing'
+  })
+  await user.tokens().save(token)
 })
 
 test('Check that a user can reach forgot-password page', async ({ client }) => {

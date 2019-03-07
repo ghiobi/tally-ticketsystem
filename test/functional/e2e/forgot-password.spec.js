@@ -2,7 +2,7 @@
 
 const { test, trait, before } = use('Test/Suite')('Forgot Password integration test')
 
-const { OrganizationFactory, UserFactory } = models
+const { OrganizationFactory, UserFactory, TokenFactory } = models
 
 trait('Test/Browser', {
   defaultViewport: {
@@ -26,6 +26,9 @@ before(async () => {
     password: 'userpassword'
   })
   await organization.users().save(user)
+
+  const token = await TokenFactory.make({ token: 'token-testing' })
+  await user.tokens().save(token)
 })
 
 test('Clicking Forgot Password from Login should lead to the password forgot-password page', async ({ browser }) => {
