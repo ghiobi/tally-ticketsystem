@@ -91,6 +91,24 @@ class User extends Model {
     await this.roles().attach([model.id])
   }
 
+  /**
+   * Removes a role to a user.
+   *
+   * @param role The role key.
+   * @returns {Promise<void>}
+   */
+  async removeRole(role) {
+    if (!(await this.hasRole(role))) {
+      return
+    }
+
+    const model = await Role.query()
+      .where('key', role)
+      .first()
+
+    await this.roles().detach([model.id])
+  }
+
   static get hidden() {
     return ['password']
   }

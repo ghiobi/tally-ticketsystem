@@ -1,10 +1,11 @@
 'use strict'
 
 class UsersController {
-  async index({ request, view }) {
+  async index({ request, view, auth }) {
     let { organization } = request
     let role = request.input('role')
     const search = request.input('search', '')
+    let isOwner = await auth.user.hasRole('owner')
 
     let users = this.getUsers(organization).where(function() {
       this.where('name', 'like', `%${search}%`)
@@ -21,8 +22,7 @@ class UsersController {
     }
 
     users = await users.fetch()
-
-    return view.render('admin.users', { users: users.toJSON(), role, search })
+    return view.render('admin.users', { users: users.toJSON(), isOwner, role, search })
   }
 
   getUsers(organization) {

@@ -3,7 +3,6 @@
 @section('content')
   @set('title', 'Organization Users')
   @include('partials.header')
-
   <!-- Page title -->
   <section id="page-title" class="page-title-classic">
     <div class="container">
@@ -50,28 +49,37 @@
                 User
               </th>
               <th>
-                  Email
+                Email
               </th>
               <th>
                 Role(s)
               </th>
+              <th></th>
           </thead>
           <tbody>
             @each(user in users)
               <tr>
-                <td>
+                <td class="align-middle">
                   {{ user.id }}
                 </td>
-                <td>
+                <td class="align-middle">
                   {{ user.name }}
                 </td>
-                <td>
+                <td class="align-middle">
                   {{ user.email }}
                 </td>
-                <td>
+                <td>                  
                   @each(role in user.roles)
                     @include('partials.user.roleBadge')
                   @endeach
+
+                </td>
+                <td>
+                  @if(user.roles.length == 0)
+                    <button type="button" class="btn btn-outline" data-toggle="modal" data-target="#makeAdminModal" data-user-id="{{ user.id }}" data-user-name="{{ user.name }}" data-change-type="add">Make admin</button>
+                  @elseif(isOwner && user.roles.length == 1)
+                    <button type="button" class="btn btn-outline" data-toggle="modal" data-target="#makeAdminModal" data-user-id="{{ user.id }}" data-user-name="{{ user.name }}" data-change-type="remove">Remove admin</button>
+                  @endif
                 </td>
               </tr>
             @endeach
@@ -79,6 +87,7 @@
         </table>
     </div>
   </section>
+  @include('admin.partials.admin-confirmation-modal')
   @include('partials.footer')
 @endsection
             

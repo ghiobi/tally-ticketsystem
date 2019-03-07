@@ -1,0 +1,45 @@
+<!-- Modal -->
+<script>
+$(document).ready(function () {
+  $('#makeAdminModal').on('show.bs.modal', function (e) {
+  var button = $(e.relatedTarget)
+  var user_id = button.data('user-id')
+  var user_name = button.data('user-name')
+  var change_type = button.data('change-type')
+  var modal = $(this)
+  var modal_body = ''
+  var route = '{{ organizationRoute }}/admin/users/'
+  if(change_type == 'add'){
+    modal_body = 'Are you sure you want to make ' + user_name + ' an admin? Only the owner of the organization can revert this change.'
+    route += 'addAdmin'
+  }else{
+    modal_body = 'Are you sure you want to remove admin access from ' + user_name + '?'
+    route += 'removeAdmin'
+  }
+
+  modal.find('.modal-body').html(modal_body)
+  modal.find('.modal-footer .user_id_input').val(user_id)
+  modal.find('#manage-admin-form').attr('action', route)
+  })
+});
+</script>
+
+<div class="modal fade" id="makeAdminModal" tabindex="-1" role="dialog" aria-labelledby="makeAdminModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Confirmation</h5>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <form action="{{ organizationRoute }}/admin/users/addAdmin" id="manage-admin-form" method="post">
+            {{ csrfField() }}
+            <input type="hidden" class="user_id_input" name="input_user_id">
+            <button type="submit" class="btn btn-primary">Confirm</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
