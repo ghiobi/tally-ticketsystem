@@ -18,16 +18,13 @@ let user = null
 
 before(async () => {
   organization = await OrganizationFactory.create({
-    slug: 'account-e2e'
+    slug: 'forgot-password-e2e'
   })
 
-  user = await UserFactory.make({
-    email: 'account-e2e@email.com',
-    password: 'userpassword'
-  })
+  user = await UserFactory.make({ email: 'forgot-password-e2e@email.com', password: 'userpassword' })
   await organization.users().save(user)
 
-  const token = await TokenFactory.make({ token: 'token-testing' })
+  const token = await TokenFactory.make({ token: 'forgot-token-testing' })
   await user.tokens().save(token)
 })
 

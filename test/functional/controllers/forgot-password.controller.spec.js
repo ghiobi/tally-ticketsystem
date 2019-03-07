@@ -10,17 +10,17 @@ let user = null
 
 before(async () => {
   organization = await OrganizationFactory.create({
-    slug: 'Forgot-password-controller-test'
+    slug: 'forgot-password-controller-test'
   })
 
   user = await UserFactory.make({
-    email: 'Forgot-password-controller-test@email.com',
+    email: 'forgot-password-controller-test@email.com',
     password: 'password'
   })
   await organization.users().save(user)
 
   const token = await TokenFactory.make({
-    token: 'token-testing'
+    token: 'forgot-controller-token-testing'
   })
   await user.tokens().save(token)
 })
@@ -42,14 +42,14 @@ test('make sure the user can request token to reset password', async ({ client }
 })
 
 test('Check that a user can reach reset-password page', async ({ client }) => {
-  const token = 'token-testing'
+  const token = 'forgot-controller-token-testing'
   const response = await client.get(`/resetpassword/${token}`).end()
 
   response.assertStatus(200)
 })
 
 test('Check that a user can submit new password', async ({ client }) => {
-  const token = 'token-testing'
+  const token = 'forgot-controller-token-testing'
   const response = await client
     .post('/resetpassword')
     .send({
