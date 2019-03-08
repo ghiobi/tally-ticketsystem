@@ -45,8 +45,9 @@ const namedMiddleware = {
   accessTicket: 'App/Middleware/TicketBelongsToUser',
   IsSelfOrAdmin: 'App/Middleware/IsSelfOrAdmin',
   IsAdmin: 'App/Middleware/IsAdmin',
-  api: 'App/Middleware/ApiAuth',
-  resetpassword: 'App/Middleware/ResetPassword'
+  IsOwner: 'App/Middleware/IsOwner',
+  resetpassword: 'App/Middleware/ResetPassword',
+  api: 'App/Middleware/ApiAuth'
 }
 
 /*

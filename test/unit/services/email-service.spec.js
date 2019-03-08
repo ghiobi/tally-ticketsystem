@@ -43,7 +43,7 @@ test('Check sendReplyNotification sends proper data', async ({ assert }) => {
 
   const data = {
     ...ticket1.toJSON(),
-    user: user1.toJSON(),
+    user: { ...user1.toJSON(), organization: organization1.toJSON() },
     messages: [message1.toJSON()]
   }
   assert.isTrue(EmailService.sendEmail.called)
@@ -63,7 +63,7 @@ test('Check sendTicketConfirmation sends proper data', async ({ assert }) => {
 
   const data = {
     ...ticket1.toJSON(),
-    user: user1.toJSON(),
+    user: { ...user1.toJSON(), organization: organization1.toJSON() },
     messages: [message1.toJSON()]
   }
   assert.isTrue(EmailService.sendEmail.called)
