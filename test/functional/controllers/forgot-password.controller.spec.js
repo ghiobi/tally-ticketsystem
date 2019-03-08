@@ -43,7 +43,7 @@ test('make sure the user can request token to reset password', async ({ client }
 
 test('Check that a user can reach reset-password page', async ({ client }) => {
   const token = 'forgot-controller-token-testing'
-  const response = await client.get(`/resetpassword/${token}`).end()
+  const response = await client.get(`/resetpassword?token=${token}`).end()
 
   response.assertStatus(200)
 })

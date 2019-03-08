@@ -10,7 +10,6 @@ class ForgotPasswordController {
 
   async recover({ request, response, session }) {
     const payload = { uid: request.input('email') }
-
     try {
       const user = await request.organization.findUserByEmail(payload.uid)
 
@@ -29,31 +28,28 @@ class ForgotPasswordController {
     return response.redirect('back')
   }
 
-  resetpage({ view, params }) {
-    return view.render('auth.reset-password', { ...params })
+  resetpage({ view, request }) {
+    return view.render('auth.reset-password', { token: request.input('token') })
   }
 
   async resetByToken({ request, response, session }) {
     const token = decodeURIComponent(request.input('token'))
     const payload = request.only(['password', 'password_confirmation'])
-    try {
-      const validation = await validateAll(
-        request.post(),
-        {
-          password: 'required|min:6|confirmed',
-          password_confirmation: 'required'
-        },
-        {
-          'password.min': 'Password needs to be atleast of length 6',
-          'password.confirmed': 'Password did not match'
-        }
-      )
 
-      if (validation.fails()) {
-        throw validation.messages()
+    const validation = await validateAll(
+      request.post(),
+      {
+        password: 'required|min:6|confirmed',
+        password_confirmation: 'required'
+      },
+      {
+        'password.min': 'Password needs to be atleast of length 6',
+        'password.confirmed': 'Password did not match'
       }
-    } catch (err) {
-      session.withErrors(err).flashAll()
+    )
+
+    if (validation.fails()) {
+      session.withErrors(validation.messages()).flashAll()
 
       return response.redirect('back')
     }

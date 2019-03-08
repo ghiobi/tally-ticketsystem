@@ -3,14 +3,12 @@ const Token = use('App/Models/Token')
 const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
 class ResetPassword {
-  async handle({ request, params }, next) {
-    let { token } = params
+  async handle({ request }, next) {
+    let token = request.input('token')
     if (!token) {
-      //reset password POST
-      token = request.input('token')
-      //else reset password page
+      // TODO: throw a more appropriate error
+      throw new ForbiddenException()
     }
-
     token = decodeURIComponent(token)
 
     const token_in_db = await Token.query()
