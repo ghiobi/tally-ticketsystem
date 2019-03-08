@@ -1,14 +1,12 @@
 @layout('layouts.email')
 
 @section('content')
- <div>
-     <h1>{{messages[0].user.name}} has replied to your ticket!</h1>
- </div>
- <div>
-     <h2>Title: {{title}}</h2>
- </div>
- <div>
-     <h3>Here is what they said</h3>
-     <span>"{{messages[0].body}}"</span>
- </div>
+    <div>
+        <p>{{messages[0].user.name}} has replied to your <a href='{{appUrl}}/organization/{{user.organization.slug}}/ticket/{{id}}'>ticket!</a></p>
+    </div>
+    <hr/>
+    <div>
+        <h2>Title: {{title}}</h2>
+         <p>"{{messages[0].body}}"</p>
+    </div>
 @endsection
