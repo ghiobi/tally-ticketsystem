@@ -1,0 +1,43 @@
+
+<div class="mb-2 m">
+  <small>Page: {{ expenses.page }}</small>
+</div>
+<table class="table">
+  <thead>
+      <th>
+         Expense
+      </th>
+      <th>
+         Business Purpose
+      </th>
+      <th>
+         Created
+      </th>
+  </thead>
+  <tbody>
+  @each(expense in expenses.data)
+    <tr>
+      <td>
+        <a href="{{ organizationRoute }}/expense/{{expense.id}}" class="d-block">
+          <span class="text">{{ expense.title }}</span>
+        </a>
+      </td>
+      <td>
+        {{ expense.business_purpose }}
+      </td>
+      <td>
+        {{ humanTime(expense.created_at) }}
+      </td>
+    </tr>
+  @endeach
+  </tbody>
+</table>
+
+@set('url', adminPaginateUrl ? adminPaginateUrl : '?')
+@!component('partials.components.pagination',
+  total = expenses.total,
+  page = expenses.page,
+  perPage = expenses.perPage,
+  lastPage = expenses.lastPage,
+  url = organizationRoute + url
+)
