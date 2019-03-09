@@ -63,6 +63,10 @@ class User extends Model {
     return this.hasMany('App/Models/Ticket')
   }
 
+  expenses() {
+    return this.hasMany('App/Models/Expense')
+  }
+
   /**
    * Checks if a user has a role by key.
    *

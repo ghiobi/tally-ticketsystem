@@ -59,3 +59,18 @@ Factory.blueprint('App/Models/Notification', (faker, i, data) => {
     ...data
   }
 })
+
+Factory.blueprint('App/Models/Expense', (faker, i, data) => {
+  return {
+    title: faker.string(),
+    business_purpose: 'Transportation',
+    ...data
+  }
+})
+
+Factory.blueprint('App/Models/ExpenseLineItem', (faker, i, data) => {
+  return {
+    memo: faker.string(),
+    ...data
+  }
+})
