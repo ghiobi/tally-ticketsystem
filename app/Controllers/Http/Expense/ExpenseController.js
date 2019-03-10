@@ -13,9 +13,14 @@ class ExpenseController {
   }
 
   async viewExpense({ view, params }) {
-    const expense = await Expense.find(params.expense_id)
+    const expense = await Expense.query()
+      .where('id', params.expense_id)
+      .with('user')
+      .with('expenseLineItems')
+      .first()
 
-    return view.render('expense.main', { expenses: expense.toJSON() })
+    console.log(expense.toJSON())
+    return view.render('expense.expense', { expense: expense.toJSON() })
   }
 }
 

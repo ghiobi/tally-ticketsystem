@@ -1,0 +1,58 @@
+<div class="mb-2 m">
+  <small>Page: {{ expense.page }}</small>
+</div>
+<table class="table">
+  <thead>
+      <th>
+         Item
+      </th>
+      <th>
+         Price
+      </th>
+      <th>
+         Tax
+      </th>
+      <th>
+         Currency
+      </th>
+      <th>
+         Region
+      </th>
+      <th>
+         Information
+      </th>
+  </thead>
+  <tbody>
+  @each(item in expense.expenseLineItems)
+    <tr>
+      <td>
+        {{ item.memo }}
+      </td>
+      <td>
+        {{ item.price }}
+      </td>
+      <td>
+        {{ item.tax }}
+      </td>
+      <td>
+        {{ item.currency }}
+      </td>
+      <td>
+        {{ item.region }}
+      </td>
+      <td>
+        {{ item.text }}
+      </td>
+    </tr>
+  @endeach
+  </tbody>
+</table>
+
+@set('url', adminPaginateUrl ? adminPaginateUrl : '?')
+@!component('partials.components.pagination',
+  total = expense.total,
+  page = expense.page,
+  perPage = expense.perPage,
+  lastPage = expense.lastPage,
+  url = organizationRoute + url
+)
