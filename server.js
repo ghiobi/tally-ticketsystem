@@ -21,6 +21,7 @@ const { Ignitor } = require('@adonisjs/ignitor')
 
 new Ignitor(require('@adonisjs/fold'))
   .appRoot(__dirname)
+  .wsServer()
   .fireHttpServer()
   /* eslint-disable no-console */
   .catch(console.error)
