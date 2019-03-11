@@ -71,6 +71,7 @@ Factory.blueprint('App/Models/Expense', (faker, i, data) => {
 Factory.blueprint('App/Models/ExpenseLineItem', (faker, i, data) => {
   return {
     memo: faker.string(),
+    text: faker.string(),
     ...data
   }
 })

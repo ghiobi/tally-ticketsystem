@@ -19,7 +19,6 @@ class ExpenseController {
       .with('expenseLineItems')
       .first()
 
-    console.log(expense.toJSON())
     return view.render('expense.expense', { expense: expense.toJSON() })
   }
 }

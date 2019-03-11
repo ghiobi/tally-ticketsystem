@@ -15,6 +15,16 @@ class Expense extends Model {
   expenseLineItems() {
     return this.hasMany('App/Models/ExpenseLineItem')
   }
+
+  async updateTitle(newTitle) {
+    this.title = newTitle
+    await this.save()
+  }
+
+  async updateBusinessPurpose(newBusinessPurpose) {
+    this.business_purpose = newBusinessPurpose
+    await this.save()
+  }
 }
 
 module.exports = Expense
