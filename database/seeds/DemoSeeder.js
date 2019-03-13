@@ -57,7 +57,7 @@ class DemoSeeder {
     await organization.users().save(admin)
     await admin.setRole('admin')
 
-    await ExpenseFactory.create({
+    const expense = await ExpenseFactory.create({
       title: 'uber',
       business_purpose: 'transportation',
       user_id: 1
@@ -67,9 +67,10 @@ class DemoSeeder {
      * Seed an expense line item
      */
     await ExpenseLineItemFactory.create({
-      expense_id: 1,
+      expense_id: expense.id,
       memo: 'Some random memo',
       currency: 'CAD',
+      category: 'Uber',
       region: 'CAD-QC',
       text: 'Some random text',
       price: 32.56,

@@ -22,6 +22,8 @@ const Route = use('Route')
 Route.group(() => {
   Route.get('/login', 'Auth/LoginController.index')
   Route.post('/login', 'Auth/LoginController.login')
+  Route.get('/forgot-password', 'Auth/ForgotPasswordController.index')
+  Route.post('/forgot-password', 'Auth/ForgotPasswordController.recover')
 })
   .prefix('organization/:organization')
   .middleware(['organization', 'guest'])
@@ -97,4 +99,7 @@ Route.group(() => {
 
   Route.get('/oauth', 'Auth/SlackOAuthController.redirect')
   Route.get('/oauth/authenticate', 'Auth/SlackOAuthController.authenticate')
+
+  Route.get('/resetpassword', 'Auth/ForgotPasswordController.resetpage').middleware('resetpassword')
+  Route.post('/resetpassword', 'Auth/ForgotPasswordController.resetByToken').middleware('resetpassword')
 }).middleware(['guest'])

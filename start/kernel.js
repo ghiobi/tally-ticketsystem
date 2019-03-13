@@ -46,6 +46,7 @@ const namedMiddleware = {
   IsSelfOrAdmin: 'App/Middleware/IsSelfOrAdmin',
   IsAdmin: 'App/Middleware/IsAdmin',
   IsOwner: 'App/Middleware/IsOwner',
+  resetpassword: 'App/Middleware/ResetPassword',
   api: 'App/Middleware/ApiAuth'
 }
 

@@ -22,6 +22,11 @@ class ExpenseLineItem extends Model {
     await this.save()
   }
 
+  async updateCategory(newCategory) {
+    this.category = newCategory
+    await this.save()
+  }
+
   async updateRegion(newRegion) {
     this.region = newRegion
     await this.save()

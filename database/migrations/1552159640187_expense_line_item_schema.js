@@ -9,6 +9,7 @@ class ExpenseLineItemSchema extends Schema {
       table.increments()
       table.string('memo', 255).notNullable()
       table.string('currency', 3).notNullable()
+      table.string('category', 255).notNullable()
       table.string('region', 80).notNullable()
       table.string('text', 'text').notNullable()
       table.float('price', 12, 2).notNullable()

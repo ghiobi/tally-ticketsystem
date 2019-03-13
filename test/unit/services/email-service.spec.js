@@ -69,3 +69,22 @@ test('Check sendTicketConfirmation sends proper data', async ({ assert }) => {
   assert.isTrue(EmailService.sendEmail.called)
   assert.deepEqual(EmailService.sendEmail.args[0][2], data)
 })
+
+test('Check sendTokenToResetPassword sends proper subject and view', async ({ assert }) => {
+  await EmailService.sendTokenToResetPassword(user1, 'token-testing')
+  assert.isTrue(EmailService.sendEmail.called)
+  assert.equal(EmailService.sendEmail.args[0][0], 'Tally Ticket - Recover Password')
+  assert.equal(EmailService.sendEmail.args[0][1], 'emails.reset-password')
+})
+
+test('Check sendTokenToResetPassword sends proper data', async ({ assert }) => {
+  await EmailService.sendTokenToResetPassword(user1, 'token-testing')
+  await message1.load('user')
+
+  const data = {
+    user: user1,
+    token: 'token-testing'
+  }
+  assert.isTrue(EmailService.sendEmail.called)
+  assert.deepEqual(EmailService.sendEmail.args[0][2], data)
+})

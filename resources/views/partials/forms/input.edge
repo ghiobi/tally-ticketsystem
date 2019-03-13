@@ -17,12 +17,14 @@
   + old (optional) - the sessions old method set old value
 --}}
 <div class="form-group">
+  @if(config.label)
   <label for="form__{{ config.key }}">
     {{ config.label }}
     @if(config.required === false)
       <small class="font-italic">- Optional</small>
     @endif
   </label>
+  @endif
   <{{ config.type === 'textarea' ? 'textarea' : 'input' }} id="form__{{ config.key }}"
     class="form-control {{ elIf('$self', 'is-invalid', error(config.key)) }}"
     type="{{ config.type ? config.type : 'text' }}"
@@ -30,8 +32,6 @@
     value="{{ old && old(config.key, '') }}"
     aria-describedby="{{ config.detail ? config.key + '_help': '' }}"
     placeholder="{{ config.placeholder ? config.placeholder: '' }}"
-    name="{{ config.key }}"
-    value="{{ old && old(config.key, '') }}"
     {{ config.required === false ? '' : 'required' }}
     {{ config.disabled === true ? 'disabled' : '' }}
   >
