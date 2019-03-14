@@ -30,7 +30,7 @@ test('Make sure user can delete ', async ({ client, assert }) => {
   const response = await client
     .delete(`organization/${organization.slug}/expense`)
     .loginVia(admin)
-    .send({ form_data: expense.id })
+    .send({ modal_data: expense.id })
     .end()
 
   const res = await Expense.query()

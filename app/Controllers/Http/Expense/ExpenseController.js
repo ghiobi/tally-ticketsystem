@@ -23,18 +23,18 @@ class ExpenseController {
     return view.render('expense.expense', { expense: expense.toJSON() })
   }
 
-  async deleteExpense({ request, response, auth }) {
-    const expense_id = request.input('form_data')
-    const expense = await Expense.query()
-      .where('id', expense_id)
-      .first()
+  async deleteExpense({ request, response, auth, session }) {
+    const expense_id = request.input('modal_data')
+    const expense = await Expense.find(expense_id)
+    if (!expense) {
+      session.flash({ error: 'expense was no longer found' })
+      return response.redirect('back')
+    }
 
     if (auth.user.id !== expense.user_id) {
-      console.log('error')
       throw new ForbiddenException()
     }
     await expense.delete()
-    console.log('redirect')
     return response.redirect('back')
   }
 }

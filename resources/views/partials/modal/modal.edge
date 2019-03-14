@@ -3,7 +3,7 @@
         On the button that triggers the modal, you need the following attributes:
         
         data-user-id: user id
-        data-form-data: Optional form data to be send with the confirmation route
+        data-modal-data: Optional modal data to be send with the confirmation route
         
         config:{
             id : id of the modal
@@ -16,7 +16,7 @@ $(document).ready(function () {
   $('#{{ config.id }}').on('show.bs.modal', function (e) {
   let button = $(e.relatedTarget)
   let user_id = button.data('user-id')
-  let form_data = button.data('form-data')
+  let modal_data = button.data('modal-data')
 
   let modal = $(this)
   let modal_body = '{{config.body}}'
@@ -33,7 +33,7 @@ $(document).ready(function () {
     
   modal.find('.modal-body').html(modal_body)
   modal.find('.modal-footer .user_id_input').val(user_id)
-  modal.find('.modal-footer .form_data_input').val(form_data)
+  modal.find('.modal-footer .modal_data_input').val(modal_data)
   modal.find('#modalForm-{{config.id}}').attr('action', route)
   })
 });
@@ -52,7 +52,7 @@ $(document).ready(function () {
           <form action="" id="modalForm-{{config.id}}" method="POST">
             {{ csrfField() }}
             <input type="hidden" class="user_id_input" name="user_id">
-            <input type="hidden" class="form_data_input" name="form_data">
+            <input type="hidden" class="modal_data_input" name="modal_data">
             <button id="{{config.id}}-submit" type="submit" class="btn btn-primary">Confirm</button>
           </form>
       </div>
