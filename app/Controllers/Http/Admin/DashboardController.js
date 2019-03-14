@@ -8,24 +8,30 @@ class DashboardController {
 
     switch (show) {
       case 'closed':
-        tickets = await this.getTickets(organization)
-          .where('status', 'closed')
-          .fetch()
+        tickets = this.getTickets(organization).where('status', 'closed')
         break
       case 'mine':
-        tickets = await this.getTickets(organization)
+        tickets = this.getTickets(organization)
           .whereNot({ status: 'closed' })
           .where('assigned_to', auth.user.id)
-          .fetch()
         break
       default:
         show = 'all'
-        tickets = await this.getTickets(organization)
-          .whereNot({ status: 'closed' })
-          .fetch()
+        tickets = this.getTickets(organization).whereNot({ status: 'closed' })
     }
 
-    return view.render('admin.dashboard', { tickets: tickets.toJSON(), show })
+    const search = request.input('search', '')
+
+    tickets = this.search(tickets, request.input('search', ''))
+    tickets = await tickets.paginate(request.input('page', 1))
+
+    const adminPaginateUrl = '/admin?show=' + show + '&' + (search ? 'search=' + search + '&' : '')
+    return view.render('admin.dashboard', {
+      tickets: tickets.toJSON(),
+      show,
+      search,
+      adminPaginateUrl
+    })
   }
 
   getTickets(organization) {
@@ -33,6 +39,13 @@ class DashboardController {
       .tickets()
       .with('user')
       .with('assignedTo')
+  }
+
+  search(builder, title = '') {
+    if (title) {
+      return builder.where('title', 'like', `%${title}%`)
+    }
+    return builder
   }
 }
 

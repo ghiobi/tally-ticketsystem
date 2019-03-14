@@ -54,8 +54,8 @@ before(async () => {
   await ticket3.user().associate(user3)
 
   handle = {
-    response: {
-      redirect: sinon.fake()
+    request: {
+      organization: organization
     },
     auth: {
       user: user2 // user2 is a regular user
@@ -70,16 +70,11 @@ beforeEach(async () => {
   middleware = new TicketBelongsToUser()
 })
 
-test('make sure users can only access tickets belonging to them', async ({
-  assert
-}) => {
+test('make sure users can only access tickets belonging to them', async ({ assert }) => {
   //allowed to view tickets that belong to them
   handle.params.ticket_id = ticket2.id
   await middleware.handle(handle, next)
-  assert.isTrue(
-    next.called,
-    'next() was not called when ticket belonged to user'
-  )
+  assert.isTrue(next.called, 'next() was not called when ticket belonged to user')
   next = sinon.fake()
   //not allowed to view tickets not belonging to them
   handle.params.ticket_id = ticket1.id
@@ -93,24 +88,16 @@ test('make sure users can only access tickets belonging to them', async ({
   }
   assert.isOk(pass, 'ticket belongs to user')
 
-  assert.isFalse(
-    next.called,
-    'next() was called when it ticket did not belong to user'
-  )
+  assert.isFalse(next.called, 'next() was called when it ticket did not belong to user')
 })
 
-test('make sure admin can access all tickets in their organization', async ({
-  assert
-}) => {
+test('make sure admin can access all tickets in their organization', async ({ assert }) => {
   // allow admin/owner to access any ticket in their organization
   handle.auth.user = user
   handle.params.ticket_id = ticket2.id
 
   await middleware.handle(handle, next)
-  assert.isTrue(
-    next.called,
-    'next() was not not called even though user is admin'
-  )
+  assert.isTrue(next.called, 'next() was not not called even though user is admin')
   next = sinon.fake()
 
   // disallow admin/owner to access any ticket that is not in their organization
@@ -125,8 +112,5 @@ test('make sure admin can access all tickets in their organization', async ({
   }
   assert.isOk(pass, '')
 
-  assert.isFalse(
-    next.called,
-    'next() was called even though ticket did not belong to admin organization'
-  )
+  assert.isFalse(next.called, 'next() was called even though ticket did not belong to admin organization')
 })

@@ -18,6 +18,20 @@ class AppServiceProvider extends ServiceProvider {
    * @return {void}
    */
   async register() {
+    this.registerViewGlobals()
+    await this.registerServices()
+    this.registerCache()
+  }
+
+  registerViewGlobals() {
+    const View = use('View')
+
+    View.global('humanTime', (dateTime) => {
+      return moment(dateTime).fromNow()
+    })
+  }
+
+  async registerServices() {
     let services = []
 
     try {
@@ -25,9 +39,7 @@ class AppServiceProvider extends ServiceProvider {
        * Looks up in the App/Services folder for services and creates an array of their names.
        * ['NameService', 'AnotherNameService']. An exception is thrown when no files are found.
        */
-      services = await promisify(require('fs').readdir)(
-        path.join(__dirname, '..', 'app/Services')
-      ).then((files) =>
+      services = await promisify(require('fs').readdir)(path.join(__dirname, '..', 'app/Services')).then((files) =>
         files.map((file) => file.substring(0, file.lastIndexOf('.js')))
       )
     } catch (e) {
@@ -39,11 +51,17 @@ class AppServiceProvider extends ServiceProvider {
         return new (require(`../app/Services/${service}`))()
       })
     })
+  }
 
-    const View = use('View')
+  registerCache() {
+    this.app.singleton('Cache/Strategy', () => {
+      return new Map()
+    })
 
-    View.global('humanTime', (dateTime) => {
-      return moment(dateTime).fromNow()
+    this.app.singleton('Cache', () => {
+      // TODO: Create Redis cache strategy.
+      const Engine = use('Cache/Engine')
+      return new (require('./cache/Cache'))(Engine)
     })
   }
 }

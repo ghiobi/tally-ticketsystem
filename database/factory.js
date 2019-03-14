@@ -49,3 +49,33 @@ Factory.blueprint('App/Models/Message', (faker, i, data) => {
     ...data
   }
 })
+
+Factory.blueprint('App/Models/Token', (faker, i, data) => {
+  return { token: faker.string({ length: 32 }), type: 'test', ...data }
+})
+
+Factory.blueprint('App/Models/Notification', (faker, i, data) => {
+  return {
+    user_id: 1,
+    data: null,
+    type: 'message',
+    read: faker.bool(),
+    ...data
+  }
+})
+
+Factory.blueprint('App/Models/Expense', (faker, i, data) => {
+  return {
+    title: faker.string(),
+    business_purpose: 'Transportation',
+    ...data
+  }
+})
+
+Factory.blueprint('App/Models/ExpenseLineItem', (faker, i, data) => {
+  return {
+    memo: faker.string(),
+    text: faker.string(),
+    ...data
+  }
+})

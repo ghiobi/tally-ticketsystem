@@ -7,6 +7,9 @@
   + config.label - the displaying label
   + config.type - the type of input -> default: 'text'
   + config.required - is required -> defaults: true
+  + config.disabled - is disabled
+  + config.detail - extra description for input
+  + config.placeholder - placeholder for input
   + error - the sessions getErrorFor method
     Since components are stateless we can't use sessions methods directly, thus they must be
     passed into the component.
@@ -14,18 +17,30 @@
   + old (optional) - the sessions old method set old value
 --}}
 <div class="form-group">
+  @if(config.label)
   <label for="form__{{ config.key }}">
     {{ config.label }}
     @if(config.required === false)
       <small class="font-italic">- Optional</small>
     @endif
   </label>
-  <input id="form__{{ config.key }}"
+  @endif
+  <{{ config.type === 'textarea' ? 'textarea' : 'input' }} id="form__{{ config.key }}"
     class="form-control {{ elIf('$self', 'is-invalid', error(config.key)) }}"
     type="{{ config.type ? config.type : 'text' }}"
-    name="{{ config.key }}" value="{{ old && old(config.key, '') }}"
+    name="{{ config.key }}"
+    value="{{ old && old(config.key, '') }}"
+    aria-describedby="{{ config.detail ? config.key + '_help': '' }}"
+    placeholder="{{ config.placeholder ? config.placeholder: '' }}"
     {{ config.required === false ? '' : 'required' }}
+    {{ config.disabled === true ? 'disabled' : '' }}
   >
+  @if(config.type === 'textarea')
+  </textarea>
+  @endif
+  @if(config.detail)
+    <small id="{{config.key}}_help" class="form-text text-muted">{{ config.detail }}</small>
+  @endif
   @if(error(config.key))
     <div class="invalid-feedback">
       {{ error(config.key) }}

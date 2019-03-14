@@ -19,6 +19,8 @@ const OrganizationFactory = Factory.model('App/Models/Organization')
 const UserFactory = Factory.model('App/Models/User')
 const TicketFactory = Factory.model('App/Models/Ticket')
 const MessageFactory = Factory.model('App/Models/Message')
+const ExpenseFactory = Factory.model('App/Models/Expense')
+const ExpenseLineItemFactory = Factory.model('App/Models/ExpenseLineItem')
 
 class DemoSeeder {
   async run() {
@@ -38,14 +40,45 @@ class DemoSeeder {
     /**
       Seed an admin/owner
      */
-    const admin = await UserFactory.create({
+    const owner = await UserFactory.create({
       email: 'owner@tally.com',
-      name: 'Owner ',
+      name: 'Owner',
+      password: 'password'
+    })
+    await organization.users().save(owner)
+    await owner.setRole('owner')
+    await owner.setRole('admin')
+
+    const admin = await UserFactory.create({
+      email: 'admin@tally.com',
+      name: 'Administrator',
       password: 'password'
     })
     await organization.users().save(admin)
-    await admin.setRole('owner')
     await admin.setRole('admin')
+
+    /**
+      Seed some expenses
+     */
+    for (let i = 0; i < 50; i++) {
+      const expense = await ExpenseFactory.create({
+        title: chance.string({ length: 10 }),
+        business_purpose: chance.string({ length: 10 }),
+        user_id: 1
+      })
+      for (let j = 0; j < chance.integer({ min: 0, max: 10 }); j++) {
+        await ExpenseLineItemFactory.create({
+          expense_id: expense.id,
+          memo: chance.sentence({ words: 3 }),
+          currency: 'CAD',
+          category: chance.word(),
+          region: 'CAD-QC',
+          text: chance.sentence({ words: 5 }),
+          price: chance.floating({ min: 0, max: 100 }),
+          tax: chance.floating({ min: 5.0, max: 15.0 })
+        })
+      }
+    }
 
     /**
       Seed more users
@@ -66,9 +99,9 @@ class DemoSeeder {
         let assigned = chance.bool()
         tickets.push(
           await TicketFactory.create({
-            user_id: chance.integer({ min: 2, max: 15 }),
+            user_id: chance.integer({ min: 3, max: 15 }),
             status: this.getStatus(assigned),
-            assigned_to: assigned ? admin.id : null
+            assigned_to: assigned ? owner.id : null
           })
         )
       }
@@ -85,7 +118,7 @@ class DemoSeeder {
       for (let i = 0; i < chance.integer({ min: 0, max: 4 }); i++) {
         await MessageFactory.create({
           ticket_id: ticket.id,
-          user_id: chance.bool() ? ticket.user_id : admin.id
+          user_id: chance.bool() ? ticket.user_id : owner.id
         })
       }
     }

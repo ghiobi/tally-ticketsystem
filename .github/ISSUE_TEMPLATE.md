@@ -25,6 +25,6 @@ _Image describing the PR_
 
 # Tasks
 
-- [ ] **Task Name** - _x_ Ideal hour(s) _TASK #_
-- [ ] **Task Name** - _x_ Ideal hour(s) _TASK #_
-- [ ] **Task Name** - _x_ Ideal Hour(s) _TASK #_
+- [ ] **Task Name** - _x_ Ideal hour(s)
+- [ ] **Task Name** - _x_ Ideal hour(s)
+- [ ] **Task Name** - _x_ Ideal Hour(s)

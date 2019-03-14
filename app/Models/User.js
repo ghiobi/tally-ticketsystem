@@ -23,6 +23,10 @@ class User extends Model {
     })
   }
 
+  static get hidden() {
+    return ['password']
+  }
+
   /**
    * A relationship on tokens is required for auth to
    * work. Since features like `refreshTokens` or
@@ -59,6 +63,10 @@ class User extends Model {
     return this.hasMany('App/Models/Ticket')
   }
 
+  expenses() {
+    return this.hasMany('App/Models/Expense')
+  }
+
   /**
    * Checks if a user has a role by key.
    *
@@ -91,8 +99,26 @@ class User extends Model {
     await this.roles().attach([model.id])
   }
 
-  static get hidden() {
-    return ['password']
+  /**
+   * Removes a role to a user.
+   *
+   * @param role The role key.
+   * @returns {Promise<void>}
+   */
+  async removeRole(role) {
+    if (!(await this.hasRole(role))) {
+      return
+    }
+
+    const model = await Role.query()
+      .where('key', role)
+      .first()
+
+    await this.roles().detach([model.id])
+  }
+
+  notifications() {
+    return this.hasMany('App/Models/Notification')
   }
 }
 

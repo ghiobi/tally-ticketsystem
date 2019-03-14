@@ -10,8 +10,7 @@ trait('Test/Browser', {
     height: 720,
     isMobile: false
   },
-  headless: true,
-  slowMo: 500
+  headless: true
 })
 
 let organization = null
@@ -50,14 +49,12 @@ test('Visit home page', async ({ browser }) => {
   await page.assertHas('Tally, A Bot')
 }).timeout(60000)
 
-test('Clicking "Sign in" on homepage redirects to organization sign in page', async ({
-  browser
-}) => {
+test('Clicking "Sign in" on homepage redirects to organization sign in page', async ({ browser }) => {
   const page = await browser.visit('/')
   await page
     .waitForElement('#organization-signin')
     .click('#organization-signin')
-    .waitFor(500)
+    .waitForElement('#organization-input')
     .assertPath('/organization')
     .assertHas('SIGN INTO YOUR ORGANIZATION')
 }).timeout(60000)

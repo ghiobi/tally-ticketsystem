@@ -6,12 +6,7 @@ const { test, beforeEach } = use('Test/Suite')('Email Service')
 
 const EmailService = use('App/Services/EmailService')
 
-const {
-  UserFactory,
-  TicketFactory,
-  OrganizationFactory,
-  MessageFactory
-} = models
+const { UserFactory, TicketFactory, OrganizationFactory, MessageFactory } = models
 
 let ticket1 = null
 let user1 = null
@@ -35,16 +30,11 @@ beforeEach(async () => {
   EmailService.sendEmail = sinon.fake()
 })
 
-test('Check sendReplyNotification sends proper subject and view', async ({
-  assert
-}) => {
+test('Check sendReplyNotification sends proper subject and view', async ({ assert }) => {
   await EmailService.sendReplyNotification(ticket1)
   assert.isTrue(EmailService.sendEmail.called)
   assert.equal(EmailService.sendEmail.args[0][0], 'Tally Ticket Reply')
-  assert.equal(
-    EmailService.sendEmail.args[0][1],
-    'emails.reply-notification-email'
-  )
+  assert.equal(EmailService.sendEmail.args[0][1], 'emails.reply-notification-email')
 })
 
 test('Check sendReplyNotification sends proper data', async ({ assert }) => {
@@ -53,23 +43,18 @@ test('Check sendReplyNotification sends proper data', async ({ assert }) => {
 
   const data = {
     ...ticket1.toJSON(),
-    user: user1.toJSON(),
+    user: { ...user1.toJSON(), organization: organization1.toJSON() },
     messages: [message1.toJSON()]
   }
   assert.isTrue(EmailService.sendEmail.called)
   assert.deepEqual(EmailService.sendEmail.args[0][2], data)
 })
 
-test('Check sendTicketConfirmation sends proper subject and view', async ({
-  assert
-}) => {
+test('Check sendTicketConfirmation sends proper subject and view', async ({ assert }) => {
   await EmailService.sendTicketConfirmation(ticket1)
   assert.isTrue(EmailService.sendEmail.called)
   assert.equal(EmailService.sendEmail.args[0][0], 'Tally Ticket Confirmation')
-  assert.equal(
-    EmailService.sendEmail.args[0][1],
-    'emails.ticket-confirmation-email'
-  )
+  assert.equal(EmailService.sendEmail.args[0][1], 'emails.ticket-confirmation-email')
 })
 
 test('Check sendTicketConfirmation sends proper data', async ({ assert }) => {
@@ -78,8 +63,27 @@ test('Check sendTicketConfirmation sends proper data', async ({ assert }) => {
 
   const data = {
     ...ticket1.toJSON(),
-    user: user1.toJSON(),
+    user: { ...user1.toJSON(), organization: organization1.toJSON() },
     messages: [message1.toJSON()]
+  }
+  assert.isTrue(EmailService.sendEmail.called)
+  assert.deepEqual(EmailService.sendEmail.args[0][2], data)
+})
+
+test('Check sendTokenToResetPassword sends proper subject and view', async ({ assert }) => {
+  await EmailService.sendTokenToResetPassword(user1, 'token-testing')
+  assert.isTrue(EmailService.sendEmail.called)
+  assert.equal(EmailService.sendEmail.args[0][0], 'Tally Ticket - Recover Password')
+  assert.equal(EmailService.sendEmail.args[0][1], 'emails.reset-password')
+})
+
+test('Check sendTokenToResetPassword sends proper data', async ({ assert }) => {
+  await EmailService.sendTokenToResetPassword(user1, 'token-testing')
+  await message1.load('user')
+
+  const data = {
+    user: user1,
+    token: 'token-testing'
   }
   assert.isTrue(EmailService.sendEmail.called)
   assert.deepEqual(EmailService.sendEmail.args[0][2], data)

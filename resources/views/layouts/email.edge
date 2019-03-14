@@ -1,4 +1,18 @@
 
-@!section('content')
-<br/>
-<h4>Tally-ticketing system</h4>
+<div style="background-color:#f9f9f9; padding: 10px">
+    <img src="cid:logo" style="height:50px"/>
+    <div style="background-color:white; margin:0 15%; padding:3% 7%;">
+        <div>
+            <h2 style="color:#1abc9c">Hi {{user.name}},</h2> 
+        </div>
+        @!section('content')
+        <hr/>
+        <h4>Tally-ticketing system</h4>
+    </div>
+
+    <div style="background-color:white; margin:1% 15%; padding:3% 7%;">
+        <div>
+            <p>You can unsubscribe from our mailing service by clicking <a href="{{appUrl}}">Joking, you can't yet</a>
+        </div>
+    </div>
+</div>

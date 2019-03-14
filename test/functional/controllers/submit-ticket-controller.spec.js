@@ -1,13 +1,7 @@
 'use strict'
 
 const { test, trait, before } = use('Test/Suite')('Submit Ticket Controller')
-const {
-  OrganizationFactory,
-  UserFactory,
-  TicketFactory,
-  Message,
-  Ticket
-} = models
+const { OrganizationFactory, UserFactory, TicketFactory, Message, Ticket } = models
 
 trait('Test/ApiClient')
 trait('Auth/Client')
@@ -33,12 +27,9 @@ before(async () => {
   await ticket.user().associate(user)
 })
 
-test('Ensure ticket is created after user submits new ticket', async ({
-  client,
-  assert
-}) => {
+test('Ensure ticket is created after user submits new ticket', async ({ client, assert }) => {
   await client
-    .post(`organization/${organization.slug}/submit/ticket`)
+    .post(`organization/${organization.slug}/ticket/create`)
     .send({ title: 'Test ticket title', body: 'Random ticket message' })
     .loginVia(user)
     .end()
@@ -50,12 +41,9 @@ test('Ensure ticket is created after user submits new ticket', async ({
   assert.exists(ticket)
 })
 
-test('Ensure message is created after user submits new ticket', async ({
-  client,
-  assert
-}) => {
+test('Ensure message is created after user submits new ticket', async ({ client, assert }) => {
   await client
-    .post(`organization/${organization.slug}/submit/ticket`)
+    .post(`organization/${organization.slug}/ticket/create`)
     .send({ title: 'Random Title', body: 'foobar' })
     .loginVia(user)
     .end()
@@ -68,12 +56,9 @@ test('Ensure message is created after user submits new ticket', async ({
   assert.isNotNull(message)
 })
 
-test('Ensure ticket is not created if missing title ', async ({
-  client,
-  assert
-}) => {
+test('Ensure ticket is not created if missing title ', async ({ client, assert }) => {
   await client
-    .post(`organization/${organization.slug}/submit/ticket`)
+    .post(`organization/${organization.slug}/ticket/create`)
     .send({ body: 'dfaf89s7D(*Adus980D9SAFKNAD;VKDAFA]}{PP{' })
     .loginVia(user)
     .end()
@@ -85,12 +70,9 @@ test('Ensure ticket is not created if missing title ', async ({
   assert.notExists(message)
 })
 
-test('Ensure ticket is not created if missing message body', async ({
-  client,
-  assert
-}) => {
+test('Ensure ticket is not created if missing message body', async ({ client, assert }) => {
   await client
-    .post(`organization/${organization.slug}/submit/ticket`)
+    .post(`organization/${organization.slug}/ticket/create`)
     .send({ title: 'testTicket1' })
     .loginVia(user)
     .end()
