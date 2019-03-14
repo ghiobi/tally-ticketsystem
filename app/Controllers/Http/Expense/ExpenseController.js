@@ -30,10 +30,11 @@ class ExpenseController {
       .first()
 
     if (auth.user.id !== expense.user_id) {
+      console.log('error')
       throw new ForbiddenException()
     }
     await expense.delete()
-
+    console.log('redirect')
     return response.redirect('back')
   }
 }
