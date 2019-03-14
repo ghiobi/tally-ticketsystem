@@ -57,25 +57,28 @@ class DemoSeeder {
     await organization.users().save(admin)
     await admin.setRole('admin')
 
-    const expense = await ExpenseFactory.create({
-      title: 'uber',
-      business_purpose: 'transportation',
-      user_id: 1
-    })
-
     /**
-     * Seed an expense line item
+      Seed some expenses
      */
-    await ExpenseLineItemFactory.create({
-      expense_id: expense.id,
-      memo: 'Some random memo',
-      currency: 'CAD',
-      category: 'Uber',
-      region: 'CAD-QC',
-      text: 'Some random text',
-      price: 32.56,
-      tax: 5.65
-    })
+    for (let i = 0; i < 50; i++) {
+      const expense = await ExpenseFactory.create({
+        title: chance.string({ length: 10 }),
+        business_purpose: chance.string({ length: 10 }),
+        user_id: 1
+      })
+      for (let j = 0; j < chance.integer({ min: 0, max: 10 }); j++) {
+        await ExpenseLineItemFactory.create({
+          expense_id: expense.id,
+          memo: chance.sentence({ words: 3 }),
+          currency: 'CAD',
+          category: chance.word(),
+          region: 'CAD-QC',
+          text: chance.sentence({ words: 5 }),
+          price: chance.floating({ min: 0, max: 100 }),
+          tax: chance.floating({ min: 5.0, max: 15.0 })
+        })
+      }
+    }
 
     /**
       Seed more users
