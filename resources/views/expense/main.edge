@@ -1,0 +1,32 @@
+@layout('layouts.index')
+
+@section('content')
+  @set('title', 'Expenses')
+  @include('partials.header')
+  <!-- Page title -->
+  <section id="page-title" class="page-title-classic">
+    <div class="container d-flex justify-content-between">
+      <div class="page-title">
+        <h1>Welcome {{ auth.user.name }}</h1>
+        <span>View and Edit Expenses Here</span>
+      </div>
+    </div>
+  </section>
+  <!-- end: Page title -->
+
+  <section class="flex-grow-1">
+    <div class="container">
+      @if(expenses.data.length)
+        @include('partials.tables.expense-table')
+      @else
+        <div class="row">
+          <div class="col-md-6 offset-3 text-center">
+            <p class="text-bold mb-1">You don't have any Expenses.</p>
+          </div>
+        </div>
+      @endif
+    </div>
+  </section>
+
+  @include('partials.footer')
+@endsection

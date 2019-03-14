@@ -19,6 +19,8 @@ const OrganizationFactory = Factory.model('App/Models/Organization')
 const UserFactory = Factory.model('App/Models/User')
 const TicketFactory = Factory.model('App/Models/Ticket')
 const MessageFactory = Factory.model('App/Models/Message')
+const ExpenseFactory = Factory.model('App/Models/Expense')
+const ExpenseLineItemFactory = Factory.model('App/Models/ExpenseLineItem')
 
 class DemoSeeder {
   async run() {
@@ -54,6 +56,26 @@ class DemoSeeder {
     })
     await organization.users().save(admin)
     await admin.setRole('admin')
+
+    const expense = await ExpenseFactory.create({
+      title: 'uber',
+      business_purpose: 'transportation',
+      user_id: 1
+    })
+
+    /**
+     * Seed an expense line item
+     */
+    await ExpenseLineItemFactory.create({
+      expense_id: expense.id,
+      memo: 'Some random memo',
+      currency: 'CAD',
+      category: 'Uber',
+      region: 'CAD-QC',
+      text: 'Some random text',
+      price: 32.56,
+      tax: 5.65
+    })
 
     /**
       Seed more users
