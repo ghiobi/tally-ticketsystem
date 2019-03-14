@@ -1,0 +1,61 @@
+<!-- Modal
+    param:
+        On the button that triggers the modal, you need the following attributes:
+        
+        data-user-id: user id
+        data-form-data: Optional form data to be send with the confirmation route
+        
+        config:{
+            id : id of the modal
+            body: The message of the modal
+            confirmation_route: route to go to once user presses confirm
+        }
+-->
+<script>
+$(document).ready(function () {
+  $('#{{ config.id }}').on('show.bs.modal', function (e) {
+  let button = $(e.relatedTarget)
+  let user_id = button.data('user-id')
+  let form_data = button.data('form-data')
+
+  let modal = $(this)
+  let modal_body = '{{config.body}}'
+  let form_method = ''
+  let route = '{{ organizationRoute }}{{config.confirmation_route}}'
+
+  if('{{config.method}}' != undefined){
+    form_method = '{{config.method}}'
+  }
+
+  if(form_method != ''){
+    route += '?_method='+form_method.toUpperCase()
+  }
+    
+  modal.find('.modal-body').html(modal_body)
+  modal.find('.modal-footer .user_id_input').val(user_id)
+  modal.find('.modal-footer .form_data_input').val(form_data)
+  modal.find('#modalForm-{{config.id}}').attr('action', route)
+  })
+});
+</script>
+
+<div class="modal fade" id="{{config.id}}" tabindex="-1" role="dialog" aria-labelledby="{{config.id}}" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title">Confirmation</h5>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <form action="" id="modalForm-{{config.id}}" method="POST">
+            {{ csrfField() }}
+            <input type="hidden" class="user_id_input" name="user_id">
+            <input type="hidden" class="form_data_input" name="form_data">
+            <button type="submit" class="btn btn-primary">Confirm</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>

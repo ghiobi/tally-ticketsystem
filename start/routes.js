@@ -37,8 +37,8 @@ Route.group(() => {
   Route.get('/', 'Dashboard/DashboardController.index')
 
   Route.get('/expense', 'Expense/ExpenseController.index')
-
   Route.get('/expense/:expense_id', 'Expense/ExpenseController.viewExpense')
+  Route.delete('/expense', 'Expense/ExpenseController.deleteExpense')
 
   Route.get('/account', 'Account/AccountController.index')
   Route.post('/account/password', 'Account/AccountController.password')

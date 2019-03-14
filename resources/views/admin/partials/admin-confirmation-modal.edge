@@ -9,6 +9,7 @@ $(document).ready(function () {
   var modal = $(this)
   var modal_body = ''
   var route = '{{ organizationRoute }}/admin/users/'
+  
   if(change_type == 'add'){
     modal_body = 'Are you sure you want to make ' + user_name + ' an admin? Only the owner of the organization can revert this change.'
     route += 'addAdmin'

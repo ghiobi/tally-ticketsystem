@@ -28,5 +28,6 @@
     </div>
   </section>
 
+  @!component('partials.modal.modal', config = { id : 'removeModal', confirmation_route:organizationRoute+'/expense', body:'Are you sure you wish to remove this expense?', method:'delete' }, csrfField = csrfField)
   @include('partials.footer')
 @endsection
