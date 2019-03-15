@@ -21,7 +21,7 @@ let userTicket = null
 
 before(async () => {
   organization = await OrganizationFactory.create({
-    slug: 'e2e-test'
+    slug: 'organization-login-e2e-test'
   })
 
   admin = await UserFactory.make({
@@ -48,7 +48,7 @@ test('Entering an organization and clicking "Find workspace" should lead to logi
   const page = await browser.visit('/organization')
   await page
     .waitForElement('#organization-input')
-    .type('#organization-input', 'e2e-test')
+    .type('#organization-input', 'organization-login-e2e-test')
     .click('#organization-workspace-submit')
     .waitFor(500)
     .assertPath('/organization/' + organization.slug + '/login')
@@ -70,7 +70,7 @@ test('Login in with a user account should lead to the dashboard page', async ({ 
   const page = await browser.visit('/organization')
   await page
     .waitForElement('#organization-input')
-    .type('#organization-input', 'e2e-test')
+    .type('#organization-input', 'organization-login-e2e-test')
     .click('#organization-workspace-submit')
     .waitForElement('#form__email')
     .waitForElement('#form__password')
@@ -86,7 +86,7 @@ test('Login in with an admin account should lead to the dashboard page', async (
   const page = await browser.visit('/organization')
   await page
     .waitForElement('#organization-input')
-    .type('#organization-input', 'e2e-test')
+    .type('#organization-input', 'organization-login-e2e-test')
     .click('#organization-workspace-submit')
     .waitForElement('#form__email')
     .waitForElement('#form__password')
