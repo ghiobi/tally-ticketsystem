@@ -1,0 +1,87 @@
+@layout('layouts.index')
+@section('content')
+  @set('title', 'Submit Expense')
+  @include('partials.header')
+  <!-- Page title -->
+  <section id="page-title" class="page-title-classic">
+    <div class="container">
+      <div class="page-title">
+        <h1>Submit Expense</h1>
+      </div>
+    </div>
+  </section>
+  <!-- end: Page title -->
+
+  <section id="submit-expense-content" class="flex-grow-1">
+    <div class="container">
+        <h3>Expense Information</h3>
+          <form action="{{ organizationRoute }}/newExpense/submit" method="post" id="expense_form" name="expense_form">
+            {{ csrfField() }}
+            <div class="row">
+              <div class="col-md-8">
+                @!component('partials.forms.input', config = {label: 'Expense title', key: 'title', required: true}, error = getErrorFor, old = old )
+                <div class="form-group">
+                  <label for="business_purpose">Business Purpose</label>
+                  <select id="business_purpose" name="business_purpose" form="expense_form" class="form-control">
+                    <option>Some option</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            @!component('expense.partials.receipt-details', form_name="expense_form")
+            <div class="row">
+              <div class="col-5">
+                <button class="btn btn-outline-primary" type="button" id="remove_receipt_button" style="display:none;">Remove Receipt</button>
+                <button class="btn btn-outline-primary" type="button" id="add_receipt_button">Add Another Receipt</button>
+              </div>
+              <div class="col-3">
+                <div class="text-right">
+                  <button class="btn btn-outline-primary" type="submit">Submit</button>
+                </div>
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+  </section>
+  <script>
+    $(document).ready(function () {
+      var receiptIndex = 0;
+      $("#add_receipt_button").click(function() {
+        receiptIndex++
+
+        if(receiptIndex > 0){
+          $("#remove_receipt_button").show();
+        }
+
+        var newDiv = $("#receipt_details_0").clone();
+        newDiv.attr("id","receipt_details_"+receiptIndex) 
+        .hide()
+        .fadeIn("fast")
+        .insertAfter("#receipt_details_"+(receiptIndex-1))
+        .find("#receipt_title").html("Receipt "+(receiptIndex+1));
+        newDiv.find("#memo").attr('name', "memo["+receiptIndex+"]").val("");
+        newDiv.find("#category").attr('name', "category["+receiptIndex+"]");
+        newDiv.find("#currency").attr('name', "currency["+receiptIndex+"]");
+        newDiv.find("#region").attr('name', "region["+receiptIndex+"]");
+        newDiv.find("#price").attr('name', "price["+receiptIndex+"]").val("");
+        newDiv.find("#tax").attr('name', "tax["+receiptIndex+"]").val("");
+      });
+
+      $("#remove_receipt_button").click(function() {
+        console.log(receiptIndex)
+        $("#receipt_details_"+receiptIndex).
+        fadeOut("fast", function() {
+          $(this).remove();
+        });
+
+        receiptIndex--
+
+        if(receiptIndex < 1){
+          $("#remove_receipt_button").hide();
+        }
+      });
+    });
+  </script>
+  @include('partials.footer')
+@endsection
