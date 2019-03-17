@@ -21,6 +21,9 @@ const TicketFactory = Factory.model('App/Models/Ticket')
 const MessageFactory = Factory.model('App/Models/Message')
 const ExpenseFactory = Factory.model('App/Models/Expense')
 const ExpenseLineItemFactory = Factory.model('App/Models/ExpenseLineItem')
+const ExpenseBusinessPurposeFactory = Factory.model('App/Models/ExpenseBusinessPurpose')
+const LineItemCategoryFactory = Factory.model('App/Models/LineItemCategory')
+const LineItemRegionFactory = Factory.model('App/Models/LineItemRegion')
 
 class DemoSeeder {
   async run() {
@@ -118,6 +121,68 @@ class DemoSeeder {
           user_id: chance.bool() ? ticket.user_id : owner.id
         })
       }
+    }
+
+    /**
+     * Seed some expense business purposes
+     */
+    const purposes = ['Conference', 'General', 'Relocation', 'Team Building Events']
+    purposes.forEach(
+      await function(purpose) {
+        ExpenseBusinessPurposeFactory.create({
+          name: purpose
+        })
+      }
+    )
+
+    /**
+     * Seed some expense categories
+     */
+    const categories = [
+      'Accomodations',
+      'Cellphones and Wireless',
+      'Conference Fees',
+      'Consulting / Advisory Fees',
+      'Contests Costs',
+      'Courier Costs',
+      'Courier and Postage',
+      'Deposits',
+      'Direct Computer Hardware',
+      'Dicrect Computer Supplies',
+      'Direct Recuitment Costs',
+      'Direct Software and Licenses',
+      'Employee Benefits',
+      'Employee Functions',
+      'Employee Merchandise',
+      'Employee Recognition',
+      'Events - Internal',
+      'Kitchen/Washroom Supplies',
+      'Meals and Entertainment',
+      'Mileage',
+      'Misc. Expenses',
+      'Office Furnishing',
+      'Office Supplies',
+      'Professional Development',
+      'Transportation',
+      'Team Offiste Costs'
+    ]
+    categories.forEach(
+      await function(category) {
+        LineItemCategoryFactory.create({
+          name: category
+        })
+      }
+    )
+
+    /**
+     * Seed some expense regions
+     */
+    const regions = { 'CAD-QC': 'Quebec', CAD: 'Canada (outside Quebec)', US: 'United States', Other: 'Other' }
+    for (var region in regions) {
+      await LineItemRegionFactory.create({
+        name: region,
+        display: regions[region]
+      })
     }
   }
 

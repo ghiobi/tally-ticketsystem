@@ -23,12 +23,14 @@
                 <div class="form-group">
                   <label for="business_purpose">Business Purpose</label>
                   <select id="business_purpose" name="business_purpose" form="expense_form" class="form-control">
-                    <option>Some option</option>
+                    @each(businessPurpose in businessPurposes)
+                      <option>{{ businessPurpose.name }}</option>
+                    @endeach
                   </select>
                 </div>
               </div>
             </div>
-            @!component('expense.partials.receipt-details', form_name="expense_form")
+            @!component('expense.partials.receipt-details', index="0", form_name="expense_form", categories=categories, regions=regions, currencyToSymbolMap=currencyToSymbolMap)
             <div class="row">
               <div class="col-5">
                 <button class="btn btn-outline-primary" type="button" id="remove_receipt_button" style="display:none;">Remove Receipt</button>
@@ -47,6 +49,7 @@
   <script>
     $(document).ready(function () {
       var receiptIndex = 0;
+      //add receipts dynamically
       $("#add_receipt_button").click(function() {
         receiptIndex++
 
@@ -68,6 +71,7 @@
         newDiv.find("#tax").attr('name', "tax["+receiptIndex+"]").val("");
       });
 
+      //remove receipts dynamically
       $("#remove_receipt_button").click(function() {
         console.log(receiptIndex)
         $("#receipt_details_"+receiptIndex).
