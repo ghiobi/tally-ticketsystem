@@ -53,8 +53,8 @@ Route.group(() => {
   Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen').middleware('accessTicket')
   Route.post('/ticket/:ticket_id/assign', 'Ticket/TicketController.assign').middleware('IsAdmin')
 
-  Route.get('/newExpense', 'Expense/NewExpenseController.index')
-  Route.post('/newExpense/submit', 'Expense/NewExpenseController.submit')
+  Route.get('/newexpense', 'Expense/NewExpenseController.index')
+  Route.post('/newexpense/submit', 'Expense/NewExpenseController.submit')
 })
   .prefix('organization/:organization')
   .middleware(['organization', 'auth', 'within'])
