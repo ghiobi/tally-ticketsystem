@@ -1,0 +1,50 @@
+@layout('layouts.index')
+@section('content')
+  @set('title', 'Submit Expense')
+  @include('partials.header')
+  <!-- Page title -->
+  <section id="page-title" class="page-title-classic">
+    <div class="container">
+      <div class="page-title">
+        <h1>Submit Expense</h1>
+      </div>
+    </div>
+  </section>
+  <!-- end: Page title -->
+
+  <section id="submit-expense-content" class="flex-grow-1">
+    <div class="container">
+        <h3>Expense Information</h3>
+          <form action="{{ organizationRoute }}/newExpense/submit" method="post" id="expense_form" name="expense_form">
+            {{ csrfField() }}
+            <div class="row">
+              <div class="col-md-8">
+                @!component('partials.forms.input', config = {label: 'Expense title', key: 'title', required: true}, error = getErrorFor, old = old )
+                <div class="form-group">
+                  <label for="business_purpose">Business Purpose</label>
+                  <select id="business_purpose" name="business_purpose" form="expense_form" class="form-control">
+                    @each(businessPurpose in businessPurposes)
+                      <option>{{ businessPurpose.name }}</option>
+                    @endeach
+                  </select>
+                </div>
+              </div>
+            </div>
+            @!component('expense.partials.receipt-details', index="0", form_name="expense_form", categories=categories, regions=regions, currencyToSymbolMap=currencyToSymbolMap)
+            <div class="row">
+              <div class="col-5">
+                <button class="btn btn-outline-primary" type="button" id="remove_receipt_button" style="display:none;">Remove Receipt</button>
+                <button class="btn btn-outline-primary" type="button" id="add_receipt_button">Add Another Receipt</button>
+              </div>
+              <div class="col-3">
+                <div class="text-right">
+                  <button class="btn btn-outline-primary" type="submit">Submit</button>
+                </div>
+              </div>
+            </div>
+          </form>
+      </div>
+    </div>
+  </section>
+  @include('partials.footer')
+@endsection

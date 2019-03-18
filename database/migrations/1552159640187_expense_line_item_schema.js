@@ -11,7 +11,7 @@ class ExpenseLineItemSchema extends Schema {
       table.string('currency', 3).notNullable()
       table.string('category', 255).notNullable()
       table.string('region', 80).notNullable()
-      table.string('text', 'text').notNullable()
+      table.string('text', 'text')
       table.float('price', 12, 2).notNullable()
       table.float('tax', 12, 2).notNullable()
       table.binary('picture')
