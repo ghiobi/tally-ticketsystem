@@ -127,13 +127,12 @@ class DemoSeeder {
      * Seed some expense business purposes
      */
     const purposes = ['Conference', 'General', 'Relocation', 'Team Building Events']
-    purposes.forEach(
-      await function(purpose) {
-        ExpenseBusinessPurposeFactory.create({
-          name: purpose
-        })
-      }
-    )
+
+    for (const purpose in purposes) {
+      await ExpenseBusinessPurposeFactory.create({
+        name: purposes[purpose]
+      })
+    }
 
     /**
      * Seed some expense categories
@@ -166,19 +165,18 @@ class DemoSeeder {
       'Transportation',
       'Team Offiste Costs'
     ]
-    categories.forEach(
-      await function(category) {
-        LineItemCategoryFactory.create({
-          name: category
-        })
-      }
-    )
+
+    for (const category in categories) {
+      await LineItemCategoryFactory.create({
+        name: categories[category]
+      })
+    }
 
     /**
      * Seed some expense regions
      */
     const regions = { 'CAD-QC': 'Quebec', CAD: 'Canada (outside Quebec)', US: 'United States', Other: 'Other' }
-    for (var region in regions) {
+    for (const region in regions) {
       await LineItemRegionFactory.create({
         name: region,
         display: regions[region]
