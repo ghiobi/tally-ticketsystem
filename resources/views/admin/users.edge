@@ -76,9 +76,9 @@
                 </td>
                 <td>
                   @if(user.roles.length == 0)
-                    <button type="button" class="btn btn-outline" data-toggle="modal" data-target="#makeAdminModal" data-user-id="{{ user.id }}" data-user-name="{{ user.name }}" data-change-type="add">Make admin</button>
+                    <button type="button" class="btn btn-outline addAdmin" data-toggle="modal" data-target="#makeAdminModal" data-user-id="{{ user.id }}" data-user-name="{{ user.name }}" data-change-type="add">Make admin</button>
                   @elseif(isOwner && user.roles.length == 1)
-                    <button type="button" class="btn btn-outline" data-toggle="modal" data-target="#makeAdminModal" data-user-id="{{ user.id }}" data-user-name="{{ user.name }}" data-change-type="remove">Remove admin</button>
+                    <button type="button" class="btn btn-outline removeAdmin" data-toggle="modal" data-target="#makeAdminModal" data-user-id="{{ user.id }}" data-user-name="{{ user.name }}" data-change-type="remove">Remove admin</button>
                   @endif
                 </td>
               </tr>

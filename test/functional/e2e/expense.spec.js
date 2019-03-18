@@ -3,6 +3,7 @@
 const { test, trait, before } = use('Test/Suite')('Expense integration test')
 
 const { OrganizationFactory, UserFactory, ExpenseFactory } = models
+const actions = require('./actions')
 
 trait('Test/Browser', {
   defaultViewport: {
@@ -14,7 +15,8 @@ trait('Test/Browser', {
 })
 
 let organization = null
-let user = null
+let user,
+  user2 = null
 
 before(async () => {
   organization = await OrganizationFactory.create({
@@ -27,6 +29,9 @@ before(async () => {
   })
   await organization.users().save(user)
 
+  user2 = await UserFactory.make({ email: 'expense-e2e2@email.com', password: 'userpassword' })
+  await organization.users().save(user2)
+
   await ExpenseFactory.create({
     title: 'Expense-e2e-test-1',
     business_purpose: 'Expense-e2e-test-1',
@@ -34,18 +39,24 @@ before(async () => {
   })
 })
 
+test('Users with no expense should not see a table', async ({ browser }) => {
+  await actions.login(browser, organization.slug, user2.email, 'userpassword')
+
+  const expensePage = await browser.visit(`/organization/${organization.slug}/expense`)
+
+  expensePage.assertExists('You do not have any Expenses')
+}).timeout(60000)
+
+test('Users with expenses should see a table', async ({ browser }) => {
+  await actions.login(browser, organization.slug, user.email, 'userpassword')
+
+  const expensePage = await browser.visit(`/organization/${organization.slug}/expense`)
+
+  expensePage.assertExists('#expense-table')
+}).timeout(60000)
+
 test('Clicking on delete should prompt user to confirm with modal', async ({ browser }) => {
-  const loginpage = await browser.visit('/organization')
-  await loginpage
-    .waitForElement('#organization-input')
-    .type('#organization-input', 'expense-e2e')
-    .click('#organization-workspace-submit')
-    .waitForElement('#form__email')
-    .waitForElement('#form__password')
-    .type('#form__email', user.email)
-    .type('#form__password', 'userpassword')
-    .click('#sign-in-btn')
-    .waitFor(500)
+  await actions.login(browser, organization.slug, user.email, 'userpassword')
 
   const expensePage = await browser.visit(`/organization/${organization.slug}/expense`)
 
