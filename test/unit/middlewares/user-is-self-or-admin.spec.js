@@ -1,9 +1,7 @@
 'use strict'
 const sinon = require('sinon')
 
-const { test, before, beforeEach } = use('Test/Suite')(
-  'Get User Tickets Access'
-)
+const { test, before, beforeEach } = use('Test/Suite')('Get User Tickets Access')
 const { UserFactory } = models
 const Factory = use('Factory')
 
@@ -49,26 +47,25 @@ beforeEach(async () => {
   handle.response.redirect = sinon.fake()
 })
 
-test('check if the middleware allows a users to see their own tickets', async ({
-  assert
-}) => {
+test('check if the middleware allows a users to see their own tickets', async ({ assert }) => {
   handle.auth.user = user1
   await middleware.handle(handle, next)
   assert.isFalse(handle.response.redirect.called)
 })
 
-test('check if the middleware prevents a users to see tickets opened by others', async ({
-  assert
-}) => {
+test('check if the middleware prevents a users to see tickets opened by others', async ({ assert }) => {
   handle.auth.user = user2
-  await middleware.handle(handle, next)
-  assert.isTrue(handle.response.redirect.called)
+  try {
+    await middleware.handle(handle, next)
+    assert.isTrue(false)
+  } catch (err) {
+    assert.isTrue(true)
+  }
 })
 
-test('check if the middleware allows an admin to see tickets belonging to a user', async ({
-  assert
-}) => {
+test('check if the middleware allows an admin to see tickets belonging to a user', async ({ assert }) => {
   await user2.setRole('admin')
   handle.auth.user = user2
+  middleware.handle(handle, next)
   assert.isFalse(handle.response.redirect.called)
 })

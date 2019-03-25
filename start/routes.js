@@ -37,7 +37,7 @@ Route.group(() => {
   Route.get('/', 'Dashboard/DashboardController.index')
 
   Route.get('/expense', 'Expense/ExpenseController.index')
-  Route.get('/expense/:expense_id', 'Expense/ExpenseController.viewExpense')
+  Route.get('/expense/:expense_id', 'Expense/ExpenseController.viewExpense').middleware('expenseDetailGuard')
   Route.delete('/expense', 'Expense/ExpenseController.deleteExpense')
 
   Route.get('/account', 'Account/AccountController.index')
@@ -46,11 +46,11 @@ Route.group(() => {
   Route.get('/ticket/create', 'Ticket/SubmitTicketController.index')
   Route.post('/ticket/create', 'Ticket/SubmitTicketController.submit').validator('StoreTicket')
 
-  Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware('accessTicket')
-  Route.post('/ticket/:ticket_id', 'Ticket/TicketController.update').middleware('accessTicket')
-  Route.post('/ticket/:ticket_id/reply', 'Ticket/TicketController.reply').middleware('accessTicket')
-  Route.post('/ticket/:ticket_id/resolve', 'Ticket/TicketController.resolve').middleware('accessTicket')
-  Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen').middleware('accessTicket')
+  Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware('ticketGuard')
+  Route.post('/ticket/:ticket_id', 'Ticket/TicketController.update').middleware('ticketGuard')
+  Route.post('/ticket/:ticket_id/reply', 'Ticket/TicketController.reply').middleware('ticketGuard')
+  Route.post('/ticket/:ticket_id/resolve', 'Ticket/TicketController.resolve').middleware('ticketGuard')
+  Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen').middleware('ticketGuard')
   Route.post('/ticket/:ticket_id/assign', 'Ticket/TicketController.assign').middleware('IsAdmin')
 
   Route.get('/newexpense', 'Expense/NewExpenseController.index')
@@ -103,6 +103,6 @@ Route.group(() => {
   Route.get('/oauth', 'Auth/SlackOAuthController.redirect')
   Route.get('/oauth/authenticate', 'Auth/SlackOAuthController.authenticate')
 
-  Route.get('/resetpassword', 'Auth/ForgotPasswordController.resetpage').middleware('resetpassword')
-  Route.post('/resetpassword', 'Auth/ForgotPasswordController.resetByToken').middleware('resetpassword')
+  Route.get('/resetpassword', 'Auth/ForgotPasswordController.resetpage').middleware('resetPassword')
+  Route.post('/resetpassword', 'Auth/ForgotPasswordController.resetByToken').middleware('resetPassword')
 }).middleware(['guest'])
