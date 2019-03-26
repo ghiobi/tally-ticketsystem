@@ -76,9 +76,9 @@
                 </td>
                 <td>
                   @if(user.roles.length == 0)
-                    <button type="button" class="btn btn-outline" data-toggle="modal" data-target="#makeAdminModal" data-user-id="{{ user.id }}" data-user-name="{{ user.name }}" data-change-type="add">Make admin</button>
+                    <button type="button" class="btn btn-outline" data-toggle="modal" data-target="#makeAdminModal" data-user-id="{{ auth.user.id }}" data-modal-data="{{ user.id }}" data-modal-desc="{{user.name}}">Make admin</button>
                   @elseif(isOwner && user.roles.length == 1)
-                    <button type="button" class="btn btn-outline" data-toggle="modal" data-target="#makeAdminModal" data-user-id="{{ user.id }}" data-user-name="{{ user.name }}" data-change-type="remove">Remove admin</button>
+                    <button type="button" class="btn btn-outline" data-toggle="modal" data-target="#removeAdminModal" data-user-id="{{ auth.user.id }}" data-modal-data="{{ user.id }}" data-modal-desc="{{user.name}}">Remove admin</button>
                   @endif
                 </td>
               </tr>
@@ -87,7 +87,8 @@
         </table>
     </div>
   </section>
-  @include('admin.partials.admin-confirmation-modal')
+  @!component('partials.modal.modal', config = { id : 'makeAdminModal', confirmation_route:organizationRoute+'/admin/users/addAdmin', body:'Are you sure you wish to make this user admin?', method:'post' }, csrfField = csrfField)
+  @!component('partials.modal.modal', config = { id : 'removeAdminModal', confirmation_route:organizationRoute+'/admin/users/removeAdmin', body:'Are you sure you wish to remove this admin?', method:'post' }, csrfField = csrfField)
   @include('partials.footer')
 @endsection
             
