@@ -10,7 +10,9 @@ class ExpenseController {
       .with('user')
       .paginate(request.input('page', 1))
 
-    return view.render('expense.main', { expenses: expenses.toJSON() })
+    const paginateUrl = '/expense?'
+
+    return view.render('expense.main', { expenses: expenses.toJSON(), paginateUrl })
   }
 
   async viewExpense({ view, params }) {

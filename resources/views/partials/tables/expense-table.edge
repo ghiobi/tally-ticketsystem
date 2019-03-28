@@ -46,7 +46,7 @@
   </tbody>
 </table>
 
-@set('url', adminPaginateUrl ? adminPaginateUrl : '?')
+@set('url', paginateUrl ? paginateUrl : '?')
 @!component('partials.components.pagination',
   total = expenses.total,
   page = expenses.page,
