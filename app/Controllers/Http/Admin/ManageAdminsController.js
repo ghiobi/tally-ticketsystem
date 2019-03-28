@@ -1,14 +1,10 @@
 'use strict'
 
 const User = use('App/Models/User')
-const ForbiddenException = use('App/Exceptions/ForbiddenException')
+const { HttpException } = require('@adonisjs/generic-exceptions')
 
 class ManageAdminsController {
-  async addAdmin({ request, response, session, auth }) {
-    if (!(await auth.user.hasRole('owner'))) {
-      throw new ForbiddenException()
-    }
-
+  async addAdmin({ request, response, session }) {
     const { modal_data } = request.post()
 
     const user = await User.find(modal_data)
@@ -19,14 +15,15 @@ class ManageAdminsController {
     return response.redirect('back')
   }
 
-  async removeAdmin({ request, response, session, auth }) {
-    if (!(await auth.user.hasRole('admin'))) {
-      throw new ForbiddenException()
-    }
-
+  async removeAdmin({ request, response, session }) {
     const { modal_data } = request.post()
 
     const user = await User.find(modal_data)
+
+    if (!user) {
+      throw new HttpException(null, 404)
+    }
+
     await user.removeRole('admin')
 
     session.flash({ success: `${user.name}'s admin privileges have been revoke.` })
