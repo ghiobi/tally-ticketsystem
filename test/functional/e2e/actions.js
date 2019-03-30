@@ -1,9 +1,9 @@
 module.exports = {
-  login: async function(browser, email, password) {
+  login: async function(browser, org, email, password) {
     const loginpage = await browser.visit('/organization')
     return loginpage
       .waitForElement('#organization-input')
-      .type('#organization-input', 'users-page-e2e')
+      .type('#organization-input', org)
       .click('#organization-workspace-submit')
       .waitForElement('#form__email')
       .waitForElement('#form__password')
