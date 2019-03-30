@@ -69,7 +69,7 @@ Route.group(() => {
   Route.post('/token', 'Admin/ApiTokenController.generate')
 
   Route.get('/users', 'Admin/UsersController.index')
-  Route.post('/users/addAdmin', 'Admin/ManageAdminsController.addAdmin')
+  Route.post('/users/addAdmin', 'Admin/ManageAdminsController.addAdmin').middleware(['IsAdmin'])
   Route.post('/users/removeAdmin', 'Admin/ManageAdminsController.removeAdmin').middleware(['IsOwner'])
 })
   .prefix('organization/:organization/admin')

@@ -7,20 +7,20 @@ trait('Test/ApiClient')
 trait('Auth/Client')
 trait('Session/Client')
 
-let organization, admin, admin2, user, user2
+let organization, owner, admin2, user, user2
 
 before(async () => {
   organization = await OrganizationFactory.create({
     slug: 'manage-admins-controller-test'
   })
 
-  admin = await UserFactory.make({
+  owner = await UserFactory.make({
     email: 'manage-admins-controller@email.com',
     password: 'password'
   })
-  await organization.users().save(admin)
-  await admin.setRole('admin')
-  await admin.setRole('owner')
+  await organization.users().save(owner)
+  await owner.setRole('admin')
+  await owner.setRole('owner')
 
   admin2 = await UserFactory.make({
     email: 'manage-admins2-@email.com',
@@ -44,11 +44,20 @@ before(async () => {
 
 beforeEach(async () => {})
 
+test('Check that Owner can grant admin permissions', async ({ client }) => {
+  const response = await client
+    .post(`organization/${organization.slug}/admin/users/addAdmin`)
+    .send({ modal_data: user.id })
+    .loginVia(owner)
+    .end()
+  response.assertStatus(200)
+})
+
 test('Check that admins can grant admin permissions', async ({ client }) => {
   const response = await client
     .post(`organization/${organization.slug}/admin/users/addAdmin`)
-    .send({ input_user_id: user.id })
-    .loginVia(admin)
+    .send({ modal_data: user.id })
+    .loginVia(admin2)
     .end()
   response.assertStatus(200)
 })
@@ -56,7 +65,7 @@ test('Check that admins can grant admin permissions', async ({ client }) => {
 test('Check that users cannot grant admin permissions', async ({ client }) => {
   const response = await client
     .post(`organization/${organization.slug}/admin/users/addAdmin`)
-    .send({ input_user_id: user.id })
+    .send({ modal_data: user.id })
     .loginVia(user2)
     .end()
   response.assertStatus(403)
@@ -65,8 +74,8 @@ test('Check that users cannot grant admin permissions', async ({ client }) => {
 test('Check that owners can remove admin permissions', async ({ client }) => {
   const response = await client
     .post(`organization/${organization.slug}/admin/users/removeAdmin`)
-    .send({ input_user_id: admin2.id })
-    .loginVia(admin)
+    .send({ modal_data: admin2.id })
+    .loginVia(owner)
     .end()
 
   response.assertStatus(200)
@@ -75,7 +84,7 @@ test('Check that owners can remove admin permissions', async ({ client }) => {
 test('Check that admins cannot remove admin permissions', async ({ client }) => {
   const response = await client
     .post(`organization/${organization.slug}/admin/users/removeAdmin`)
-    .send({ input_user_id: admin.id })
+    .send({ modal_data: owner.id })
     .loginVia(admin2)
     .end()
 
@@ -85,7 +94,7 @@ test('Check that admins cannot remove admin permissions', async ({ client }) => 
 test('Check that users cannot remove admin permissions', async ({ client }) => {
   const response = await client
     .post(`organization/${organization.slug}/admin/users/removeAdmin`)
-    .send({ input_user_id: admin.id })
+    .send({ input_user_id: owner.id })
     .loginVia(user)
     .end()
 
