@@ -12,7 +12,8 @@ trait('Test/Browser', {
     height: 720,
     isMobile: false
   },
-  headless: true
+  headless: true,
+  args: ['--no-sandbox', '--disable-setuid-sandbox']
 })
 
 let organization = null
@@ -73,6 +74,6 @@ test('All the fields must be filled to submit', async ({ browser }) => {
     .assertHas('SUBMIT EXPENSE')
     .waitForElement('#submit-expense-btn')
     .click('#submit-expense-btn')
-    .waitFor(500)
+    .waitFor(1000)
     .assertPath(`/organization/${organization.slug}/newexpense`)
 }).timeout(60000)

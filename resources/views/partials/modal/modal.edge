@@ -2,7 +2,7 @@
     param:
         On the button that triggers the modal, you need the following attributes:
         
-        data-user-id: user id
+        data-user-id: auth user id
         data-modal-data: Optional modal data to be send with the confirmation route
         
         config:{
@@ -18,9 +18,13 @@ $(document).ready(function () {
   let button = $(e.relatedTarget)
   let user_id = button.data('user-id')
   let modal_data = button.data('modal-data')
-
+  let extra_desc = button.data('modal-desc'
+  )
   let modal = $(this)
   let modal_body = '{{config.body}}'
+  if(extra_desc){
+    modal_body+= ' (<b>'+extra_desc+'</b>)'
+  }
   let form_method = ''
   let route = '{{ organizationRoute }}{{config.confirmation_route}}'
 
