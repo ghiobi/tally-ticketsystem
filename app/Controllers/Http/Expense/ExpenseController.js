@@ -42,7 +42,7 @@ class ExpenseController {
     const expense_id = request.input('modal_data')
     const expense = await Expense.find(expense_id)
     if (!expense) {
-      session.flash({ error: 'expense was no longer found' })
+      session.flash({ error: 'expense was not found' })
       return response.redirect('back')
     }
 

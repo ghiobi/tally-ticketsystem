@@ -40,6 +40,12 @@ Route.group(() => {
   Route.get('/expense/:expense_id', 'Expense/ExpenseController.viewExpense').middleware('expenseDetailGuard')
   Route.delete('/expense', 'Expense/ExpenseController.deleteExpense')
 
+  Route.get('/expense/update/:expense_id', 'Expense/UpdateExpenseController.index')
+  Route.post('/expense/update/:expense_id', 'Expense/UpdateExpenseController.update')
+
+  Route.get('/newexpense', 'Expense/NewExpenseController.index')
+  Route.post('/newexpense/submit', 'Expense/NewExpenseController.submit')
+
   Route.get('/account', 'Account/AccountController.index')
   Route.post('/account/password', 'Account/AccountController.password')
 
@@ -52,9 +58,6 @@ Route.group(() => {
   Route.post('/ticket/:ticket_id/resolve', 'Ticket/TicketController.resolve').middleware('ticketGuard')
   Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen').middleware('ticketGuard')
   Route.post('/ticket/:ticket_id/assign', 'Ticket/TicketController.assign').middleware('IsAdmin')
-
-  Route.get('/newexpense', 'Expense/NewExpenseController.index')
-  Route.post('/newexpense/submit', 'Expense/NewExpenseController.submit')
 })
   .prefix('organization/:organization')
   .middleware(['organization', 'auth', 'within'])
