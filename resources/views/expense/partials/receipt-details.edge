@@ -17,7 +17,7 @@
       @if(values)
         <div class="form-group" style="display:none;">
           <label for="memo">ID</label>
-          <input required id="memo" name="id[{{index}}]" value="{{values.id}}" class="form-control" />
+          <input required id="line_id" name="id[{{index}}]" value="{{values.id}}" class="form-control" />
         </div>
       @endif
       <div class="form-group">
@@ -86,4 +86,5 @@
       </div>
     </div>
   </div>
+  <button class="btn btn-warning remove_receipt_button" type="button" id="remove_receipt_button_{{index}}">Remove</button>
 </div>

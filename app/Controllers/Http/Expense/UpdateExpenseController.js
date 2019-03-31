@@ -7,6 +7,7 @@ const ExpenseLineItem = use('App/Models/ExpenseLineItem')
 const ExpenseBusinessPurpose = use('App/Models/ExpenseBusinessPurpose')
 const LineItemCategory = use('App/Models/LineItemCategory')
 const LineItemRegion = use('App/Models/LineItemRegion')
+const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
 class UpdateExpenseController {
   async index({ view, params }) {
@@ -57,33 +58,33 @@ class UpdateExpenseController {
       throw new ForbiddenException()
     }
 
-    if (title != expense.title) {
+    if (title !== expense.title) {
       await expense.updateTitle(title)
     }
 
-    if (expense.business_purpose != business_purpose) {
+    if (expense.business_purpose !== business_purpose) {
       await expense.updateBusinessPurpose(business_purpose)
     }
 
     for (var i = 0; i < id.length; i++) {
       if (id[i] in lineItemsDict) {
         let oldItem = lineItemsDict[id[i]]
-        if (oldItem.memo != memo[i]) {
+        if (oldItem.memo !== memo[i]) {
           oldItem.updateMemo(memo[i])
         }
-        if (oldItem.category != category[i]) {
+        if (oldItem.category !== category[i]) {
           oldItem.updateCategory(category[i])
         }
-        if (oldItem.region != region[i]) {
+        if (oldItem.region !== region[i]) {
           oldItem.updateRegion(region[i])
         }
-        if (oldItem.currency != currency[i]) {
+        if (oldItem.currency !== currency[i]) {
           oldItem.updateCurrency(currency[i])
         }
-        if (oldItem.price != price[i]) {
+        if (oldItem.price !== price[i]) {
           oldItem.updatePrice(price[i])
         }
-        if (oldItem.tax != tax[i]) {
+        if (oldItem.tax !== tax[i]) {
           oldItem.updateTax(tax[i])
         }
         delete lineItemsDict[id[i]]

@@ -34,10 +34,11 @@
                 </div>
               </div>
             </div>
-            @each(expenseLineItem in expenseLineItems)
-              @!component('expense.partials.receipt-details', index=($loop.index + 1), form_name="expense_form", categories=categories, regions=regions, currencyToSymbolMap=currencyToSymbolMap, values=expenseLineItem)
-              <button class="btn btn-warning" type="button" id="remove_receipt_button">Remove</button>
-            @endeach
+            <div id="expense_items">
+              @each(expenseLineItem in expenseLineItems)
+                @!component('expense.partials.receipt-details', index=($loop.index + 1), form_name="expense_form", categories=categories, regions=regions, currencyToSymbolMap=currencyToSymbolMap, values=expenseLineItem)
+              @endeach
+            </div>
             <div class="row">
               <div class="col-5">
                 {{--  <button class="btn btn-outline-primary" type="button" id="remove_receipt_button" style="display:none;">Remove Receipt</button>  --}}

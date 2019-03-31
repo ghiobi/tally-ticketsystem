@@ -17,50 +17,68 @@ $(() => {
     )
   })
 
+  function calculateReceiptIndices() {
+    $('.receipt_details').each(function(index) {
+      $(this).attr('id', 'receipt_details_' + index)
+      $(this)
+        .find('#line_id')
+        .attr('name', 'id[' + index + ']')
+      $(this)
+        .find('#memo')
+        .attr('name', 'memo[' + index + ']')
+      $(this)
+        .find('#category')
+        .attr('name', 'category[' + index + ']')
+      $(this)
+        .find('#currency')
+        .attr('name', 'currency[' + index + ']')
+      $(this)
+        .find('#region')
+        .attr('name', 'region[' + index + ']')
+      $(this)
+        .find('#price')
+        .attr('name', 'price[' + index + ']')
+      $(this)
+        .find('#tax')
+        .attr('name', 'tax[' + index + ']')
+      $(this)
+        .find('#receipt_title')
+        .html('Receipt ' + index)
+      $(this)
+        .find('.remove_receipt_button')
+        .attr('id', 'remove_receipt_button_' + index)
+    })
+  }
+
   var receiptIndex = 0
   //add receipts dynamically
-  $('#add_receipt_button').click(function() {
+  $(document.body).on('click', '#add_receipt_button', function() {
     receiptIndex++
 
     if (receiptIndex > 0) {
       $('#remove_receipt_button').show()
     }
 
-    var newDiv = $('#receipt_details_0').clone()
-    newDiv
-      .attr('id', 'receipt_details_' + receiptIndex)
-      .hide()
-      .fadeIn('fast')
-      .insertAfter('.receipt_details' + (receiptIndex - 1))
-      .find('#receipt_title')
-      .html('Receipt ' + (receiptIndex + 1))
-    newDiv
-      .find('#memo')
-      .attr('name', 'memo[' + receiptIndex + ']')
-      .val('')
-    newDiv.find('#category').attr('name', 'category[' + receiptIndex + ']')
-    newDiv.find('#currency').attr('name', 'currency[' + receiptIndex + ']')
-    newDiv.find('#region').attr('name', 'region[' + receiptIndex + ']')
-    newDiv
-      .find('#price')
-      .attr('name', 'price[' + receiptIndex + ']')
-      .val('')
-    newDiv
-      .find('#tax')
-      .attr('name', 'tax[' + receiptIndex + ']')
-      .val('')
+    var newLineItem = $('.receipt_details')
+      .first()
+      .clone()
+    newLineItem.find('#memo').val('')
+    newLineItem.find('#category').prop('selectedIndex', 0)
+    newLineItem.find('#region').prop('selectedIndex', 0)
+    newLineItem.find('#currency').prop('selectedIndex', 0)
+    newLineItem.find('#price').val('')
+    newLineItem.find('#tax').val('')
+    newLineItem.find('#line_id').val('new')
+
+    $('#expense_items').append(newLineItem)
+    calculateReceiptIndices()
   })
 
   //remove receipts dynamically
-  $('#remove_receipt_button').click(function() {
-    $('#receipt_details_' + receiptIndex).fadeOut('fast', function() {
-      $(this).remove()
-    })
-
-    receiptIndex--
-
-    if (receiptIndex < 1) {
-      $('#remove_receipt_button').hide()
-    }
+  $(document.body).on('click', '[id^=remove_receipt_button]', function() {
+    $(this)
+      .closest('.receipt_details')
+      .remove()
+    calculateReceiptIndices()
   })
 })
