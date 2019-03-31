@@ -10,12 +10,14 @@ const LineItemRegion = use('App/Models/LineItemRegion')
 
 class UpdateExpenseController {
   async index({ view, params }) {
-    console.log(12345)
     const expense = await Expense.query()
       .where('id', params.expense_id)
       .with('user')
       .with('expenseLineItems')
       .first()
+    const expenseLineItems = await ExpenseLineItem.query()
+      .where('expense_id', expense.id)
+      .fetch()
 
     const businessPurposes = await ExpenseBusinessPurpose.all()
     const categories = await LineItemCategory.all()
@@ -25,7 +27,8 @@ class UpdateExpenseController {
       categories: categories.toJSON(),
       regions: regions.toJSON(),
       currencyToSymbolMap,
-      expense: expense.toJSON()
+      expense: expense.toJSON(),
+      expenseLineItems: expenseLineItems.toJSON()
     })
   }
 

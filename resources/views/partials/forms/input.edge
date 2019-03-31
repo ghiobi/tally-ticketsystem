@@ -9,6 +9,7 @@
   + config.required - is required -> defaults: true
   + config.disabled - is disabled
   + config.detail - extra description for input
+  + config.value - Sets the value for the input
   + config.placeholder - placeholder for input
   + error - the sessions getErrorFor method
     Since components are stateless we can't use sessions methods directly, thus they must be
@@ -29,7 +30,11 @@
     class="form-control {{ elIf('$self', 'is-invalid', error(config.key)) }}"
     type="{{ config.type ? config.type : 'text' }}"
     name="{{ config.key }}"
-    value="{{ old && old(config.key, '') }}"
+    @if(config.value)
+      value="{{ config.value }}"
+    @else
+      value="{{ old && old(config.key, '') }}"
+    @endif
     aria-describedby="{{ config.detail ? config.key + '_help': '' }}"
     placeholder="{{ config.placeholder ? config.placeholder: '' }}"
     {{ config.required === false ? '' : 'required' }}
