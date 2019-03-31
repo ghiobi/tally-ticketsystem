@@ -31,7 +31,7 @@ $(() => {
       .attr('id', 'receipt_details_' + receiptIndex)
       .hide()
       .fadeIn('fast')
-      .insertAfter('#receipt_details_' + (receiptIndex - 1))
+      .insertAfter('.receipt_details' + (receiptIndex - 1))
       .find('#receipt_title')
       .html('Receipt ' + (receiptIndex + 1))
     newDiv

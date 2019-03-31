@@ -6,7 +6,7 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <h3 id="receipt_title">Receipt</h3>
+    <h3 id="receipt_title">Receipt {{index}}</h3>
     </div>
     <div class="col-md-2 text-right">
         <button class="btn btn-outline">Scan Receipt</button>
@@ -14,6 +14,12 @@
   </div>
   <div class="row">
     <div class="col-md-8">
+      @if(values)
+        <div class="form-group" style="display:none;">
+          <label for="memo">ID</label>
+          <input required id="memo" name="id[{{index}}]" value="{{values.id}}" class="form-control" />
+        </div>
+      @endif
       <div class="form-group">
           <label for="memo">Memo</label>
           @if(values)
@@ -23,17 +29,17 @@
           @endif
       </div>
       <div class="form-group">
-          <label for="currency">Category</label>
-          <select required id="category"name="category[{{index}}]" form="{{form_name}}" class="form-control">
-            @each(category in categories)
-              @if(values && values.category === category.name)
-                <option selected="selected">{{ category.name }}</option>
-              @else
-                <option>{{ category.name }}</option>
-              @endif
-            @endeach
-          </select>
-        </div>
+        <label for="currency">Category</label>
+        <select required id="category"name="category[{{index}}]" form="{{form_name}}" class="form-control">
+          @each(category in categories)
+            @if(values && values.category === category.name)
+              <option selected="selected">{{ category.name }}</option>
+            @else
+              <option>{{ category.name }}</option>
+            @endif
+          @endeach
+        </select>
+      </div>
       <div class="form-group">
         <label for="region">Region</label>
         <select required id="region"name="region[{{index}}]" form="{{form_name}}" class="form-control">
@@ -54,7 +60,7 @@
                 <option selected="selected">{{ currency }} ({{ symbol }})</option>
               @else
                 <option value="{{ currency }}"
-                @if(currency=='CAD')
+                @if(currency=='CAD' && !values)
                 selected 
                 @endif
                 >{{ currency }} ({{ symbol }})</option>

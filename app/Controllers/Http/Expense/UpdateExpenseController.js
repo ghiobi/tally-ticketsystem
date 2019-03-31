@@ -15,6 +15,7 @@ class UpdateExpenseController {
       .with('user')
       .with('expenseLineItems')
       .first()
+
     const expenseLineItems = await ExpenseLineItem.query()
       .where('expense_id', expense.id)
       .fetch()
@@ -33,12 +34,19 @@ class UpdateExpenseController {
   }
 
   async update({ request, response, auth, session, params }) {
-    const { title, business_purpose, memo, category, currency, region, price, tax } = request.post()
+    const { id, title, business_purpose, memo, category, currency, region, price, tax } = request.post()
     const expense = await Expense.query()
       .where('id', params.expense_id)
       .with('user')
       .with('expenseLineItems')
       .first()
+
+    const expenseLineItems = await ExpenseLineItem.query()
+      .where('expense_id', expense.id)
+      .fetch()
+
+    let lineItemsDict = {}
+    expenseLineItems.rows.forEach((el) => (lineItemsDict[el.id] = el))
 
     if (!expense) {
       session.flash({ error: 'Error retrieving expense' })
@@ -57,18 +65,46 @@ class UpdateExpenseController {
       await expense.updateBusinessPurpose(business_purpose)
     }
 
-    for (var i = 0; i < memo.length; i++) {
-      await ExpenseLineItem.create({
-        expense_id: expense.id,
-        memo: memo[i],
-        currency: currency[i],
-        category: category[i],
-        region: region[i],
-        price: price[i],
-        tax: tax[i]
-      })
+    for (var i = 0; i < id.length; i++) {
+      if (id[i] in lineItemsDict) {
+        let oldItem = lineItemsDict[id[i]]
+        if (oldItem.memo != memo[i]) {
+          oldItem.updateMemo(memo[i])
+        }
+        if (oldItem.category != category[i]) {
+          oldItem.updateCategory(category[i])
+        }
+        if (oldItem.region != region[i]) {
+          oldItem.updateRegion(region[i])
+        }
+        if (oldItem.currency != currency[i]) {
+          oldItem.updateCurrency(currency[i])
+        }
+        if (oldItem.price != price[i]) {
+          oldItem.updatePrice(price[i])
+        }
+        if (oldItem.tax != tax[i]) {
+          oldItem.updateTax(tax[i])
+        }
+        delete lineItemsDict[id[i]]
+      } else {
+        await ExpenseLineItem.create({
+          expense_id: expense.id,
+          memo: memo[i],
+          currency: currency[i],
+          category: category[i],
+          region: region[i],
+          price: price[i],
+          tax: tax[i]
+        })
+      }
     }
-    session.flash({ success: 'Your expense was filed.' })
+
+    for (var key in lineItemsDict) {
+      lineItemsDict[key].delete()
+    }
+
+    session.flash({ success: 'Your expense was updated.' })
     return response.redirect(`/organization/${request.organization.slug}/expense/${expense.id}`)
   }
 }
