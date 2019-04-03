@@ -60,7 +60,7 @@ test('Users can add and remove receipts', async ({ browser }) => {
     .click('#add_receipt_button')
     .waitForElement('#receipt_details_1')
     .assertExists('#receipt_details_1')
-    .click('#remove_receipt_button')
+    .click('#remove_receipt_button_1')
     .waitFor(500)
     .assertNotExists('#receipt_details_1')
 }).timeout(60000)

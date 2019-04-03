@@ -34,9 +34,11 @@
         {{ humanTime(expense.created_at) }}
       </td>
       <td class="d-flex">
-        <button class="btn">
-          <i class="fas fa-edit mr-0"></i>
-        </button>
+        <a href="{{ organizationRoute }}/expense/update/{{expense.id}}">
+          <button class="btn">
+            <i class="fas fa-edit mr-0"></i>
+          </button>
+        </a>
         <button class="btn btn-danger" data-toggle="modal" data-target="#removeModal" data-user-id="{{ auth.user.id }}" data-modal-data="{{expense.id}}">
           <i class="fas fa-trash-alt mr-0"></i>
         </button>

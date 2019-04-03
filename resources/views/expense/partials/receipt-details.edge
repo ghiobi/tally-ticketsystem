@@ -6,7 +6,7 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <h3 id="receipt_title">Receipt 1</h3>
+    <h3 id="receipt_title">Receipt {{index}}</h3>
     </div>
     <div class="col-md-2 text-right">
         <button class="btn btn-outline">Scan Receipt</button>
@@ -14,23 +14,41 @@
   </div>
   <div class="row">
     <div class="col-md-8">
+      @if(values)
+        <div class="form-group" style="display:none;">
+          <label for="memo">ID</label>
+          <input required id="line_id" name="id[{{index}}]" value="{{values.id}}" class="form-control" />
+        </div>
+      @endif
       <div class="form-group">
           <label for="memo">Memo</label>
-          <input required id="memo" name="memo[{{index}}]" class="form-control" />
+          @if(values)
+            <input required id="memo" name="memo[{{index}}]" value="{{values.memo}}" class="form-control" />
+          @else
+            <input required id="memo" name="memo[{{index}}]" class="form-control" />
+          @endif
       </div>
       <div class="form-group">
-          <label for="currency">Category</label>
-          <select required id="category"name="category[{{index}}]" form="{{form_name}}" class="form-control">
-              @each(category in categories)
-                <option>{{ category.name }}</option>
-              @endeach
-          </select>
-        </div>
+        <label for="currency">Category</label>
+        <select required id="category"name="category[{{index}}]" form="{{form_name}}" class="form-control">
+          @each(category in categories)
+            @if(values && values.category === category.name)
+              <option selected="selected">{{ category.name }}</option>
+            @else
+              <option>{{ category.name }}</option>
+            @endif
+          @endeach
+        </select>
+      </div>
       <div class="form-group">
         <label for="region">Region</label>
         <select required id="region"name="region[{{index}}]" form="{{form_name}}" class="form-control">
           @each(region in regions)
-            <option value="{{ region.name }}">{{ region.display }}</option>
+            @if(values && values.region === region.name)
+                <option selected="selected">{{ region.name }}</option>
+            @else
+              <option value="{{ region.name }}">{{ region.display }}</option>
+            @endif
           @endeach
         </select>
       </div>
@@ -38,22 +56,35 @@
           <label for="currency">Currency</label>
           <select required id="currency"name="currency[{{index}}]" form="{{form_name}}" class="form-control">
             @each((symbol, currency) in currencyToSymbolMap)
-              <option value="{{ currency }}"
-              @if(currency=='CAD')
-              selected 
+              @if(values && values.currency === currency)
+                <option selected="selected">{{ currency }} ({{ symbol }})</option>
+              @else
+                <option value="{{ currency }}"
+                @if(currency=='CAD' && !values)
+                selected 
+                @endif
+                >{{ currency }} ({{ symbol }})</option>
               @endif
-              >{{ currency }} ({{ symbol }})</option>
             @endeach
           </select>
       </div>
       <div class="form-group">
         <label for="price">Price</label>
-        <input type="number" required id="price" name="price[{{index}}]" min="0" step="0.01" pattern="[0-9]+(\.[0-9][0-9]?)?" oninvalid="this.setCustomValidity('Please etner a valid amount')"  oninput="this.setCustomValidity('')"/>
+        <input type="number" required id="price" name="price[{{index}}]" 
+        @if(values)
+          value = {{values.price}}
+        @endif
+        min="0" step="0.01" pattern="[0-9]+(\.[0-9][0-9]?)?" oninvalid="this.setCustomValidity('Please etner a valid amount')"  oninput="this.setCustomValidity('')"/>
       </div>
       <div class="form-group">
         <label for="tax">Tax</label>
-        <input type="number" required id="tax" name="tax[{{index}}]" min="0" step="0.01" pattern="[0-9]+(\.[0-9][0-9]?)?" oninvalid="this.setCustomValidity('Please etner a valid amount')"  oninput="this.setCustomValidity('')"/>
+        <input type="number" required id="tax" name="tax[{{index}}]" min="0" step="0.01" 
+        @if(values)
+          value = {{values.tax}}
+        @endif
+        pattern="[0-9]+(\.[0-9][0-9]?)?" oninvalid="this.setCustomValidity('Please etner a valid amount')"  oninput="this.setCustomValidity('')"/>
       </div>
     </div>
   </div>
+  <button class="btn btn-warning remove_receipt_button" type="button" id="remove_receipt_button_{{index}}">Remove</button>
 </div>

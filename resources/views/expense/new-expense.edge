@@ -30,10 +30,11 @@
                 </div>
               </div>
             </div>
-            @!component('expense.partials.receipt-details', index="0", form_name="expense_form", categories=categories, regions=regions, currencyToSymbolMap=currencyToSymbolMap)
-            <div class="row">
+            <div id="expense_items">
+              @!component('expense.partials.receipt-details', index="0", form_name="expense_form", categories=categories, regions=regions, currencyToSymbolMap=currencyToSymbolMap)
+            </div>
+              <div class="row">
               <div class="col-5">
-                <button class="btn btn-outline-primary" type="button" id="remove_receipt_button" style="display:none;">Remove Receipt</button>
                 <button class="btn btn-outline-primary" type="button" id="add_receipt_button">Add Another Receipt</button>
               </div>
               <div class="col-3">
