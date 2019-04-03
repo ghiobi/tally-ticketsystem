@@ -30,10 +30,7 @@ class TicketBelongsToUser {
       throw new HttpException(null, 404)
     }
 
-    if (
-      ticket.user_id !== auth.user.id &&
-      !(await auth.user.hasRole('admin'))
-    ) {
+    if (ticket.user_id !== auth.user.id && !(await auth.user.hasRole('admin'))) {
       throw new ForbiddenException()
     }
 
