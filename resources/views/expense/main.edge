@@ -7,8 +7,14 @@
   <section id="page-title" class="page-title-classic">
     <div class="container d-flex justify-content-between">
       <div class="page-title">
-        <h1>Welcome {{ auth.user.name }}</h1>
-        <span>View and Edit Expenses Here</span>
+        @if(searching)
+          <p class="mb-3"><small><a href="{{ organizationRoute }}/expense"><i class="fa fa-chevron-left"></i> Back</a></small></p>
+          <h1>Results</h1>
+          <span>Here are your search results</span>
+        @else
+          <h1>Welcome {{ auth.user.name }}</h1>
+          <span>View and Edit Expenses Here</span>
+        @endif     
       </div>
     </div>
   </section>
@@ -18,7 +24,16 @@
     <div class="container">
       <div class="row">
           <div class="col-md-8">
-            <a href="{{ organizationRoute }}/newexpense">
+              <form action="{{ organizationRoute }}/expense" method="GET">
+                {{ csrfField() }}
+                <div class="form-group">
+                  <label for="search">Search</label>
+                  <input type="text" class="form-control w-25" name="search" id="search" placeholder="Search">
+                </div>
+              </form>
+          </div>
+          <div class="col-md-4">
+            <a href="{{ organizationRoute }}/newexpense" class="float-right">
               <button class="btn btn-outline-primary" type="button">New Expense</button>
             </a>
           </div>

@@ -5,14 +5,27 @@ const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
 class ExpenseController {
   async index({ view, request, auth }) {
-    const expenses = await auth.user
-      .expenses()
-      .with('user')
-      .paginate(request.input('page', 1))
+    const search_keyword = request.only('search').search
+    let expenses = null
+    let searching = false
+
+    if (search_keyword && search_keyword !== '') {
+      searching = true
+      expenses = await auth.user
+        .expenses()
+        .whereRaw(`"title" LIKE '%${search_keyword}%'`)
+        .with('user')
+        .paginate(request.input('page', 1))
+    } else {
+      expenses = await auth.user
+        .expenses()
+        .with('user')
+        .paginate(request.input('page', 1))
+    }
 
     const paginateUrl = '/expense?'
 
-    return view.render('expense.main', { expenses: expenses.toJSON(), paginateUrl })
+    return view.render('expense.main', { expenses: expenses.toJSON(), paginateUrl, searching: searching })
   }
 
   async viewExpense({ view, params }) {
