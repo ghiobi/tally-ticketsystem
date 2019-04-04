@@ -132,3 +132,45 @@ test('Users can delete a line item from an existing expense', async ({ browser, 
 
   assert.equal(expenseLineItem.rows.length, 1)
 }).timeout(60000)
+
+test('Users can add a line item to an existing expense but cant submit unless fields are filled', async ({
+  browser
+}) => {
+  await await actions.login(browser, organization.slug, user.email, 'userpassword')
+
+  const page = await browser.visit(`/organization/${organization.slug}/expense/update/${expense.id}`)
+
+  await page
+    .waitForElement('#form__title')
+    .click('#add_receipt_button')
+    .click('#submit-expense-btn')
+    .waitFor(1000)
+    .assertPath(`/organization/${organization.slug}/expense/update/${expense.id}`)
+}).timeout(60000)
+
+test('Users can add a line item to an existing expense', async ({ browser, assert }) => {
+  await await actions.login(browser, organization.slug, user.email, 'userpassword')
+
+  const page = await browser.visit(`/organization/${organization.slug}/expense/update/${expense.id}`)
+
+  await page
+    .waitForElement('#form__title')
+    .click('#add_receipt_button')
+    .waitForElement('input[name="memo[1]"]')
+    .waitForElement('input[name="price[1]"]')
+    .waitForElement('input[name="tax[1]"]')
+    .type('input[name="memo[1]"]', 'New Memo')
+    .type('input[name="price[1]"]', '10.12')
+    .type('input[name="tax[1]"]', '1.34')
+    .click('#submit-expense-btn')
+    .waitFor(500)
+    .assertHas('Your expense was updated.')
+
+  const expenseLineItem = await ExpenseLineItem.query()
+    .where('expense_id', expense.id)
+    .fetch()
+
+  assert.equal(expenseLineItem.rows[1].memo, 'New Memo')
+  assert.equal(expenseLineItem.rows[1].price, 10.12)
+  assert.equal(expenseLineItem.rows[1].tax, 1.34)
+}).timeout(60000)
