@@ -55,6 +55,23 @@ test('Users can access update expense page', async ({ browser }) => {
   await page.assertHas('UPDATE EXPENSE')
 }).timeout(60000)
 
+test('Users can add and remove receipts from an existing expense', async ({ browser }) => {
+  await await actions.login(browser, organization.slug, user.email, 'userpassword')
+
+  const page = await browser.visit(`/organization/${organization.slug}/expense/update/${expense.id}`)
+
+  await page
+    .assertHas('UPDATE EXPENSE')
+    .waitForElement('#add_receipt_button')
+    .assertNotExists('#receipt_details_1')
+    .click('#add_receipt_button')
+    .waitForElement('#receipt_details_1')
+    .assertExists('#receipt_details_1')
+    .click('#remove_receipt_button_1')
+    .waitFor(500)
+    .assertNotExists('#receipt_details_1')
+}).timeout(60000)
+
 test('Users can update an existing expense and line itme', async ({ browser, assert }) => {
   await await actions.login(browser, organization.slug, user.email, 'userpassword')
 
@@ -115,22 +132,3 @@ test('Users can delete a line item from an existing expense', async ({ browser, 
 
   assert.equal(expenseLineItem.rows.length, 1)
 }).timeout(60000)
-
-// test('Users can add a line item from an existing expense', async ({ browser, assert }) => {
-
-//     await await actions.login(browser, organization.slug, user.email, 'userpassword')
-
-//     const page = await browser.visit(`/organization/${organization.slug}/expense/update/${expense.id}`)
-
-//     await page
-//         .waitForElement('#form__title')
-//         .click('#remove_receipt_button_1')
-//         .click('#submit-expense-btn')
-//         .waitFor(500)
-//         .assertHas('Your expense was updated.')
-
-//     const expenseLineItem = await ExpenseLineItem.query()
-//         .where('expense_id', expense.id)
-//         .fetch()
-//     assert.equal(expenseLineItem.length, 1)
-// }).timeout(60000)
