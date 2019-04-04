@@ -30,11 +30,13 @@ before(async () => {
 
   user = await UserFactory.make({ email: 'update-expense-e2e@email.com', password: 'userpassword' })
   await organization.users().save(user)
+
   expense = await ExpenseFactory.create({
     title: 'Test Expense',
     business_purpose: 'Conference',
     user_id: user.id
   })
+
   await ExpenseLineItemFactory.create({
     expense_id: expense.id,
     memo: 'Foo',
