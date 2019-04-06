@@ -39,6 +39,7 @@
     "@adonisjs/websocket": "^1.0.11",
     "@slack/client": "^4.8.0",
     "adonis-websocket-client": "^1.0.2",
+    "c3": "^0.6.14",
     "chance": "^1.0.18",
     "currency-symbol-map": "^4.0.4",
     "mysql2": "^1.6.4",

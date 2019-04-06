@@ -1,8 +1,6 @@
 'use strict'
 
-const { test, trait, before } = use('Test/Suite')(
-  'Organization login integration test'
-)
+const { test, trait, before } = use('Test/Suite')('Organization login integration test')
 
 const { OrganizationFactory, UserFactory, TicketFactory } = models
 
@@ -46,9 +44,7 @@ before(async () => {
   await userTicket.user().associate(user)
 })
 
-test('Entering an organization and clicking "Find workspace" should lead to login page', async ({
-  browser
-}) => {
+test('Entering an organization and clicking "Find workspace" should lead to login page', async ({ browser }) => {
   const page = await browser.visit('/organization')
   await page
     .waitForElement('#organization-input')
@@ -60,9 +56,7 @@ test('Entering an organization and clicking "Find workspace" should lead to logi
     .assertHas('PASSWORD')
 }).timeout(60000)
 
-test('Leaving organization field empty should not lead to login page', async ({
-  browser
-}) => {
+test('Leaving organization field empty should not lead to login page', async ({ browser }) => {
   const page = await browser.visit('/organization')
   await page
     .waitForElement('#organization-input')
@@ -72,9 +66,7 @@ test('Leaving organization field empty should not lead to login page', async ({
     .assertPath('/organization')
 }).timeout(60000)
 
-test('Login in with a user account should lead to the dashboard page', async ({
-  browser
-}) => {
+test('Login in with a user account should lead to the dashboard page', async ({ browser }) => {
   const page = await browser.visit('/organization')
   await page
     .waitForElement('#organization-input')
@@ -90,9 +82,7 @@ test('Login in with a user account should lead to the dashboard page', async ({
     .assertHas('Create and track your tickets here')
 }).timeout(60000)
 
-test('Login in with an admin account should lead to the dashboard page', async ({
-  browser
-}) => {
+test('Login in with an admin account should lead to the dashboard page', async ({ browser }) => {
   const page = await browser.visit('/organization')
   await page
     .waitForElement('#organization-input')
@@ -104,6 +94,6 @@ test('Login in with an admin account should lead to the dashboard page', async (
     .type('#form__password', 'adminpassword')
     .click('#sign-in-btn')
     .waitFor(500)
-    .assertPath('/organization/' + organization.slug + '/admin')
+    .assertPath('/organization/' + organization.slug + '/admin/tickets')
     .assertHas('Manage submitted tickets right here')
 }).timeout(60000)
