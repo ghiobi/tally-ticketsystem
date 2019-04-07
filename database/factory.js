@@ -79,3 +79,25 @@ Factory.blueprint('App/Models/ExpenseLineItem', (faker, i, data) => {
     ...data
   }
 })
+
+Factory.blueprint('App/Models/ExpenseBusinessPurpose', (faker, i, data) => {
+  return {
+    name: faker.string(),
+    ...data
+  }
+})
+
+Factory.blueprint('App/Models/LineItemCategory', (faker, i, data) => {
+  return {
+    name: faker.string(),
+    ...data
+  }
+})
+
+Factory.blueprint('App/Models/LineItemRegion', (faker, i, data) => {
+  return {
+    name: faker.string(),
+    display: faker.string(),
+    ...data
+  }
+})

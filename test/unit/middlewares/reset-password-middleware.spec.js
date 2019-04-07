@@ -1,8 +1,8 @@
 'use strict'
 
-const { test } = use('Test/Suite')('Rest Password Middleware')
+const { test } = use('Test/Suite')('Reset Password Middleware')
 
-const ResetPassword = use('App/Middleware/ResetPassword')
+const ResetPassword = use('App/Middleware/Pageguards/ResetPassword')
 
 test('make sure exception is thrown when token does not exist', async ({ assert }) => {
   const middleware = new ResetPassword()

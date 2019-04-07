@@ -37,8 +37,14 @@ Route.group(() => {
   Route.get('/', 'Dashboard/DashboardController.index')
 
   Route.get('/expense', 'Expense/ExpenseController.index')
-  Route.get('/expense/:expense_id', 'Expense/ExpenseController.viewExpense')
+  Route.get('/expense/:expense_id', 'Expense/ExpenseController.viewExpense').middleware('expenseDetailGuard')
   Route.delete('/expense', 'Expense/ExpenseController.deleteExpense')
+
+  Route.get('/expense/update/:expense_id', 'Expense/UpdateExpenseController.index')
+  Route.post('/expense/update/:expense_id', 'Expense/UpdateExpenseController.update')
+
+  Route.get('/newexpense', 'Expense/NewExpenseController.index')
+  Route.post('/newexpense/submit', 'Expense/NewExpenseController.submit')
 
   Route.get('/account', 'Account/AccountController.index')
   Route.post('/account/password', 'Account/AccountController.password')
@@ -46,11 +52,11 @@ Route.group(() => {
   Route.get('/ticket/create', 'Ticket/SubmitTicketController.index')
   Route.post('/ticket/create', 'Ticket/SubmitTicketController.submit').validator('StoreTicket')
 
-  Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware('accessTicket')
-  Route.post('/ticket/:ticket_id', 'Ticket/TicketController.update').middleware('accessTicket')
-  Route.post('/ticket/:ticket_id/reply', 'Ticket/TicketController.reply').middleware('accessTicket')
-  Route.post('/ticket/:ticket_id/resolve', 'Ticket/TicketController.resolve').middleware('accessTicket')
-  Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen').middleware('accessTicket')
+  Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware('ticketGuard')
+  Route.post('/ticket/:ticket_id', 'Ticket/TicketController.update').middleware('ticketGuard')
+  Route.post('/ticket/:ticket_id/reply', 'Ticket/TicketController.reply').middleware('ticketGuard')
+  Route.post('/ticket/:ticket_id/resolve', 'Ticket/TicketController.resolve').middleware('ticketGuard')
+  Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen').middleware('ticketGuard')
   Route.post('/ticket/:ticket_id/assign', 'Ticket/TicketController.assign').middleware('IsAdmin')
 })
   .prefix('organization/:organization')
@@ -66,7 +72,7 @@ Route.group(() => {
   Route.post('/token', 'Admin/ApiTokenController.generate')
 
   Route.get('/users', 'Admin/UsersController.index')
-  Route.post('/users/addAdmin', 'Admin/ManageAdminsController.addAdmin')
+  Route.post('/users/addAdmin', 'Admin/ManageAdminsController.addAdmin').middleware(['IsAdmin'])
   Route.post('/users/removeAdmin', 'Admin/ManageAdminsController.removeAdmin').middleware(['IsOwner'])
 })
   .prefix('organization/:organization/admin')
@@ -100,6 +106,6 @@ Route.group(() => {
   Route.get('/oauth', 'Auth/SlackOAuthController.redirect')
   Route.get('/oauth/authenticate', 'Auth/SlackOAuthController.authenticate')
 
-  Route.get('/resetpassword', 'Auth/ForgotPasswordController.resetpage').middleware('resetpassword')
-  Route.post('/resetpassword', 'Auth/ForgotPasswordController.resetByToken').middleware('resetpassword')
+  Route.get('/resetpassword', 'Auth/ForgotPasswordController.resetpage').middleware('resetPassword')
+  Route.post('/resetpassword', 'Auth/ForgotPasswordController.resetByToken').middleware('resetPassword')
 }).middleware(['guest'])

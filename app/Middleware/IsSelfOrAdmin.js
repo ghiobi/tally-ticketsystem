@@ -11,10 +11,7 @@ class IsSelfOrAdmin {
    * @param {Function} next
    */
   async handle({ auth, params }, next) {
-    if (
-      +params.userId !== auth.user.id &&
-      !(await auth.user.hasRole('admin'))
-    ) {
+    if (+params.userId !== auth.user.id && !(await auth.user.hasRole('admin'))) {
       throw new ForbiddenException()
     }
 

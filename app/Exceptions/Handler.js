@@ -24,9 +24,7 @@ class ExceptionHandler extends BaseExceptionHandler {
     switch (error.name) {
       case 'InvalidSessionException':
         if (request.organization) {
-          return response.redirect(
-            `/organization/${request.organization.slug}/login`
-          )
+          return response.redirect(`/organization/${request.organization.slug}/login`)
         }
         return response.redirect('/organization')
       case 'HttpException':

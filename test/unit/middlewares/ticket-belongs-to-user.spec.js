@@ -4,7 +4,7 @@ const { UserFactory, TicketFactory, OrganizationFactory } = models
 
 const { test, before, beforeEach } = use('Test/Suite')('Ticket belongs to user')
 
-const TicketBelongsToUser = use('App/Middleware/TicketBelongsToUser')
+const TicketBelongsToUser = use('App/Middleware/Pageguards/TicketBelongsToUser')
 
 let middleware = null
 let next = null

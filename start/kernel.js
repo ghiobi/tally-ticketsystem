@@ -38,16 +38,19 @@ const globalMiddleware = [
 |
 */
 const namedMiddleware = {
+  /* General Middleware */
   auth: 'Adonis/Middleware/Auth',
   guest: 'Adonis/Middleware/AllowGuestOnly',
   organization: 'App/Middleware/Organization',
   within: 'App/Middleware/WithinOrganization',
-  accessTicket: 'App/Middleware/TicketBelongsToUser',
   IsSelfOrAdmin: 'App/Middleware/IsSelfOrAdmin',
   IsAdmin: 'App/Middleware/IsAdmin',
   IsOwner: 'App/Middleware/IsOwner',
-  resetpassword: 'App/Middleware/ResetPassword',
-  api: 'App/Middleware/ApiAuth'
+  api: 'App/Middleware/ApiAuth',
+  /* Page Guards */
+  expenseDetailGuard: 'App/Middleware/Pageguards/ExpenseDetail',
+  resetPassword: 'App/Middleware/Pageguards/ResetPassword',
+  ticketGuard: 'App/Middleware/Pageguards/TicketBelongsToUser'
 }
 
 /*
