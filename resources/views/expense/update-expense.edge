@@ -36,7 +36,7 @@
             </div>
             <div id="expense_items">
               @each(expenseLineItem in expenseLineItems)
-                @!component('expense.partials.receipt-details', index=($loop.index + 1), form_name="expense_form", categories=categories, regions=regions, currencyToSymbolMap=currencyToSymbolMap, values=expenseLineItem)
+                @!component('expense.partials.receipt-details', index=($loop.index), form_name="expense_form", categories=categories, regions=regions, currencyToSymbolMap=currencyToSymbolMap, values=expenseLineItem)
               @endeach
             </div>
             <div class="row">
@@ -46,7 +46,7 @@
               </div>
               <div class="col-3">
                 <div class="text-right">
-                  <button class="btn btn-outline-primary" type="submit">Update</button>
+                  <button class="btn btn-outline-primary" id="submit-expense-btn" type="submit">Update</button>
                 </div>
               </div>
             </div>
