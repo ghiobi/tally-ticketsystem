@@ -25,7 +25,7 @@
                     @!component('partials.forms.input', config = {label: 'Ticket title', key: 'title', required: true}, error = getErrorFor, old = old )
                     @!component('partials.forms.input', config = {type: 'textarea', label: 'Feedback', key: 'body', required: true}, error = getErrorFor, old = old )
                     <button id="ticketSubmit" class="btn btn-light btn-outline-secondary" type="submit">Submit</button>
-                    <a id="ticketCancel" href="{{ organizationRoute }}/{{ hasRole('admin') ? '/admin' : ''}}" class="btn btn-light btn-outline-secondary">Cancel</a>
+                    <a id="ticketCancel" href="{{ organizationRoute }}/{{ hasRole('admin') ? 'admin' : ''}}" class="btn btn-light btn-outline-secondary">Cancel</a>
                 </form>
             </div>
         </div>
