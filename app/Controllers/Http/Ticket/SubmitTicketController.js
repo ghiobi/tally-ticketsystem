@@ -24,7 +24,11 @@ class SubmitTicketController {
       body: request.input('body')
     })
 
-    await EmailService.sendTicketConfirmation(ticket)
+    try {
+      await EmailService.sendTicketConfirmation(ticket)
+    } catch (error) {
+      //TODO: add logging for errors
+    }
 
     session.flash({ success: 'Ticket has been created' })
     return response.redirect('/organization/' + request.organization.slug)
