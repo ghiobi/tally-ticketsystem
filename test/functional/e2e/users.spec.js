@@ -60,7 +60,6 @@ test('Admin can grant admin permission to users', async ({ browser }) => {
 }).timeout(60000)
 
 test('Owners can remove admin permission from users', async ({ browser }) => {
-
   await actions.login(browser, organization.slug, owner.email, 'userpassword')
 
   const userspage = await browser.visit(`/organization/${organization.slug}/admin/users`)
