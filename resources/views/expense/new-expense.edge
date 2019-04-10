@@ -15,31 +15,45 @@
   <section id="submit-expense-content" class="flex-grow-1">
     <div class="container">
         <h3>Expense Information</h3>
-          <form action="{{ organizationRoute }}/newExpense/submit" method="post" id="expense_form" name="expense_form">
+          <form action="{{ organizationRoute }}/newexpense/scan" method="post" id="expense_form" name="expense_form" enctype="multipart/form-data">
             {{ csrfField() }}
             <div class="row">
               <div class="col-md-8">
-                @!component('partials.forms.input', config = {label: 'Expense title', key: 'title', required: true}, error = getErrorFor, old = old )
+                @if(expense)
+                  @!component('partials.forms.input', config = {label: 'Expense title', key: 'title', required: true, value: expense.title}, error = getErrorFor, old = old )
+                @else
+                  @!component('partials.forms.input', config = {label: 'Expense title', key: 'title', required: true}, error = getErrorFor, old = old )
+                @endif
                 <div class="form-group">
                   <label for="business_purpose">Business Purpose</label>
                   <select id="business_purpose" name="business_purpose" form="expense_form" class="form-control">
                     @each(businessPurpose in businessPurposes)
-                      <option>{{ businessPurpose.name }}</option>
+                      @if(expense && businessPurpose.name == expense.business_purpose)
+                        <option selected="selected">{{ businessPurpose.name }}</option>
+                      @else
+                        <option>{{ businessPurpose.name }}</option>
+                      @endif
                     @endeach
                   </select>
                 </div>
               </div>
             </div>
             <div id="expense_items">
-              @!component('expense.partials.receipt-details', index="0", form_name="expense_form", categories=categories, regions=regions, currencyToSymbolMap=currencyToSymbolMap)
-            </div>
+              @if(expenseLineItems)
+                @each(expenseLineItem in expenseLineItems)
+                  @!component('expense.partials.receipt-details', index=($loop.index), form_name="expense_form", categories=categories, regions=regions, currencyToSymbolMap=currencyToSymbolMap, values=expenseLineItem)
+                @endeach
+              @else
+                @!component('expense.partials.receipt-details', index="0", form_name="expense_form", categories=categories, regions=regions, currencyToSymbolMap=currencyToSymbolMap, organizationRoute=organizationRoute)
+              @endif
+              </div>
               <div class="row">
               <div class="col-5">
                 <button class="btn btn-outline-primary" type="button" id="add_receipt_button">Add Another Receipt</button>
               </div>
               <div class="col-3">
                 <div class="text-right">
-                  <button class="btn btn-outline-primary" id="submit-expense-btn" type="submit">Submit</button>
+                  <button class="btn btn-outline-primary" formaction="{{ organizationRoute }}/newexpense/submit" id="submit-expense-btn" type="submit">Submit</button>
                 </div>
               </div>
             </div>

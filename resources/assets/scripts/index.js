@@ -43,10 +43,16 @@ $(() => {
         .attr('name', 'tax[' + index + ']')
       $(this)
         .find('#receipt_title')
-        .html('Receipt ' + index)
+        .html('Receipt ' + (index + 1))
       $(this)
         .find('.remove_receipt_button')
         .attr('id', 'remove_receipt_button_' + index)
+      $(this)
+        .find('#receipt-upload')
+        .attr('name', 'receipt[' + index + ']')
+      $('.receipt-upload').change(function() {
+        $('#loading-overlay').show()
+      })
     })
   }
 
@@ -64,8 +70,8 @@ $(() => {
       .clone()
     newLineItem.find('#memo').val('')
     newLineItem.find('#category').prop('selectedIndex', 0)
-    newLineItem.find('#region').prop('selectedIndex', 0)
-    newLineItem.find('#currency').prop('selectedIndex', 0)
+    newLineItem.find('#region').val('CAD-QC')
+    newLineItem.find('#currency').val('CAD')
     newLineItem.find('#price').val('')
     newLineItem.find('#tax').val('')
     newLineItem.find('#line_id').val('new')
@@ -80,5 +86,9 @@ $(() => {
       .closest('.receipt_details')
       .remove()
     calculateReceiptIndices()
+  })
+
+  $('.receipt-upload').change(function() {
+    $('#loading-overlay').show()
   })
 })

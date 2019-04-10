@@ -5,11 +5,13 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-6">
-    <h3 id="receipt_title">Receipt {{index}}</h3>
+    <div class="col-md-4">
+    <h3 id="receipt_title">Receipt {{index*1+1}}</h3>
     </div>
-    <div class="col-md-2 text-right">
-        <button class="btn btn-outline">Scan Receipt</button>
+    <div class="col-md-4 text-right">
+      <label class="btn btn-outline btn-file">
+          Scan Receipt<input type="file" name="receipt[{{index}}]" class="receipt-upload" id="receipt-upload" accept="image/png, image/jpeg" onchange="this.form.submit()" style="display: none;">
+      </label>
     </div>
   </div>
   <div class="row">
@@ -29,7 +31,7 @@
           @endif
       </div>
       <div class="form-group">
-        <label for="currency">Category</label>
+        <label for="category">Category</label>
         <select required id="category"name="category[{{index}}]" form="{{form_name}}" class="form-control">
           @each(category in categories)
             @if(values && values.category === category.name)
@@ -57,7 +59,7 @@
           <select required id="currency"name="currency[{{index}}]" form="{{form_name}}" class="form-control">
             @each((symbol, currency) in currencyToSymbolMap)
               @if(values && values.currency === currency)
-                <option selected="selected">{{ currency }} ({{ symbol }})</option>
+                <option selected="selected" value="{{ currency }}">{{ currency }} ({{ symbol }})</option>
               @else
                 <option value="{{ currency }}"
                 @if(currency=='CAD' && !values)
@@ -86,5 +88,8 @@
       </div>
     </div>
   </div>
-  <button class="btn btn-warning remove_receipt_button" type="button" id="remove_receipt_button_{{index}}">Remove</button>
+  <button class="btn btn-warning remove_receipt_button" type="button" id="remove_receipt_button_{{index}}" >Remove</button>
+</div>
+<div id="loading-overlay">
+    <div class="loader-inner line-scale loading-position"><div></div><div></div><div></div><div></div><div></div></div>
 </div>
