@@ -28,9 +28,7 @@ before(async () => {
   await organization.users().save(user)
 })
 
-test('Login in with a user account should lead to the dashboard page', async ({
-  browser
-}) => {
+test('Login in with a user account should lead to the dashboard page', async ({ browser }) => {
   const loginpage = await browser.visit('/organization')
   await loginpage
     .waitForElement('#organization-input')
@@ -43,9 +41,7 @@ test('Login in with a user account should lead to the dashboard page', async ({
     .click('#sign-in-btn')
     .waitFor(500)
 
-  const accountpage = await browser.visit(
-    `/organization/${organization.slug}/account`
-  )
+  const accountpage = await browser.visit(`/organization/${organization.slug}/account`)
 
   await accountpage
     .waitFor(500)

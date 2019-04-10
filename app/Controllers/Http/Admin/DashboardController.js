@@ -26,6 +26,7 @@ class DashboardController {
     tickets = await tickets.paginate(request.input('page', 1))
 
     const adminPaginateUrl = '/admin/tickets?show=' + show + '&' + (search ? 'search=' + search + '&' : '')
+    
     return view.render('admin.dashboard', {
       tickets: tickets.toJSON(),
       show,
