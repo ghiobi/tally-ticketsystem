@@ -44,15 +44,9 @@ before(async () => {
   await ticket4.user().associate(user2)
 })
 
-test('check if all tickets from an organization can be retrieved', async ({
-  client
-}) => {
+test('check if all tickets from an organization can be retrieved', async ({ client }) => {
   const response = await client
-    .get(
-      `/organization/${organization.slug}/api/tickets?token=${
-        organization.api_token
-      }`
-    )
+    .get(`/organization/${organization.slug}/api/tickets?token=${organization.api_token}`)
     .loginVia(userAdmin)
     .end()
 
@@ -73,15 +67,10 @@ test('check if all tickets from an organization can be retrieved', async ({
   ])
 })
 
-test('check that tickets belonging to a user can be retrieved', async ({
-  client
-}) => {
+test('check that tickets belonging to a user can be retrieved', async ({ client }) => {
   const response = await client
-    .get(
-      `organization/${organization.slug}/api/tickets/user/${user2.id}?token=${
-        organization.api_token
-      }`
-    )
+    .get(`organization/${organization.slug}/api/tickets/user/${user2.external_id}?token=${organization.api_token}`)
+    .loginVia(user2)
     .end()
 
   response.assertStatus(200)
@@ -97,38 +86,21 @@ test('check that tickets belonging to a user can be retrieved', async ({
   ])
 })
 
-test('check that a wrong token prevents from retrieving all tickets', async ({
-  client
-}) => {
+test('check that a wrong token prevents from retrieving all tickets', async ({ client }) => {
+  const response = await client.get(`/organization/${organization.slug}/api/tickets?token=${wrongOrganization}`).end()
+
+  response.assertStatus(403)
+})
+
+test('check that a wrong token prevents from retrieving tickets belonging to a user', async ({ client }) => {
   const response = await client
-    .get(
-      `/organization/${
-        organization.slug
-      }/api/tickets?token=${wrongOrganization}`
-    )
+    .get(`organization/${organization.slug}/api/tickets/user/${user2.external_id}?token=${wrongOrganization}`)
     .end()
 
   response.assertStatus(403)
 })
 
-test('check that a wrong token prevents from retrieving tickets belonging to a user', async ({
-  client
-}) => {
-  const response = await client
-    .get(
-      `organization/${organization.slug}/api/tickets/user/${
-        user2.id
-      }?token=${wrongOrganization}`
-    )
-    .end()
-
-  response.assertStatus(403)
-})
-
-test('createTicket api should create a new ticket and message in the database', async ({
-  assert,
-  client
-}) => {
+test('createTicket api should create a new ticket and message in the database', async ({ assert, client }) => {
   const response = await client
     .post(`/organization/${organization.slug}/api/tickets`)
     .send({
