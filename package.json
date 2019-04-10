@@ -25,6 +25,7 @@
     "@adonisjs/auth": "^3.0.7",
     "@adonisjs/bodyparser": "^2.0.5",
     "@adonisjs/cors": "^1.0.7",
+    "@adonisjs/drive": "^1.0.4",
     "@adonisjs/fold": "^4.0.9",
     "@adonisjs/framework": "^5.0.9",
     "@adonisjs/ignitor": "^2.0.8",
@@ -44,6 +45,7 @@
     "mysql2": "^1.6.4",
     "popper.js": "^1.14.6",
     "sqlite3": "^4.0.6",
+    "tesseract.js": "^1.0.14",
     "vue": "^2.5.22"
   },
   "devDependencies": {
