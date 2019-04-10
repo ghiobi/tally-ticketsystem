@@ -26,7 +26,7 @@ class NewExpenseController {
     })
   }
 
-  async scanReceipt({ view, request, response, auth }) {
+  async scanReceipt({ view, request, auth }) {
     const businessPurposes = await ExpenseBusinessPurpose.all()
     const categories = await LineItemCategory.all()
     const regions = await LineItemRegion.all()

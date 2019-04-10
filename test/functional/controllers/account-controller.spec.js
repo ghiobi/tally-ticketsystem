@@ -1,8 +1,6 @@
 'use strict'
 
-const { test, trait, before, beforeEach } = use('Test/Suite')(
-  'Account Controller'
-)
+const { test, trait, before, beforeEach } = use('Test/Suite')('Account Controller')
 const { OrganizationFactory, UserFactory } = models
 const AccountController = use('App/Controllers/Http/Account/AccountController')
 const sinon = require('sinon')
@@ -70,9 +68,7 @@ test('Make sure password is validated before saving', async ({ assert }) => {
   assert.isTrue(handle.response.redirect.called)
 })
 
-test('Make sure password and confirm password are the same before saving', async ({
-  assert
-}) => {
+test('Make sure password and confirm password are the same before saving', async ({ assert }) => {
   handle.request = {
     post: sinon.fake.returns({
       newPassword: 'testing2',

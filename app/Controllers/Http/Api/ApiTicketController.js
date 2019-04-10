@@ -23,7 +23,9 @@ class ApiTicketController {
    * Returns all tickets created by a user.
    */
   async userTickets({ response, params }) {
-    const user = await User.find(params.user_id)
+    const user = await User.query()
+      .where('external_id', params.user_id)
+      .first()
 
     return response.json(await user.tickets().fetch())
   }
@@ -41,11 +43,7 @@ class ApiTicketController {
 
     if (!user) {
       const client = Client.create()
-      user = SlackService.findOrCreateUser(
-        client,
-        request.organization,
-        user_id
-      )
+      user = SlackService.findOrCreateUser(client, request.organization, user_id)
     }
 
     const ticket = await Ticket.create({
