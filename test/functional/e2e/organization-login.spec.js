@@ -94,6 +94,6 @@ test('Login in with an admin account should lead to the dashboard page', async (
     .type('#form__password', 'adminpassword')
     .click('#sign-in-btn')
     .waitFor(500)
-    .assertPath('/organization/' + organization.slug + '/admin')
+    .assertPath('/organization/' + organization.slug + '/admin/tickets')
     .assertHas('Manage submitted tickets right here')
 }).timeout(60000)

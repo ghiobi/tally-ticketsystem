@@ -2,7 +2,7 @@
    Will need the corresponding modal for each button 
 --}}
 <div class="mb-2 m">
-  <small>Page: {{ expenses.page }}</small>
+  <small>Page: {{ expenses.page ?   expenses.page  : 1 }}</small>
 </div>
 <table class="table">
   <thead>

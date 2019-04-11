@@ -25,13 +25,16 @@
               <li>{{ organization.name }}</li>
               @if(hasRole && hasRole('admin'))
               <li class="dropdown">
-                <a href="{{ organizationRoute }}/admin">Admin</a>
+                <a href="{{ organizationRoute }}/admin/tickets">Admin</a>
                 <ul class="dropdown-menu dropdown-menu-right">
                   <li>
-                    <a href="{{ organizationRoute }}/admin">Admin Control Panel</a>
+                    <a href="{{ organizationRoute }}/admin/tickets">Tickets</a>
                   </li>
                   <li>
                       <a href="{{ organizationRoute }}/admin/users">Users</a>
+                  </li>
+                  <li>
+                      <a href="{{ organizationRoute }}/admin/expenses">Expenses</a>
                   </li>
                   <li>
                     <a href="{{ organizationRoute }}/admin/token">API Token</a>

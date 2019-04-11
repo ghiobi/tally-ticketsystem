@@ -61,13 +61,23 @@ class DemoSeeder {
     await admin.setRole('admin')
 
     /**
+     * Seed some expense business purposes
+     */
+    const purposes = ['Conference', 'General', 'Relocation', 'Team Building Events']
+
+    for (const purpose in purposes) {
+      await ExpenseBusinessPurposeFactory.create({ name: purposes[purpose] })
+    }
+
+    /**
       Seed some expenses
      */
+
     for (let i = 0; i < 50; i++) {
       const expense = await ExpenseFactory.create({
         title: chance.string({ length: 10 }),
-        business_purpose: chance.string({ length: 10 }),
-        user_id: 1
+        business_purpose: purposes[chance.integer({ min: 0, max: 3 })],
+        user_id: chance.integer({ min: 1, max: 20 })
       })
       for (let j = 0; j < chance.integer({ min: 0, max: 10 }); j++) {
         await ExpenseLineItemFactory.create({
@@ -86,12 +96,8 @@ class DemoSeeder {
     /**
       Seed more users
      */
-    await UserFactory.create({
-      email: 'user@tally.com',
-      name: 'User',
-      password: 'password'
-    })
-    await UserFactory.createMany(13)
+    await UserFactory.create({ email: 'user@tally.com', name: 'User', password: 'password' })
+    await UserFactory.createMany(20)
 
     /**
       Seed some tickets
@@ -114,27 +120,13 @@ class DemoSeeder {
      Seed some Messages
      */
     for (const ticket of tickets) {
-      await MessageFactory.create({
-        ticket_id: ticket.id,
-        user_id: ticket.user_id
-      })
+      await MessageFactory.create({ ticket_id: ticket.id, user_id: ticket.user_id })
       for (let i = 0; i < chance.integer({ min: 0, max: 4 }); i++) {
         await MessageFactory.create({
           ticket_id: ticket.id,
           user_id: chance.bool() ? ticket.user_id : owner.id
         })
       }
-    }
-
-    /**
-     * Seed some expense business purposes
-     */
-    const purposes = ['Conference', 'General', 'Relocation', 'Team Building Events']
-
-    for (const purpose in purposes) {
-      await ExpenseBusinessPurposeFactory.create({
-        name: purposes[purpose]
-      })
     }
 
     /**
@@ -170,9 +162,7 @@ class DemoSeeder {
     ]
 
     for (const category in categories) {
-      await LineItemCategoryFactory.create({
-        name: categories[category]
-      })
+      await LineItemCategoryFactory.create({ name: categories[category] })
     }
 
     /**
@@ -180,10 +170,7 @@ class DemoSeeder {
      */
     const regions = { 'CAD-QC': 'Quebec', CAD: 'Canada (outside Quebec)', US: 'United States', Other: 'Other' }
     for (const region in regions) {
-      await LineItemRegionFactory.create({
-        name: region,
-        display: regions[region]
-      })
+      await LineItemRegionFactory.create({ name: region, display: regions[region] })
     }
   }
 

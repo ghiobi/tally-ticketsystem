@@ -303,7 +303,7 @@ test('Admin clicking on "Cancel" should lead back to the user ticket dashboard',
     .waitForElement('#form__title')
     .waitForElement('#form__body')
     .click('#ticketCancel')
-    .assertPath('/organization/' + organization.slug + '/admin')
+    .assertPath('/organization/' + organization.slug + '/admin/tickets')
 }).timeout(30000)
 
 test('Admin correctly filling the fields and clicking "Submit" should be directed to dashboard', async ({

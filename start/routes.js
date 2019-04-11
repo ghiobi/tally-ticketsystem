@@ -66,14 +66,19 @@ Route.group(() => {
  * Authenticated Organization Routes on Admin
  */
 Route.group(() => {
-  Route.get('/', 'Admin/DashboardController.index')
+  Route.get('/', ({ response }) => {
+    response.redirect('admin/tickets')
+  })
+  Route.get('/tickets', 'Admin/DashboardController.index')
 
   Route.get('/token', 'Admin/ApiTokenController.index')
   Route.post('/token', 'Admin/ApiTokenController.generate')
 
   Route.get('/users', 'Admin/UsersController.index')
-  Route.post('/users/addAdmin', 'Admin/ManageAdminsController.addAdmin').middleware(['IsAdmin'])
+  Route.post('/users/addAdmin', 'Admin/ManageAdminsController.addAdmin')
   Route.post('/users/removeAdmin', 'Admin/ManageAdminsController.removeAdmin').middleware(['IsOwner'])
+
+  Route.get('/expenses', 'Admin/ExpensesController.index')
 })
   .prefix('organization/:organization/admin')
   .middleware(['organization', 'auth', 'within', 'IsAdmin'])

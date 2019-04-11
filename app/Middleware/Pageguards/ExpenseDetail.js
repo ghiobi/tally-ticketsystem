@@ -13,7 +13,8 @@ class ExpenseDetail {
     if (!expense) {
       throw new HttpException(null, 404)
     }
-    if (auth.user.id !== expense.toJSON().user.id) {
+
+    if (!(await auth.user.hasRole('admin')) && auth.user.id !== expense.toJSON().user.id) {
       throw new ForbiddenException()
     }
 
