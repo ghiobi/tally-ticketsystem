@@ -1,5 +1,6 @@
 'use strict'
 
+const logger = use('App/Logger')
 const EmailService = use('App/Services/EmailService')
 const ExportService = use('App/Services/ExpenseExportService')
 const User = use('App/Models/User')
@@ -26,16 +27,20 @@ class TicketController {
       return response.redirect('back')
     }
 
-    const reply = request.input('reply')
-    if (!reply) {
-      return response.redirect('back')
-    }
+    try {
+      const reply = request.input('reply')
+      if (!reply) {
+        return response.redirect('back')
+      }
 
-    await Message.create({
-      user_id: auth.user.id,
-      ticket_id: ticket.id,
-      body: reply
-    })
+      await Message.create({
+        user_id: auth.user.id,
+        ticket_id: ticket.id,
+        body: reply
+      })
+    } catch (err) {
+      logger.error(`Unable to submit reply for ticket: ${ticket}. \n${err}`)
+    }
 
     if (await auth.user.hasRole('admin')) {
       // Set status to replied
@@ -58,20 +63,32 @@ class TicketController {
       return response.redirect('back')
     }
 
-    await ticket.updateStatus('closed')
+    try {
+      await ticket.updateStatus('closed')
+    } catch (err) {
+      logger.error(`Unable to resolve ticket: ${ticket}. \n${err}`)
+    }
 
-    const reply = request.input('reply')
-    if (reply) {
-      await Message.create({
-        user_id: auth.user.id,
-        ticket_id: ticket.id,
-        body: reply
-      })
+    try {
+      const reply = request.input('reply')
+      if (reply) {
+        await Message.create({
+          user_id: auth.user.id,
+          ticket_id: ticket.id,
+          body: reply
+        })
+      }
+    } catch (err) {
+      logger.error(`Unable to submit reply for ticket: ${ticket}. \n${err}`)
     }
 
     // Notify ticket owner
     if (await auth.user.hasRole('admin')) {
-      EmailService.sendReplyNotification(ticket).then()
+      try {
+        EmailService.sendReplyNotification(ticket).then()
+      } catch (err) {
+        logger.error(`Unable to send reply notification to admin for ticket: ${ticket}. \n${err}`)
+      }
     }
 
     return response.redirect('back')
@@ -84,11 +101,19 @@ class TicketController {
       return response.redirect('back')
     }
 
-    await ticket.updateStatus('replied')
+    try {
+      await ticket.updateStatus('replied')
+    } catch (err) {
+      logger.error(`Unable to update status of ticket: ${ticket}. \n${err}`)
+    }
 
     // Notify ticket owner
     if (await auth.user.hasRole('admin')) {
-      EmailService.sendReplyNotification(ticket).then()
+      try {
+        EmailService.sendReplyNotification(ticket).then()
+      } catch (err) {
+        logger.error(`Unable to send reply notifications of ticket: ${ticket}. \n${err}`)
+      }
     }
 
     return response.redirect('back')
@@ -103,10 +128,14 @@ class TicketController {
       return response.redirect('back')
     }
 
-    if (user) {
-      await ticket.assignedTo().associate(user)
-    } else {
-      await ticket.assignedTo().dissociate()
+    try {
+      if (user) {
+        await ticket.assignedTo().associate(user)
+      } else {
+        await ticket.assignedTo().dissociate()
+      }
+    } catch (err) {
+      logger.error(`Unable to assign ticket: ${ticket}. \n${err}`)
     }
 
     return response.redirect('back')

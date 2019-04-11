@@ -2,6 +2,7 @@
 const moment = require('moment')
 
 const path = require('path')
+const fs = require('fs')
 const { promisify } = require('util')
 
 const { ServiceProvider } = require('@adonisjs/fold')
@@ -10,6 +11,13 @@ const { ServiceProvider } = require('@adonisjs/fold')
  * Registers all app related services in App/Services
  */
 class AppServiceProvider extends ServiceProvider {
+  boot() {
+    const logsDir = path.join(__dirname, '../logs')
+
+    if (!fs.existsSync(logsDir)) {
+      fs.mkdirSync(logsDir)
+    }
+  }
   /**
    * Register namespaces to the IoC container
    *

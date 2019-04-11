@@ -1,5 +1,6 @@
 'use strict'
 
+const logger = use('App/Logger')
 const Expense = use('App/Models/Expense')
 const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
@@ -29,11 +30,16 @@ class ExpenseController {
   }
 
   async viewExpense({ view, params }) {
-    const expense = await Expense.query()
-      .where('id', params.expense_id)
-      .with('user')
-      .with('expenseLineItems')
-      .first()
+    let expense = ''
+    try {
+      expense = await Expense.query()
+        .where('id', params.expense_id)
+        .with('user')
+        .with('expenseLineItems')
+        .first()
+    } catch (err) {
+      logger.error(`Unable to load expense: ${params.expense_id}. \n${err}`)
+    }
 
     return view.render('expense.expense', { expense: expense.toJSON() })
   }
@@ -49,7 +55,11 @@ class ExpenseController {
     if (auth.user.id !== expense.user_id) {
       throw new ForbiddenException()
     }
-    await expense.delete()
+    try {
+      await expense.delete()
+    } catch (err) {
+      logger.error(`Unable to delete expense: ${expense_id}. \n${err}`)
+    }
     return response.redirect('back')
   }
 }

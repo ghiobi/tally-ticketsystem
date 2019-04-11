@@ -1,4 +1,7 @@
 'use strict'
+
+const logger = use('App/Logger')
+
 /** @type {import('@adonisjs/framework/src/Hash')} */
 const { validateAll } = use('Validator')
 
@@ -27,7 +30,12 @@ class AccountController {
     }
 
     auth.user.password = newPassword
-    await auth.user.save()
+    try {
+      await auth.user.save()
+    } catch (err) {
+      logger.error(`Unable to save new user password for user: ${auth.user}. \n${err}`)
+    }
+
     session.flash({ success: 'Passwords was successfully changed' })
     return response.redirect('back')
   }

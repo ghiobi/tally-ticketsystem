@@ -1,6 +1,9 @@
 'use strict'
 
 const path = require('path')
+const Logger = use('App/Logger')
+
+Logger.info('========== Starting the application ==========')
 
 /*
 |--------------------------------------------------------------------------
