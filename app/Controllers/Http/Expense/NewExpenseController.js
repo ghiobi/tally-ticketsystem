@@ -26,7 +26,7 @@ class NewExpenseController {
     })
   }
 
-  async scanReceipt({ view, request, auth }) {
+  async scanReceipt({ view, request, auth, session }) {
     const businessPurposes = await ExpenseBusinessPurpose.all()
     const categories = await LineItemCategory.all()
     const regions = await LineItemRegion.all()
@@ -55,12 +55,14 @@ class NewExpenseController {
 
     //parse
     const parsedText = await OcrService.parseImage(`/uploads/${fileName}`)
-    const receiptData = await ReceiptParserService.parse(parsedText)
+    if (parsedText) {
+      const receiptData = await ReceiptParserService.parse(parsedText)
 
-    //replace with parsed data
-    price[receiptNumber] = receiptData['total']
-    currency[receiptNumber] = receiptData['currency']
-    region[receiptNumber] = receiptData['region']
+      //replace with parsed data
+      price[receiptNumber] = receiptData['total']
+      currency[receiptNumber] = receiptData['currency']
+      region[receiptNumber] = receiptData['region']
+    }
 
     //set the fields that were already filled
     const expense_in_progress = { title: title, business_purpose: business_purpose }
@@ -80,6 +82,8 @@ class NewExpenseController {
     if (await Drive.exists(`uploads/${fileName}`)) {
       await Drive.delete(`uploads/${fileName}`)
     }
+
+    session.flash({ success: 'Your receipt was parsed.' })
 
     return view.render('expense.new-expense', {
       businessPurposes: businessPurposes.toJSON(),

@@ -32,12 +32,10 @@ class ReceiptParserService {
       CAN: 'CAD',
       US: 'USD'
     }
-
     let currency = this.currency(receipt_text)
     let region = this.region(receipt_text)
-
-    if (currency !== null && region !== null && location_map(currency) !== region) {
-      currency = currency_map(region)
+    if (currency !== null && region !== null && location_map[currency] !== region) {
+      currency = location_map[region]
     } else if (currency !== null && region === null) {
       region = currency_map[currency]
     } else if (currency === null && region !== null) {

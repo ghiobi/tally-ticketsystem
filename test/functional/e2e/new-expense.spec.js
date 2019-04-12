@@ -3,7 +3,7 @@
 const { test, trait, before } = use('Test/Suite')('Submit Expense Integration Test')
 
 const { OrganizationFactory, UserFactory } = models
-
+const Helpers = use('Helpers')
 const actions = require('./actions.js')
 
 trait('Test/Browser', {
@@ -76,4 +76,14 @@ test('All the fields must be filled to submit', async ({ browser }) => {
     .click('#submit-expense-btn')
     .waitFor(1000)
     .assertPath(`/organization/${organization.slug}/newexpense`)
+}).timeout(60000)
+
+test('Users can upload an image to be parsed', async ({ browser }) => {
+  await await actions.login(browser, organization.slug, user.email, 'userpassword')
+  const page = await browser.visit(`/organization/${organization.slug}/newexpense`)
+  await page.attach('input[type="file"]', [`${Helpers.appRoot()}/test/assets/testImage.jpg`])
+  await page
+    .waitFor(10000)
+    .assertPath(`/organization/${organization.slug}/newexpense/scan`)
+    .assertHas('SUBMIT EXPENSE')
 }).timeout(60000)
