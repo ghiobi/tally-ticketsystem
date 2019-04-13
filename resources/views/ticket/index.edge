@@ -77,7 +77,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Export Ticket</h5>
+          <h5 class="modal-title">Export Ticket</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -88,10 +88,15 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Export as PDF</button>
-          <button type="button" class="btn btn-primary">Export as CSV</button>
-          <button type="button" class="btn btn-primary">Export as JSON</button>
+          <button type="button" id="downloadPDF" class="btn btn-primary" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
+            Export as PDF
+          </button>
+          <button type="button" id="downloadCSV" class="btn btn-primary" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
+            Export as CSV
+          </button>
+          <button type="button" id="downloadJSON" class="btn btn-primary" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
+            Export as JSON
+          </button>
         </div>
       </div>
     </div>

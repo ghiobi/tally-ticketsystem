@@ -17,6 +17,45 @@ $(() => {
     )
   })
 
+  $('[data-submit-post]').on('click', function() {
+    const url = $(this).data('submit-post')
+    $.post(url, { _csrf: CSRF_TOKEN }, () => {
+      location.reload()
+    })
+  })
+
+  $('#downloadPDF').on('click', function() {
+    const url = $(this).data('submit-post')
+    const type = 'PDF'
+    downloadExpense(url, type)
+  })
+
+  $('#downloadCSV').on('click', function() {
+    const url = $(this).data('submit-post')
+    const type = 'CSV'
+    downloadExpense(url, type)
+  })
+
+  $('#downloadJSON').on('click', function() {
+    const url = $(this).data('submit-post')
+    const type = 'JSON'
+    downloadExpense(url, type)
+  })
+
+  function downloadExpense(url, type) {
+    console.log('foo')
+    $.post(
+      url,
+      {
+        _csrf: CSRF_TOKEN,
+        type: type
+      },
+      () => {
+        $('#downloadModal').modal('hide')
+      }
+    )
+  }
+
   function calculateReceiptIndices() {
     $('.receipt_details').each(function(index) {
       $(this).attr('id', 'receipt_details_' + index)

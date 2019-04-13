@@ -1,7 +1,7 @@
 'use strict'
 
 const EmailService = use('App/Services/EmailService')
-const ExportService = use('App/Services/ExpenseExportService')
+// const ExportService = use('App/Services/ExpenseExportService')
 const User = use('App/Models/User')
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
@@ -111,16 +111,16 @@ class TicketController {
     return response.redirect('back')
   }
 
-  async download({ request, response, params }) {
+  async download({ request, response, params, session }) {
     const ticket = await Ticket.find(params.ticket_id)
 
-    const user = await User.find(request.input('user_id'))
+    const requestType = request.input('type')
 
-    if (user && user.organization_id !== request.organization.id) {
-      return response.redirect('back')
+    console.log(requestType)
+
+    if (!requestType || !['PDF', 'CSV', 'JSON'].includes(requestType)) {
+      session.flash({ fail: 'Invalid Input' })
     }
-
-    return response.redirect('back')
   }
 }
 
