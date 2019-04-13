@@ -31,10 +31,7 @@ Cypress.Commands.add('userLogin', (email, password, slug) => {
   cy.get('#form__email').type(email)
   cy.get('#form__password').type(password)
   cy.get('button[id=sign-in-btn]').click()
-  cy.location('pathname').should(
-    'be',
-    'http://localhost:3333/organization/' + slug
-  )
+  cy.location('pathname').should('be', 'http://localhost:3333/organization/' + slug)
 })
 
 Cypress.Commands.add('adminLogin', (email, password, slug) => {
@@ -42,8 +39,5 @@ Cypress.Commands.add('adminLogin', (email, password, slug) => {
   cy.get('#form__email').type(email)
   cy.get('#form__password').type(password)
   cy.get('button[id=sign-in-btn]').click()
-  cy.location('pathname').should(
-    'be',
-    'http://localhost:3333/organization/' + slug + '/admin'
-  )
+  cy.location('pathname').should('be', 'http://localhost:3333/organization/' + slug + '/admin')
 })
