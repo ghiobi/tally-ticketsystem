@@ -58,6 +58,7 @@ Route.group(() => {
   Route.post('/ticket/:ticket_id/resolve', 'Ticket/TicketController.resolve').middleware('ticketGuard')
   Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen').middleware('ticketGuard')
   Route.post('/ticket/:ticket_id/assign', 'Ticket/TicketController.assign').middleware('IsAdmin')
+  Route.post('/ticket/:ticket_id/download', 'Ticket/TicketController.download').middleware('ticketGuard')
 })
   .prefix('organization/:organization')
   .middleware(['organization', 'auth', 'within'])

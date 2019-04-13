@@ -1,6 +1,7 @@
 'use strict'
 
 const EmailService = use('App/Services/EmailService')
+const ExportService = use('App/Services/ExpenseExportService')
 const User = use('App/Models/User')
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
@@ -105,6 +106,18 @@ class TicketController {
       await ticket.assignedTo().associate(user)
     } else {
       await ticket.assignedTo().dissociate()
+    }
+
+    return response.redirect('back')
+  }
+
+  async download({ request, response, params }) {
+    const ticket = await Ticket.find(params.ticket_id)
+
+    const user = await User.find(request.input('user_id'))
+
+    if (user && user.organization_id !== request.organization.id) {
+      return response.redirect('back')
     }
 
     return response.redirect('back')

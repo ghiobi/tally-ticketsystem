@@ -66,8 +66,36 @@
         </div>
       </form>
     @endif
+    
+    <button class="btn btn-success h-100" type="submit" data-toggle="modal" data-target="#downloadModal">Export Ticket</button>
+
   </div>
 </section>
+
+  <!-- Modal -->
+  <div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="export" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Export Ticket</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          Export the following expense as a PDF, PDF, or JSON object.
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Export as PDF</button>
+          <button type="button" class="btn btn-primary">Export as CSV</button>
+          <button type="button" class="btn btn-primary">Export as JSON</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 @include('partials.footer')
 @endsection
