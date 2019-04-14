@@ -42,3 +42,10 @@ $logo-height: 40px;
     background: url('/images/pattern/pattern1.png');
   }
 }
+
+#chatButton {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 99;
+}

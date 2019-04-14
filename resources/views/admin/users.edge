@@ -89,6 +89,7 @@
   </section>
   @!component('partials.modal.modal', config = { id : 'makeAdminModal', confirmation_route:organizationRoute+'/admin/users/addAdmin', body:'Are you sure you wish to make this user admin?', method:'post' }, csrfField = csrfField)
   @!component('partials.modal.modal', config = { id : 'removeAdminModal', confirmation_route:organizationRoute+'/admin/users/removeAdmin', body:'Are you sure you wish to remove this admin?', method:'post' }, csrfField = csrfField)
+  @include('partials.chat.chat')
   @include('partials.footer')
 @endsection
             
