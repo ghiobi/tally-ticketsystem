@@ -1,5 +1,5 @@
 <div id="chatButton">
-    <button type="button" class="btn" data-toggle="modal" data-target="#chatModal">
+    <button type="button" class="btn" data-toggle="modal" data-target="#chatModal" onclick="connect()">
         Contact Us!
     </button>
 </div>
@@ -11,15 +11,61 @@
           <h5 class="modal-title">Contact Us!</h5>
       </div>
       <div class="modal-body">
-          Chat box here
+          <div class="messages"></div>
+          <input type="text" id="message"/>
       </div>
       <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <form action="" id="modalForm-chatModal" method="POST">
-            {{ csrfField() }}
-            
-          </form>
       </div>
     </div>
   </div>
 </div>
+
+{{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
+{{ script('https://unpkg.com/@adonisjs/websocket-client@1.0.9/dist/Ws.browser.js') }}
+
+<script>
+    var ws = null
+
+    function connect(){
+         startChat()
+    }
+
+
+    function startChat () {
+        ws = adonis.Ws().connect()
+        
+        ws.on('open', () => {
+            $('.connection-status').addClass('connected')
+            subscribeToChannel()
+        })
+
+        ws.on('error', () => {
+            $('.connection-status').removeClass('connected')
+        })
+    }
+
+     function subscribeToChannel () {
+        const chat = ws.subscribe('chat')
+        chat.on('error', () => {
+            $('.connection-status').removeClass('connected')
+        })
+
+        chat.on('message', (message) => {
+                $('.messages').append('<div class="message"><h3>' +message.username+'</h3> <p>'+message.body+' </p> </div>')
+        })
+     }
+     $('#message').keyup(function (e) {
+        if (e.which === 13) {
+            e.preventDefault()
+
+            const message = $(this).val()
+            $(this).val('')
+            ws.getSubscription('chat').emit('message', {
+                username: '{{auth.user.name}}',
+                body: message
+            })
+            return
+        }
+    })
+</script>
