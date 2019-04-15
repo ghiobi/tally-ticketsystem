@@ -1,10 +1,11 @@
 'use strict'
 
 const EmailService = use('App/Services/EmailService')
-// const ExportService = use('App/Services/ExpenseExportService')
+const ExportService = use('App/Services/ExpenseExportService')
 const User = use('App/Models/User')
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
+const Helpers = use('Helpers')
 
 class TicketController {
   async index({ view, params }) {
@@ -112,14 +113,29 @@ class TicketController {
   }
 
   async download({ request, response, params, session }) {
-    const ticket = await Ticket.find(params.ticket_id)
+    const ticket = await Ticket.query()
+      .where('id', params.ticket_id)
+      .with('assignedTo') // returns messages linked to this ticket
+      .with('messages.user') // returns messages linked to this ticket
+      .with('user') // returns who submited the ticket
+      .first()
 
     const requestType = request.input('type')
 
-    console.log(requestType)
-
     if (!requestType || !['PDF', 'CSV', 'JSON'].includes(requestType)) {
       session.flash({ fail: 'Invalid Input' })
+    } else {
+      let exportFile
+      if (requestType == 'PDF') {
+        exportFile = await ExportService.exportPDF(ticket)
+      } else if (requestType == 'CSV') {
+        exportFile = await ExportService.exportCSV(ticket)
+      } else {
+        exportFile = await ExportService.exportJSON(ticket)
+      }
+      console.log(exportFile)
+
+      response.attachment(Helpers.tmpPath(exportFile))
     }
   }
 }

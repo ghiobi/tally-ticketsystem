@@ -88,13 +88,13 @@
         </div>
 
         <div class="modal-footer">
-          <button type="button" id="downloadPDF" class="btn btn-primary" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
+          <button type="button" id="downloadPDF" class="btn btn-primary" data-route="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
             Export as PDF
           </button>
-          <button type="button" id="downloadCSV" class="btn btn-primary" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
+          <button type="button" id="downloadCSV" class="btn btn-primary" data-route="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
             Export as CSV
           </button>
-          <button type="button" id="downloadJSON" class="btn btn-primary" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
+          <button type="button" id="downloadJSON" class="btn btn-primary" data-route="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
             Export as JSON
           </button>
         </div>

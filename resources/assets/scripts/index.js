@@ -25,35 +25,35 @@ $(() => {
   })
 
   $('#downloadPDF').on('click', function() {
-    const url = $(this).data('submit-post')
+    const url = $(this).data('route')
     const type = 'PDF'
     downloadExpense(url, type)
   })
 
   $('#downloadCSV').on('click', function() {
-    const url = $(this).data('submit-post')
+    const url = $(this).data('route')
     const type = 'CSV'
     downloadExpense(url, type)
   })
 
   $('#downloadJSON').on('click', function() {
-    const url = $(this).data('submit-post')
+    const url = $(this).data('route')
     const type = 'JSON'
     downloadExpense(url, type)
   })
 
   function downloadExpense(url, type) {
-    console.log('foo')
-    $.post(
-      url,
-      {
+    $.ajax({
+      url: url,
+      type: 'post',
+      data: {
         _csrf: CSRF_TOKEN,
         type: type
       },
-      () => {
-        $('#downloadModal').modal('hide')
+      success: function(response) {
+        console.log(response)
       }
-    )
+    })
   }
 
   function calculateReceiptIndices() {
