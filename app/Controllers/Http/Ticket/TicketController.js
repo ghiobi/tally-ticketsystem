@@ -122,7 +122,7 @@ class TicketController {
 
     const requestType = request.input('type')
 
-    if (!requestType || !['PDF', 'CSV', 'JSON'].includes(requestType)) {
+    if (!requestType || !['PDF', 'CSV', 'JSON', 'YAML'].includes(requestType)) {
       session.flash({ fail: 'Invalid Input' })
     } else {
       let exportFile
@@ -130,10 +130,11 @@ class TicketController {
         exportFile = await ExportService.exportPDF(ticket)
       } else if (requestType == 'CSV') {
         exportFile = await ExportService.exportCSV(ticket)
-      } else {
+      } else if (requestType == 'JSON') {
         exportFile = await ExportService.exportJSON(ticket)
+      } else {
+        exportFile = await ExportService.exportYAML(ticket)
       }
-      console.log(exportFile)
 
       response.attachment(Helpers.tmpPath(exportFile))
     }

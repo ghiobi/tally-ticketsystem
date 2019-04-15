@@ -42,18 +42,43 @@ $(() => {
     downloadExpense(url, type)
   })
 
+  $('#downloadYAML').on('click', function() {
+    const url = $(this).data('route')
+    const type = 'YAML'
+    downloadExpense(url, type)
+  })
+
   function downloadExpense(url, type) {
-    $.ajax({
-      url: url,
-      type: 'post',
-      data: {
-        _csrf: CSRF_TOKEN,
-        type: type
-      },
-      success: function(response) {
-        console.log(response)
-      }
-    })
+    let downloadForm = jQuery('<form>', {
+      action: url,
+      method: 'post'
+    }).append(
+      jQuery('<input>', {
+        type: 'hidden',
+        name: '_csrf',
+        value: CSRF_TOKEN
+      }).append(
+        jQuery('<input>', {
+          type: 'hidden',
+          name: 'type',
+          value: type
+        })
+      )
+    )
+
+    $(document.body).append(downloadForm)
+    downloadForm.submit()
+    // $.ajax({
+    //   url: url,
+    //   type: 'post',
+    //   data: {
+    //     _csrf: CSRF_TOKEN,
+    //     type: type
+    //   },
+    //   success: function(response) {
+    //     console.log(response)
+    //   }
+    // })
   }
 
   function calculateReceiptIndices() {

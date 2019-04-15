@@ -1,13 +1,24 @@
 const json2csv = use('json2csv')
 const Drive = use('Drive')
+const yaml = require('js-yaml')
 
 class ExpenseExportService {
   async exportCSV(ticket) {
-    return 'csv'
+    const filepath = 'ticket_' + ticket.id + '.csv'
+    const exists = await Drive.exists(filepath)
+    if (exists) {
+      return filepath
+    } else {
+    }
   }
 
   async exportPDF(ticket) {
-    return 'pdf'
+    const filepath = 'ticket_' + ticket.id + '.pdf'
+    const exists = await Drive.exists(filepath)
+    if (exists) {
+      return filepath
+    } else {
+    }
   }
 
   async exportJSON(ticket) {
@@ -16,7 +27,18 @@ class ExpenseExportService {
     if (exists) {
       return filepath
     } else {
-      await Drive.put(filepath, JSON.stringify(ticket))
+      await Drive.put(filepath, JSON.stringify(ticket, null, '\t'))
+    }
+    return filepath
+  }
+
+  async exportYAML(ticket) {
+    const filepath = 'ticket_' + ticket.id + '.yml'
+    const exists = await Drive.exists(filepath)
+    if (exists) {
+      return filepath
+    } else {
+      await Drive.put(filepath, yaml.safeDump(JSON.parse(JSON.stringify(ticket))))
     }
     return filepath
   }

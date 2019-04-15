@@ -84,18 +84,21 @@
         </div>
 
         <div class="modal-body">
-          Export the following expense as a PDF, PDF, or JSON object.
+          Export the following expense as a PDF, PDF, JSON, YAML object.
         </div>
 
         <div class="modal-footer">
           <button type="button" id="downloadPDF" class="btn btn-primary" data-route="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
-            Export as PDF
+            Export PDF
           </button>
           <button type="button" id="downloadCSV" class="btn btn-primary" data-route="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
-            Export as CSV
+            Export CSV
           </button>
           <button type="button" id="downloadJSON" class="btn btn-primary" data-route="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
-            Export as JSON
+            Export JSON
+          </button>
+          <button type="button" id="downloadYAML" class="btn btn-primary" data-route="{{ organizationRoute }}/ticket/{{ ticket.id }}/download">
+            Export YAML
           </button>
         </div>
       </div>
