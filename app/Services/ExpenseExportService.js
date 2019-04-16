@@ -1,9 +1,7 @@
-const json2csv = use('json2csv')
 const Drive = use('Drive')
 const yaml = require('js-yaml')
 const PDFDocument = require('pdfkit')
-const fs = require('fs')
-
+const createCsvWriter = require('csv-writer').createObjectCsvStringifier
 class ExpenseExportService {
   async exportCSV(ticket) {
     const filepath = 'ticket_' + ticket.id + '.csv'
@@ -11,6 +9,41 @@ class ExpenseExportService {
     if (exists) {
       return filepath
     } else {
+      ticket = ticket.toJSON()
+
+      const csvWriter = createCsvWriter({
+        header: [
+          { id: 'title', title: 'Title' },
+          { id: 'user_id', title: 'User ID' },
+          { id: 'status', title: 'Status' },
+          { id: 'assigned', title: 'Assigned to' },
+          { id: 'created', title: 'Created' },
+          { id: 'updated', title: 'Updated' },
+          { id: 'message', title: 'Message' },
+          { id: 'message_user', title: 'Message User' },
+          { id: 'message_date', title: 'Message Date' }
+        ]
+      })
+
+      let records = []
+      ticket.messages.forEach(function(message) {
+        records.push({
+          title: ticket.title,
+          user_id: ticket.user_id,
+          status: ticket.status,
+          assigned: ticket.assigned_to,
+          created: ticket.created_at,
+          updated: ticket.updated_at,
+          message: message.body,
+          message_user: message.user.name,
+          message_date: message.created_at
+        })
+      })
+
+      const csv_output = csvWriter.getHeaderString() + csvWriter.stringifyRecords(records)
+      await Drive.put(filepath, csv_output)
+
+      return filepath
     }
   }
 
