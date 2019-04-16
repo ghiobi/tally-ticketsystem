@@ -137,6 +137,8 @@ class TicketController {
       }
 
       response.attachment(Helpers.tmpPath(exportFile))
+
+      await ExportService.deleteExport(exportFile)
     }
   }
 }
