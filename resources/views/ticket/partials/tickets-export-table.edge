@@ -1,0 +1,42 @@
+<table class="table table-sm">
+  <thead>
+      <th>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" id="exportSelectAll">
+          <label class="form-check-label" for="exportSelectAll">Select All</label>
+        </div>
+      </th>
+      <th>
+         Tickets
+      </th>
+      <th>
+         Created By
+      </th>
+      <th>
+         Assigned To
+      </th>
+  </thead>
+  <tbody>
+  @each(ticket in tickets)
+    <tr>
+      <td>
+        <input type="checkbox" name="ticket" value="{{ticket.id}}"><br>
+      </td>
+      <td>
+        <span class="text">{{ ticket.title }}</span>
+        @!component('partials.ticket.status', ticket = ticket)
+      </td>
+      @if(request.url() == '/organization/' + organization.slug + '/admin')
+      <td>
+        {{ ticket.user.name }}
+      </td>
+      @else
+      <td>You</td>
+      @endif
+      <td>
+        {{ ticket.assignedTo ? ticket.assignedTo.name : '' }}
+      </td>
+    </tr>
+  @endeach
+  </tbody>
+</table>

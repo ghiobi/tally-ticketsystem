@@ -52,6 +52,9 @@ Route.group(() => {
   Route.get('/ticket/create', 'Ticket/SubmitTicketController.index')
   Route.post('/ticket/create', 'Ticket/SubmitTicketController.submit').validator('StoreTicket')
 
+  Route.get('/ticket/export', 'Ticket/ExportTicketController.index')
+  Route.post('/ticket/export', 'Ticket/ExportTicketController.submit')
+
   Route.get('/ticket/:ticket_id', 'Ticket/TicketController.index').middleware('ticketGuard')
   Route.post('/ticket/:ticket_id', 'Ticket/TicketController.update').middleware('ticketGuard')
   Route.post('/ticket/:ticket_id/download', 'Ticket/TicketController.download').middleware('ticketGuard')

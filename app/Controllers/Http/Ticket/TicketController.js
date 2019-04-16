@@ -118,19 +118,20 @@ class TicketController {
       .with('assignedTo') // returns messages linked to this ticket
       .with('messages.user') // returns messages linked to this ticket
       .with('user') // returns who submited the ticket
-      .first()
+      .fetch()
 
     const requestType = request.input('type')
 
     if (!requestType || !['PDF', 'CSV', 'JSON', 'YAML'].includes(requestType)) {
-      session.flash({ fail: 'Invalid Input' })
+      session.flash({ fail: 'Invalid Export Type' })
+      response.redirect('back')
     } else {
       let exportFile
-      if (requestType == 'PDF') {
+      if (requestType === 'PDF') {
         exportFile = await ExportService.exportPDF(ticket)
-      } else if (requestType == 'CSV') {
+      } else if (requestType === 'CSV') {
         exportFile = await ExportService.exportCSV(ticket)
-      } else if (requestType == 'JSON') {
+      } else if (requestType === 'JSON') {
         exportFile = await ExportService.exportJSON(ticket)
       } else {
         exportFile = await ExportService.exportYAML(ticket)

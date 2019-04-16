@@ -1,7 +1,6 @@
 'use strict'
 
 const Helpers = use('Helpers')
-const Env = use('Env')
 
 module.exports = {
   /*
