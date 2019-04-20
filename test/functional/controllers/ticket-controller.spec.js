@@ -10,6 +10,7 @@ trait('Session/Client')
 let organization = null
 let user = null
 let ticket = null
+let ticketAdmin = null
 let admin = null
 
 before(async () => {
@@ -34,6 +35,9 @@ before(async () => {
 
   ticket = await TicketFactory.make()
   await ticket.user().associate(user)
+
+  ticketAdmin = await TicketFactory.make()
+  await ticketAdmin.user().associate(admin)
 })
 
 test('Make sure user is redirected back after submitting reply', async ({ client }) => {
@@ -168,10 +172,19 @@ test('Assert response is 500 if download type not specified', async ({ client })
   response.assertStatus(500)
 })
 
+test('Assert response is 500 if user tries to access a ticket that does not belong to him', async ({ client }) => {
+  const response = await client
+    .post(`organization/${organization.slug}/ticket/${ticketAdmin.id}/download?type=YAML`)
+    .loginVia(user)
+    .end()
+
+  response.assertStatus(403)
+})
+
 test('Make sure user downloads ticket with no redirect and returns YAML file', async ({ client, assert }) => {
   const response = await client
     .post(`organization/${organization.slug}/ticket/${ticket.id}/download?type=YAML`)
-    .loginVia(admin)
+    .loginVia(user)
     .end()
 
   // The ticket data may have been overriden by the previous tests. Therefore, get the current ticket
@@ -188,7 +201,7 @@ test('Make sure user downloads ticket with no redirect and returns YAML file', a
 test('Make sure user downloads ticket with no redirect and returns JSON file', async ({ client, assert }) => {
   const response = await client
     .post(`organization/${organization.slug}/ticket/${ticket.id}/download?type=JSON`)
-    .loginVia(admin)
+    .loginVia(user)
     .end()
 
   // The ticket data may have been overriden by the previous tests. Therefore, get the current ticket
@@ -205,7 +218,7 @@ test('Make sure user downloads ticket with no redirect and returns JSON file', a
 test('Make sure user downloads ticket with no redirect and returns CSV file', async ({ client }) => {
   const response = await client
     .post(`organization/${organization.slug}/ticket/${ticket.id}/download?type=CSV`)
-    .loginVia(admin)
+    .loginVia(user)
     .end()
 
   response.assertHeader('content-type', 'text/csv; charset=UTF-8')
@@ -215,7 +228,7 @@ test('Make sure user downloads ticket with no redirect and returns CSV file', as
 test('Make sure user downloads ticket with no redirect and returns PDF file', async ({ client }) => {
   const response = await client
     .post(`organization/${organization.slug}/ticket/${ticket.id}/download?type=PDF`)
-    .loginVia(admin)
+    .loginVia(user)
     .end()
 
   response.assertHeader('content-type', 'application/pdf')

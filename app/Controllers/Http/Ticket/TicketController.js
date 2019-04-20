@@ -112,15 +112,26 @@ class TicketController {
     return response.redirect('back')
   }
 
-  async download({ request, response, params }) {
-    const ticket = await Ticket.query()
-      .where('id', params.ticket_id)
-      .with('assignedTo') // returns messages linked to this ticket
-      .with('messages.user') // returns messages linked to this ticket
-      .with('user') // returns who submited the ticket
-      .fetch()
+  async download({ request, response, params, auth }) {
+    let ticket
+    if (await auth.user.hasRole('admin')) {
+      ticket = await Ticket.query()
+        .where('id', params.ticket_id)
+        .with('assignedTo')
+        .with('messages.user')
+        .with('user')
+        .fetch()
+    } else {
+      ticket = await Ticket.query()
+        .where('user_id', auth.user.id)
+        .where('id', params.ticket_id)
+        .with('assignedTo')
+        .with('messages.user')
+        .with('user')
+        .fetch()
+    }
 
-    if (!ticket) {
+    if (!ticket || ticket.rows.length === 0) {
       return response.status(500).send('Internal Server Error. Please try again.')
     }
     const requestType = request.input('type')
@@ -139,7 +150,7 @@ class TicketController {
         exportFile = await ExportService.exportYAML(ticket)
       }
 
-      response.attachment(Helpers.tmpPath(exportFile))
+      await response.attachment(Helpers.tmpPath(exportFile))
 
       await ExportService.deleteExport(exportFile)
     }
