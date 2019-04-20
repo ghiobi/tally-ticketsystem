@@ -49,7 +49,7 @@ test('Users can submit new expenses', async ({ browser }) => {
 }).timeout(60000)
 
 test('Users can add and remove receipts', async ({ browser }) => {
-  await await actions.login(browser, organization.slug, user.email, 'userpassword')
+  await actions.login(browser, organization.slug, user.email, 'userpassword')
 
   const page = await browser.visit(`/organization/${organization.slug}/newexpense`)
 
@@ -66,7 +66,7 @@ test('Users can add and remove receipts', async ({ browser }) => {
 }).timeout(60000)
 
 test('All the fields must be filled to submit', async ({ browser }) => {
-  await await actions.login(browser, organization.slug, user.email, 'userpassword')
+  await actions.login(browser, organization.slug, user.email, 'userpassword')
 
   const page = await browser.visit(`/organization/${organization.slug}/newexpense`)
 
@@ -79,7 +79,7 @@ test('All the fields must be filled to submit', async ({ browser }) => {
 }).timeout(60000)
 
 test('Users can upload an image to be parsed', async ({ browser }) => {
-  await await actions.login(browser, organization.slug, user.email, 'userpassword')
+  await actions.login(browser, organization.slug, user.email, 'userpassword')
   const page = await browser.visit(`/organization/${organization.slug}/newexpense`)
   await page.attach('input[type="file"]', [`${Helpers.appRoot()}/test/assets/testImage.jpg`])
   await page
