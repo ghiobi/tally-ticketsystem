@@ -101,3 +101,17 @@ Factory.blueprint('App/Models/LineItemRegion', (faker, i, data) => {
     ...data
   }
 })
+
+Factory.blueprint('App/Models/Topic', (faker, i, data) => {
+  return {
+    title: faker.sentence({ words: 5 }),
+    ...data
+  }
+})
+
+Factory.blueprint('App/Models/TopicMessage', (faker, i, data) => {
+  return {
+    body: faker.paragraph(),
+    ...data
+  }
+})

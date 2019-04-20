@@ -1,0 +1,43 @@
+<div class="mb-2 m">
+  <small>Page: {{ topics.page }}</small>
+</div>
+
+<table class="table">
+  <thead>
+      <th>
+         Topic
+      </th>
+      <th>
+         Created By
+      </th>
+      <th>
+          Created
+      </th>
+  </thead>
+  <tbody>
+  @each(topic in topics)
+    <tr>
+      <td>
+        <a href="{{ organizationRoute }}/forum/{{topic.id}}" class="d-block">
+          <span class="text">{{ topic.title }}</span>
+        </a>
+      </td>
+      <td>
+        {{ topic.user.name }}
+      </td>
+      <td>
+        {{ humanTime(topic.created_at) }}
+      </td>
+    </tr>
+  @endeach
+  </tbody>
+</table>
+
+@set('url', adminPaginateUrl ? adminPaginateUrl : '?')
+@!component('partials.components.pagination',
+  total = topic.total,
+  page = topic.page,
+  perPage = topic.perPage,
+  lastPage = topic.lastPage,
+  url = organizationRoute + url
+)

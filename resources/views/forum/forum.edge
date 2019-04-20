@@ -1,0 +1,40 @@
+@layout('layouts.index')
+
+@section('content')
+  @set('title', 'Forum')
+  @include('partials.header')
+  <!-- Page title -->
+  <section id="page-title" class="page-title-classic">
+    <div class="container d-flex justify-content-between">
+      <div class="page-title">
+        @if(searching)
+          <p class="mb-3"><small><a href="{{ organizationRoute }}"><i class="fa fa-chevron-left"></i> Back</a></small></p>
+          <h1>Results</h1>
+          <span>Here are your search results</span>
+        @else
+          <h1>Welcome To The Community Forum</h1>
+          <span>Share and converse with your community!</span>
+        @endif        
+      </div>
+      <a id="submitTopic" href="{{ organizationRoute }}/forum/create" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>Create a topic</a>
+    </div>
+  </section>
+  <!-- end: Page title -->
+
+  <section class="flex-grow-1">
+    <div class="container">
+      @if(topics.length)
+        @include('forum.partials.topic-table')
+      @else
+        <div class="row">
+          <div class="col-md-6 offset-3 text-center">
+            <p class="text-bold mb-1">There are no topics</p>
+            <a id="submitTopic" href="{{ organizationRoute }}/forum/create" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i>Create a topic</a>
+          </div>
+        </div>
+      @endif
+    </div>
+  </section>
+
+  @include('partials.footer')
+@endsection
