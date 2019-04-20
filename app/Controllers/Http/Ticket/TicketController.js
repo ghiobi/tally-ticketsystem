@@ -112,7 +112,7 @@ class TicketController {
     return response.redirect('back')
   }
 
-  async download({ request, response, params, session }) {
+  async download({ request, response, params }) {
     const ticket = await Ticket.query()
       .where('id', params.ticket_id)
       .with('assignedTo') // returns messages linked to this ticket
@@ -120,11 +120,13 @@ class TicketController {
       .with('user') // returns who submited the ticket
       .fetch()
 
+    if (!ticket) {
+      return response.status(500).send('Internal Server Error. Please try again.')
+    }
     const requestType = request.input('type')
 
     if (!requestType || !['PDF', 'CSV', 'JSON', 'YAML'].includes(requestType)) {
-      session.flash({ fail: 'Invalid Export Type' })
-      response.redirect('back')
+      return response.status(500).send('Internal Server Error. Please try again.')
     } else {
       let exportFile
       if (requestType === 'PDF') {
