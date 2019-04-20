@@ -12,6 +12,7 @@ tmp
 # Generated directories and files
 resources/views/layouts/index.edge
 /public
+/logs
 
 # Environment variables, never commit this file
 .env

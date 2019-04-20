@@ -1,7 +1,11 @@
 'use strict'
 
+const logger = use('App/Logger')
+
 /** @type {import('@adonisjs/framework/src/Server')} */
 const Server = use('Server')
+
+logger.info('Registering middlewares...')
 
 /*
 |--------------------------------------------------------------------------

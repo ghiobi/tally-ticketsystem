@@ -1,7 +1,7 @@
 'use strict'
 
+const logger = use('App/Logger')
 const currencyToSymbolMap = require('currency-symbol-map/map')
-
 const Expense = use('App/Models/Expense')
 const ExpenseLineItem = use('App/Models/ExpenseLineItem')
 const ExpenseBusinessPurpose = use('App/Models/ExpenseBusinessPurpose')
@@ -36,15 +36,26 @@ class UpdateExpenseController {
 
   async update({ request, response, auth, session, params }) {
     const { id, title, business_purpose, memo, category, currency, region, price, tax } = request.post()
-    const expense = await Expense.query()
-      .where('id', params.expense_id)
-      .with('user')
-      .with('expenseLineItems')
-      .first()
 
-    const expenseLineItems = await ExpenseLineItem.query()
-      .where('expense_id', expense.id)
-      .fetch()
+    let expense = ''
+    try {
+      expense = await Expense.query()
+        .where('id', params.expense_id)
+        .with('user')
+        .with('expenseLineItems')
+        .first()
+    } catch (err) {
+      logger.error(`Unable to get expense for expense: ${expense}. \n${err}`)
+    }
+
+    let expenseLineItems = ''
+    try {
+      expenseLineItems = await ExpenseLineItem.query()
+        .where('expense_id', expense.id)
+        .fetch()
+    } catch (err) {
+      logger.error(`Unable to get expense line items for expense: ${expense}. \n${err}`)
+    }
 
     let lineItemsDict = {}
     expenseLineItems.rows.forEach((el) => (lineItemsDict[el.id] = el))
@@ -59,11 +70,19 @@ class UpdateExpenseController {
     }
 
     if (title !== expense.title) {
-      await expense.updateTitle(title)
+      try {
+        await expense.updateTitle(title)
+      } catch (err) {
+        logger.error(`Unable to update expense title for expense: ${expense}. \n${err}`)
+      }
     }
 
     if (expense.business_purpose !== business_purpose) {
-      await expense.updateBusinessPurpose(business_purpose)
+      try {
+        await expense.updateBusinessPurpose(business_purpose)
+      } catch (err) {
+        logger.error(`Unable to update expense business purpose for expense: ${expense}. \n${err}`)
+      }
     }
 
     for (var i = 0; i < id.length; i++) {
@@ -89,15 +108,19 @@ class UpdateExpenseController {
         }
         delete lineItemsDict[id[i]]
       } else {
-        await ExpenseLineItem.create({
-          expense_id: expense.id,
-          memo: memo[i],
-          currency: currency[i],
-          category: category[i],
-          region: region[i],
-          price: price[i],
-          tax: tax[i]
-        })
+        try {
+          await ExpenseLineItem.create({
+            expense_id: expense.id,
+            memo: memo[i],
+            currency: currency[i],
+            category: category[i],
+            region: region[i],
+            price: price[i],
+            tax: tax[i]
+          })
+        } catch (err) {
+          logger.error(`Unable to create expense line item for expense: ${expense}. \n${err}`)
+        }
       }
     }
 

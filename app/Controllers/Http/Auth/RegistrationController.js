@@ -1,6 +1,7 @@
 'use strict'
-const { validateAll } = use('Validator')
 
+const logger = use('App/Logger')
+const { validateAll } = use('Validator')
 const Organization = use('App/Models/Organization')
 const User = use('App/Models/User')
 
@@ -17,8 +18,7 @@ class RegistrationController {
       request.post(),
       {
         'organization.name': 'required',
-        'organization.slug':
-          'required|regex:^([a-z0-9]+(-[a-z0-9])?)+$|unique:organizations,slug',
+        'organization.slug': 'required|regex:^([a-z0-9]+(-[a-z0-9])?)+$|unique:organizations,slug',
         'user.name': 'required',
         'user.email': 'required|email',
         'user.password': 'required|min:6'
@@ -48,7 +48,11 @@ class RegistrationController {
     userData.external_id = 'FOR_TESTING_ONLY_TO_BE_REMOVED'
     user.fill(userData)
 
-    await organization.users().save(user)
+    try {
+      await organization.users().save(user)
+    } catch (err) {
+      logger.error(`Unable to save new user: ${user}. \n${err}`)
+    }
 
     await user.setRole('owner')
     await user.setRole('admin')
