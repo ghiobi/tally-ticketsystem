@@ -108,6 +108,16 @@ class UpdateExpenseController {
     session.flash({ success: 'Your expense was updated.' })
     return response.redirect(`/organization/${request.organization.slug}/expense/${expense.id}`)
   }
+
+  async delete({ response, params }) {
+    const { expense_id } = params
+
+    const expense = await Expense.find(expense_id)
+
+    await expense.delete()
+
+    response.redirect('back')
+  }
 }
 
 module.exports = UpdateExpenseController

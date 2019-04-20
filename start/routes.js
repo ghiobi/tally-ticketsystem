@@ -42,6 +42,7 @@ Route.group(() => {
 
   Route.get('/expense/update/:expense_id', 'Expense/UpdateExpenseController.index')
   Route.post('/expense/update/:expense_id', 'Expense/UpdateExpenseController.update')
+  Route.post('/expense/delete/:expense_id', 'Expense/UpdateExpenseController.delete')
 
   Route.get('/newexpense', 'Expense/NewExpenseController.index')
   Route.post('/newexpense/submit', 'Expense/NewExpenseController.submit')
