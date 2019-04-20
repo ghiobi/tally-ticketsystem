@@ -49,9 +49,6 @@ describe('Submit Ticket Integration Test', () => {
   it('User should reach submit ticket page when clicking on "Submit a Ticket" on dashboard view', () => {
     cy.userLogin(user.email, 'userpassword', organization.slug)
     cy.contains('Submit a Ticket').click()
-    cy.location('pathname').should(
-      'be',
-      'http://localhost:3333/organization/tally/submit/ticket'
-    )
+    cy.location('pathname').should('be', 'http://localhost:3333/organization/tally/submit/ticket')
   })
 })

@@ -18,3 +18,6 @@ resources/views/layouts/index.edge
 
 # The development sqlite file
 database/*.sqlite
+
+# Tesseract data file
+eng.traineddata

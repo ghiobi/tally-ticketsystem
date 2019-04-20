@@ -45,6 +45,7 @@ Route.group(() => {
 
   Route.get('/newexpense', 'Expense/NewExpenseController.index')
   Route.post('/newexpense/submit', 'Expense/NewExpenseController.submit')
+  Route.post('/newexpense/scan', 'Expense/NewExpenseController.scanReceipt')
 
   Route.get('/account', 'Account/AccountController.index')
   Route.post('/account/password', 'Account/AccountController.password')
