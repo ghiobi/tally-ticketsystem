@@ -17,6 +17,73 @@ $(() => {
     )
   })
 
+  $('[data-submit-post]').on('click', function() {
+    const url = $(this).data('submit-post')
+    $.post(url, { _csrf: CSRF_TOKEN }, () => {
+      location.reload()
+    })
+  })
+
+  $('#exportSelectAll').on('click', function() {
+    if ($(this).is(':checked')) {
+      $('input[name=ticket]').prop('checked', true)
+    } else {
+      $('input[name=ticket]').prop('checked', false)
+    }
+  })
+
+  $('.submit-export').on('click', function() {
+    const type = $(this).data('type')
+    $('#exportTypeInput').val(type)
+    $('#exportForm').submit()
+  })
+
+  $('#downloadPDF').on('click', function() {
+    const url = $(this).data('route')
+    const type = 'PDF'
+    downloadTicket(url, type)
+  })
+
+  $('#downloadCSV').on('click', function() {
+    const url = $(this).data('route')
+    const type = 'CSV'
+    downloadTicket(url, type)
+  })
+
+  $('#downloadJSON').on('click', function() {
+    const url = $(this).data('route')
+    const type = 'JSON'
+    downloadTicket(url, type)
+  })
+
+  $('#downloadYAML').on('click', function() {
+    const url = $(this).data('route')
+    const type = 'YAML'
+    downloadTicket(url, type)
+  })
+
+  function downloadTicket(url, type) {
+    let downloadForm = $('<form>', {
+      action: url,
+      method: 'post'
+    }).append(
+      $('<input>', {
+        type: 'hidden',
+        name: '_csrf',
+        value: CSRF_TOKEN
+      }).append(
+        $('<input>', {
+          type: 'hidden',
+          name: 'type',
+          value: type
+        })
+      )
+    )
+
+    $(document.body).append(downloadForm)
+    downloadForm.submit()
+  }
+
   function calculateReceiptIndices() {
     $('.receipt_details').each(function(index) {
       $(this).attr('id', 'receipt_details_' + index)
