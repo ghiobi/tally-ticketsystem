@@ -11,23 +11,31 @@ class ApiTicketController {
    * Returns all ticket under the organization.
    */
   async organizationTickets({ response, request }) {
-    return response.json(
-      await request.organization
-        .tickets()
-        .with('user')
-        .fetch()
-    )
+    try {
+      return response.json(
+        await request.organization
+          .tickets()
+          .with('user')
+          .fetch()
+      )
+    } catch (e) {
+      return response.status(500).send('Internal Server Error. Please try again.')
+    }
   }
 
   /**
    * Returns all tickets created by a user.
    */
   async userTickets({ response, params }) {
-    const user = await User.query()
-      .where('external_id', params.user_id)
-      .first()
+    try {
+      const user = await User.query()
+        .where('external_id', params.user_id)
+        .first()
 
-    return response.json(await user.tickets().fetch())
+      return response.json(await user.tickets().fetch())
+    } catch (e) {
+      return response.status(500).send('Internal Server Error. Please try again.')
+    }
   }
 
   /**
@@ -35,43 +43,51 @@ class ApiTicketController {
    * create a user by fetching user information from Slack.
    */
   async create({ request, response }) {
-    const { user_id, title, body } = request.post()
+    try {
+      const { user_id, title, body } = request.post()
 
-    let user = await User.query()
-      .where('external_id', user_id)
-      .first()
+      let user = await User.query()
+        .where('external_id', user_id)
+        .first()
 
-    if (!user) {
-      const client = Client.create()
-      user = SlackService.findOrCreateUser(client, request.organization, user_id)
+      if (!user) {
+        const client = Client.create()
+        user = SlackService.findOrCreateUser(client, request.organization, user_id)
+      }
+
+      const ticket = await Ticket.create({
+        user_id: user.id,
+        title: title
+      })
+
+      await Message.create({
+        user_id: user.id,
+        ticket_id: ticket.id,
+        body: body
+      })
+
+      return response.status(200).send({
+        ok: true
+      })
+    } catch (e) {
+      return response.status(500).send('Internal Server Error. Please try again.')
     }
-
-    const ticket = await Ticket.create({
-      user_id: user.id,
-      title: title
-    })
-
-    await Message.create({
-      user_id: user.id,
-      ticket_id: ticket.id,
-      body: body
-    })
-
-    return response.status(200).send({
-      ok: true
-    })
   }
 
   /**
    * Get a ticket with all messages belonging to it. Messages will have the user who created the message attached to it.
    */
   async ticket({ response, params }) {
-    return response.json(
-      await Ticket.query()
-        .where('id', params.ticket_id)
-        .with('messages.user')
-        .first()
-    )
+    try {
+      return response.json(
+        await Ticket.query()
+          .where('id', params.ticket_id)
+          .with('messages.user')
+          .first()
+      )
+    } catch (e) {
+      return response.status(500).send('Internal Server Error. Please try again.')
+    }
   }
 }
 
