@@ -4,7 +4,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Organization = use('App/Models/Organization')
-const ForbiddenException = use('App/Exceptions/ForbiddenException')
+const ForbiddenExceptionApi = use('App/Exceptions/ForbiddenExceptionApi')
 
 class ApiAuth {
   /**
@@ -19,7 +19,7 @@ class ApiAuth {
       .first()
 
     if (!token || !organization.api_token || organization.api_token !== token) {
-      throw new ForbiddenException()
+      throw new ForbiddenExceptionApi()
     }
 
     await next()

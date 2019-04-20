@@ -1,12 +1,7 @@
 'use strict'
 
 const { test, trait, before } = use('Test/Suite')('Api Message Controller')
-const {
-  OrganizationFactory,
-  UserFactory,
-  TicketFactory,
-  MessageFactory
-} = models
+const { OrganizationFactory, UserFactory, TicketFactory, MessageFactory } = models
 
 trait('Test/ApiClient')
 trait('Auth/Client')
@@ -54,11 +49,7 @@ before(async () => {
 
 test('check that messages of a ticket can be retrieved', async ({ client }) => {
   const response = await client
-    .get(
-      `/organization/${organization.slug}/api/tickets/${ticket.id}?token=${
-        organization.api_token
-      }`
-    )
+    .get(`/organization/${organization.slug}/api/tickets/${ticket.id}?token=${organization.api_token}`)
     .end()
 
   response.assertStatus(200)
