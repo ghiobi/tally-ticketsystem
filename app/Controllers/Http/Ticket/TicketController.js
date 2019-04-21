@@ -145,35 +145,37 @@ class TicketController {
     return response.redirect('back')
   }
 
-  async download({ request, response, params, session }) {
-    const ticket = await Ticket.query()
-      .where('id', params.ticket_id)
-      .with('assignedTo') // returns messages linked to this ticket
-      .with('messages.user') // returns messages linked to this ticket
-      .with('user') // returns who submited the ticket
-      .fetch()
-
+  async download({ request, response, params, auth }) {
     const requestType = request.input('type')
-
     if (!requestType || !['PDF', 'CSV', 'JSON', 'YAML'].includes(requestType)) {
-      session.flash({ fail: 'Invalid Export Type' })
-      response.redirect('back')
-    } else {
-      let exportFile
-      if (requestType === 'PDF') {
-        exportFile = await ExportService.exportPDF(ticket)
-      } else if (requestType === 'CSV') {
-        exportFile = await ExportService.exportCSV(ticket)
-      } else if (requestType === 'JSON') {
-        exportFile = await ExportService.exportJSON(ticket)
-      } else {
-        exportFile = await ExportService.exportYAML(ticket)
-      }
-
-      response.attachment(Helpers.tmpPath(exportFile))
-
-      await ExportService.deleteExport(exportFile)
+      return response.status(400).send('Internal Server Error. Please try again.')
     }
+
+    let ticket
+    if (await auth.user.hasRole('admin')) {
+      ticket = await Ticket.query()
+        .where('id', params.ticket_id)
+        .with('assignedTo')
+        .with('messages.user')
+        .with('user')
+        .fetch()
+    } else {
+      ticket = await Ticket.query()
+        .where('user_id', auth.user.id)
+        .where('id', params.ticket_id)
+        .with('assignedTo')
+        .with('messages.user')
+        .with('user')
+        .fetch()
+    }
+
+    if (!ticket || ticket.rows.length === 0) {
+      return response.status(500).send('Internal Server Error. Please try again.')
+    }
+
+    const exportFile = await ExportService.export(ticket, requestType)
+    await response.attachment(Helpers.tmpPath(exportFile))
+    await ExportService.deleteExport(exportFile)
   }
 }
 
