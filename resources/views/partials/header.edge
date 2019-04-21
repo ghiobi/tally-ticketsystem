@@ -1,6 +1,6 @@
 <!-- Header -->
 <header id="header" class="{{ isHomepage ? 'header-transparent dark' : ''}}">
-  <div id="header-wrap">
+  <div id="header-wrap" class="position-fixed">
     <div class="container">
       <!--Logo-->
       <div id="logo">
@@ -15,6 +15,16 @@
         <button class="lines-button x"> <span class="lines"></span> </button>
       </div>
       <!--end: Navigation Responsive Trigger-->
+
+      @loggedIn
+      <div class="header-extras">
+        <ul>
+          <li class="d-none d-sm-block">
+            <notification-center id="notification-center"></notification-center>
+          </li>
+        </ul>
+      </div>
+      @endloggedIn
 
       <!--Navigation-->
       <div id="mainMenu" class="light">
@@ -63,6 +73,7 @@
         </div>
       </div>
       <!--end: Navigation-->
+
     </div>
   </div>
 </header>

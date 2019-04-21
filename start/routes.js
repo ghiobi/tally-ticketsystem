@@ -52,6 +52,7 @@ Route.group(() => {
 
   Route.get('/account', 'Account/AccountController.index')
   Route.post('/account/password', 'Account/AccountController.password')
+  Route.post('/account/notifications/clear', 'Account/AccountController.clearNotifications')
 
   Route.get('/ticket/create', 'Ticket/SubmitTicketController.index')
   Route.post('/ticket/create', 'Ticket/SubmitTicketController.submit').validator('StoreTicket')

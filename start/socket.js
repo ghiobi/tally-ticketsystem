@@ -15,3 +15,5 @@
 
 /* eslint-disable no-unused-vars */
 const Ws = use('Ws')
+
+Ws.channel('notifications', 'NotificationsController').middleware('auth')
