@@ -14,6 +14,7 @@ class ApiTicketController {
    */
   async organizationTickets({ response, request }) {
     try {
+      StatsD.increment('api.organization.ticket.get.success')
       return response.json(
         await request.organization
           .tickets()
@@ -32,6 +33,7 @@ class ApiTicketController {
    */
   async userTickets({ response, params }) {
     try {
+      StatsD.increment('api.user.ticket.get.all.success')
       const user = await User.query()
         .where('external_id', params.user_id)
         .first()
@@ -67,6 +69,7 @@ class ApiTicketController {
           user_id: user.id,
           title: title
         })
+        StatsD.increment('api.user.ticket.create.success')
       } catch (err) {
         StatsD.increment('api.user.ticket.create.failed')
         logger.error(`Unable to create tickets for user_id: ${user_id}. \n${err}`)
@@ -78,6 +81,7 @@ class ApiTicketController {
           ticket_id: ticket.id,
           body: body
         })
+        StatsD.increment('api.user.ticket.message.create.success')
       } catch (err) {
         StatsD.increment('api.user.ticket.message.create.failed')
         logger.error(`Unable to create new message for ticket: ${ticket} for user: ${user_id}. \n${err}`)
@@ -96,6 +100,7 @@ class ApiTicketController {
    */
   async ticket({ response, params }) {
     try {
+      StatsD.increment('api.user.ticket.get.single.success')
       return response.json(
         await Ticket.query()
           .where('id', params.ticket_id)
