@@ -11,6 +11,8 @@ const TOKEN_MODEL = MODEL_DIR + 'Token'
 const NOTIFICATION_MODEL = MODEL_DIR + 'Notification'
 const EXPENSE_MODEL = MODEL_DIR + 'Expense'
 const EXPENSE_LINE_ITEM_MODEL = MODEL_DIR + 'ExpenseLineItem'
+const TOPIC_MODEL = MODEL_DIR + 'Topic'
+const TOPIC_MESSAGE_MODEL = MODEL_DIR + 'TopicMessage'
 
 module.exports = {
   Organization: use(ORGANIZATION_MODEL),
@@ -37,5 +39,11 @@ module.exports = {
   ExpenseLineItemFactory: Factory.model(EXPENSE_LINE_ITEM_MODEL),
 
   Notification: use(NOTIFICATION_MODEL),
-  NotificationFactory: Factory.model(NOTIFICATION_MODEL)
+  NotificationFactory: Factory.model(NOTIFICATION_MODEL),
+
+  Topic: use(TOPIC_MODEL),
+  TopicFactory: Factory.model(TOPIC_MODEL),
+
+  TopicMessage: use(TOPIC_MESSAGE_MODEL),
+  TopicMessageFactory: Factory.model(TOPIC_MESSAGE_MODEL)
 }
