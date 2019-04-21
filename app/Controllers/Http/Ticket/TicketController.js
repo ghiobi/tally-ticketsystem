@@ -3,6 +3,7 @@
 const logger = use('App/Logger')
 const EmailService = use('App/Services/EmailService')
 const ExportService = use('App/Services/ExpenseExportService')
+const NewTicketMessage = use('App/Notifications/NewTicketMessage')
 const User = use('App/Models/User')
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
@@ -49,6 +50,9 @@ class TicketController {
           ticket.updateStatus('replied')
         }
         // Notify ticket owner
+        const user = await ticket.user().fetch()
+        user.notify(new NewTicketMessage(ticket))
+
         EmailService.sendReplyNotification(ticket).then()
       }
     }

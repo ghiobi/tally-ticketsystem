@@ -8,6 +8,8 @@ const Model = use('Model')
 
 const Role = use('App/Models/Role')
 
+const NoticationService = use('App/Services/NotificationService')
+
 class User extends Model {
   static boot() {
     super.boot()
@@ -115,6 +117,10 @@ class User extends Model {
       .first()
 
     await this.roles().detach([model.id])
+  }
+
+  notify(notification) {
+    NoticationService.send([this], notification)
   }
 
   notifications() {

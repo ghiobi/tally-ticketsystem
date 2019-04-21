@@ -13,6 +13,7 @@ tmp
 resources/views/layouts/index.edge
 /public
 /logs
+/.nyc_output
 
 # Environment variables, never commit this file
 .env

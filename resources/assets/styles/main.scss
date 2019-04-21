@@ -61,3 +61,13 @@ $logo-height: 40px;
   top: 50%;
   left: 50%;
 }
+
+.notification-title {
+  color: #424242;
+  font-size: 0.5rem;
+}
+.notification {
+  border-left: 3px solid var(--info);
+  margin-left: -5px;
+  padding-left: 5px;
+}
