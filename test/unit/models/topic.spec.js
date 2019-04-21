@@ -5,11 +5,9 @@ const { test, before } = use('Test/Suite')('Topic Model')
 const { UserFactory, TopicFactory, Topic } = models
 
 let user = null
-let admin = null
 
 before(async () => {
   user = await UserFactory.create()
-  admin = await UserFactory.create()
 })
 
 test('check if a topic can be inserted', async ({ assert }) => {
