@@ -1,6 +1,7 @@
 'use strict'
 
 const logger = use('App/Logger')
+const StatsD = require('../../../../config/statsd')
 
 class DashboardController {
   async index({ view, request, auth }) {
@@ -19,6 +20,7 @@ class DashboardController {
           .paginate(request.input('page', 1))
       } catch (err) {
         logger.error(`Unable to get tickets for user: ${auth.user}. \n${err}`)
+        StatsD.increment('ticket.dashboard.user.view.failed')
       }
     } else {
       try {
@@ -29,6 +31,7 @@ class DashboardController {
           .paginate(request.input('page', 1))
       } catch (err) {
         logger.error(`Unable to get tickets for user: ${auth.user}. \n${err}`)
+        StatsD.increment('ticket.dashboard.user.view.failed')
       }
     }
 

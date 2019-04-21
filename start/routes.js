@@ -68,6 +68,13 @@ Route.group(() => {
   Route.post('/ticket/:ticket_id/reopen', 'Ticket/TicketController.reopen').middleware('IsTicketOwnerOrIsAdmin')
   Route.post('/ticket/:ticket_id/assign', 'Ticket/TicketController.assign').middleware('IsAdmin')
   Route.get('/ticket/:ticket_id/rate/:rating', 'Ticket/TicketController.rate').middleware('IsTicketOwner')
+
+  Route.get('/forum', 'Forum/ForumController.index')
+  Route.get('/forum/create', 'Forum/ForumController.createpage')
+  Route.post('/forum/create', 'Forum/ForumController.create')
+
+  Route.get('/forum/:topic_id', 'Forum/ForumController.topic')
+  Route.post('/forum/:topic_id/reply', 'Forum/ForumController.topicreply')
 })
   .prefix('organization/:organization')
   .middleware(['organization', 'auth', 'within'])

@@ -1,4 +1,4 @@
-const { test, trait, before } = use('Test/Suite')('Submit page integration test')
+const { test, trait, before } = use('Test/Suite')('Ticket page integration test')
 
 const { OrganizationFactory, UserFactory, TicketFactory } = models
 
@@ -21,7 +21,7 @@ let closedTicket = null
 
 before(async () => {
   organization = await OrganizationFactory.create({
-    slug: 'submit-ticket-e2e-test'
+    slug: 'ticket-page-e2e-test'
   })
 
   user = await UserFactory.make({

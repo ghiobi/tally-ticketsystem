@@ -1,0 +1,36 @@
+@layout('layouts.index')
+
+@section('content')
+@set('title', 'Submit a new Ticket feedback')
+
+@include('partials.header')
+
+<!-- Page title -->
+<section id="page-title" class="page-title-classic">
+<div class="container">
+    <div class="page-title">
+    <h1>Create a Forum Topic</h1>
+    <span>Share your thoughts with the community!</span>
+    </div>
+</div>
+</section>
+<!-- end: Page title -->
+
+<section id="submit-topic-content" class="flex-grow-1">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <form method="post" action="{{ organizationRoute }}/forum/create">
+                    {{ csrfField() }}
+                    @!component('partials.forms.input', config = {label: 'Topic title', key: 'title', required: true}, error = getErrorFor, old = old )
+                    @!component('partials.forms.input', config = {type: 'textarea', label: 'Description', key: 'body', required: true}, error = getErrorFor, old = old )
+                    <button id="topicSubmit" class="btn btn-light btn-outline-secondary" type="submit">Create</button>
+                    <a id="topicCancel" href="{{ organizationRoute }}/forum" class="btn btn-light btn-outline-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@include('partials.footer')
+@endsection

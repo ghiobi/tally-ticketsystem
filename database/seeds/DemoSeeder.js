@@ -18,7 +18,9 @@ const Factory = use('Factory')
 const OrganizationFactory = Factory.model('App/Models/Organization')
 const UserFactory = Factory.model('App/Models/User')
 const TicketFactory = Factory.model('App/Models/Ticket')
+const TopicFactory = Factory.model('App/Models/Topic')
 const MessageFactory = Factory.model('App/Models/Message')
+const TopicMessageFactory = Factory.model('App/Models/TopicMessage')
 const ExpenseFactory = Factory.model('App/Models/Expense')
 const ExpenseLineItemFactory = Factory.model('App/Models/ExpenseLineItem')
 const ExpenseBusinessPurposeFactory = Factory.model('App/Models/ExpenseBusinessPurpose')
@@ -128,6 +130,32 @@ class DemoSeeder {
         await MessageFactory.create({
           ticket_id: ticket.id,
           user_id: chance.bool() ? ticket.user_id : owner.id
+        })
+      }
+    }
+
+    /**
+    Seed some Forum Topic
+     */
+    const topics = []
+    for (let i = 0; i < 50; i++) {
+      for (let j = 0; j < chance.integer({ min: 0, max: 10 }); j++) {
+        topics.push(
+          await TopicFactory.create({
+            user_id: chance.integer({ min: 3, max: 15 })
+          })
+        )
+      }
+    }
+
+    /**
+     Seed some Topic Messages
+     */
+    for (const topic of topics) {
+      for (let i = 0; i < chance.integer({ min: 0, max: 4 }); i++) {
+        await TopicMessageFactory.create({
+          topic_id: topic.id,
+          user_id: chance.bool() ? topic.user_id : owner.id
         })
       }
     }
