@@ -2,19 +2,22 @@
 const sinon = require('sinon')
 const { UserFactory, TicketFactory, OrganizationFactory } = models
 
-const { test, before, beforeEach } = use('Test/Suite')('Ticket belongs to user')
+const { test, before, beforeEach } = use('Test/Suite')('Ticket belongs to user or the user is an admin')
 
-const TicketBelongsToUser = use('App/Middleware/Pageguards/TicketBelongsToUser')
+const TicketBelongsToUserOrIsAdmin = use('App/Middleware/Pageguards/TicketBelongsToUserOrIsAdmin')
 
 let middleware = null
 let next = null
 let handle = null
 
 let organization = null
+let organization2 = null
 let user = null
 let user2 = null
+let user3 = null
 let ticket1 = null
 let ticket2 = null
+let ticket3 = null
 
 before(async () => {
   next = sinon.fake()
@@ -22,6 +25,7 @@ before(async () => {
     Stub data
     */
   organization = await OrganizationFactory.create()
+  organization2 = await OrganizationFactory.create()
 
   // Admin/Owner in organization 1
   user = await UserFactory.create()
@@ -33,6 +37,10 @@ before(async () => {
   user2 = await UserFactory.make()
   await organization.users().save(user2)
 
+  // User in organization 2
+  user3 = await UserFactory.make()
+  await organization2.users().save(user3)
+
   //ticket  by user 1, in organization 1
   ticket1 = await TicketFactory.make()
   await ticket1.user().associate(user)
@@ -40,6 +48,10 @@ before(async () => {
   //ticket  by user 2, in organization 1
   ticket2 = await TicketFactory.make()
   await ticket2.user().associate(user2)
+
+  //ticket  by user 3, in organization 2
+  ticket3 = await TicketFactory.make()
+  await ticket3.user().associate(user3)
 
   handle = {
     request: {
@@ -55,7 +67,7 @@ before(async () => {
 })
 
 beforeEach(async () => {
-  middleware = new TicketBelongsToUser()
+  middleware = new TicketBelongsToUserOrIsAdmin()
 })
 
 test('make sure users can only access tickets belonging to them', async ({ assert }) => {
@@ -79,15 +91,26 @@ test('make sure users can only access tickets belonging to them', async ({ asser
   assert.isFalse(next.called, 'next() was called when the ticket did not belong to user')
 })
 
-test('make sure admin cannot access guarded tickets', async ({ assert }) => {
+test('make sure admin can access all tickets in their organization', async ({ assert }) => {
   // allow admin/owner to access any ticket in their organization
   handle.auth.user = user
   handle.params.ticket_id = ticket2.id
 
+  await middleware.handle(handle, next)
+  assert.isTrue(next.called, 'next() was not called even though user is admin')
+  next = sinon.fake()
+
+  // disallow admin/owner to access any ticket that is not in their organization
+  handle.params.ticket_id = ticket3.id
+
+  let pass = true
   try {
     await middleware.handle(handle, next)
+    pass = false
   } catch (e) {
-    assert.isOk
+    // continue regardless of error
   }
-  assert.isFalse(next.called, 'next() was called when user was admin')
+  assert.isOk(pass, '')
+
+  assert.isFalse(next.called, 'next() was called even though ticket did not belong to admin organization')
 })

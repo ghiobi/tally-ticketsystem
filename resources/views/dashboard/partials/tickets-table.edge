@@ -16,6 +16,11 @@
       <th>
          Taken Care Of By
       </th>
+      @if(request.input('show') == 'closed')
+      <th>
+        Rating
+      </th>
+      @endif
   </thead>
   <tbody>
   @each(ticket in tickets.data)
@@ -39,6 +44,11 @@
       <td>
         {{ ticket.assignedTo ? ticket.assignedTo.name : '' }}
       </td>
+      @if(request.input('show') == 'closed')
+      <td>
+          @!component('partials.ticket.rating', ticket = ticket, organizationRoute=organizationRoute)
+      </td>
+      @endif
     </tr>
   @endeach
   </tbody>

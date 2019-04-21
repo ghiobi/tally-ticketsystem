@@ -24,6 +24,11 @@ class Ticket extends Model {
     this.status = newStatus
     await this.save()
   }
+
+  async updateRating(newRating) {
+    this.rating = newRating
+    await this.save()
+  }
 }
 
 module.exports = Ticket

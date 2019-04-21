@@ -14,10 +14,20 @@
       <p class="mb-0">
         <small>Opened By:</small> <span class="text-bold">{{ ticket.user.name }}</span>
       </p>
-      <p>
+      <p class="mb-0">
         <small>Status:</small>
         @!component('partials.ticket.status', ticket = ticket)
       </p>
+      @if(ticket.status === 'closed')
+      <div>
+        @if(ticket.user_id === auth.user.id)
+        <small>Rate your experience:</small>
+        @else
+        <small>Rating from user:</small>
+        @endif
+        @!component('partials.ticket.rating', ticket = ticket, organizationRoute=organizationRoute, auth=auth)
+      </div>
+      @endif
     </div>
   </div>
 </section>
@@ -25,22 +35,25 @@
 
 <section id="page-content" class="flex-grow-1">
   <div class="container">
-    <div class="btn-group d-flex justify-content-end mb-4" role="group">
-      @if(ticket.status !== 'closed')
-        @if(hasRole('admin'))
-          <button type="button" class="btn btn-primary" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/assign?user_id=
-          @if(ticket.assigned_to)
-            0" data-toggle="tooltip" title="Unassign {{ ticket.assigned_to === auth.user.id ? 'Me' : ticket.assignedTo.name }}">Assigned To: {{ ticket.assignedTo.name }}
+    <div class="d-flex d-flex justify-content-end">
+      <div class="btn-group p-2" id="status-btn">
+          @if(ticket.status !== 'closed')
+            @if(hasRole('admin'))
+              <button type="button" class="btn btn-primary" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/assign?user_id=
+              @if(ticket.assigned_to)
+                0" data-toggle="tooltip" title="Unassign {{ ticket.assigned_to === auth.user.id ? 'Me' : ticket.assignedTo.name }}">Assigned To: {{ ticket.assignedTo.name }}
+              @else
+                {{ auth.user.id }}">Assign To Me
+              @endif
+              </button>
+            @endif
+            <button type="button" class="btn btn-danger" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/resolve">Close</button>
           @else
-            {{ auth.user.id }}">Assign To Me
+            <button type="button" class="btn btn-secondary" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/reopen">Reopen</button>
           @endif
-          </button>
-        @endif
-        <button type="button" class="btn btn-danger" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/resolve">Close</button>
-      @else
-        <button type="button" class="btn btn-secondary" data-submit-post="{{ organizationRoute }}/ticket/{{ ticket.id }}/reopen">Reopen</button>
-      @endif
+        </div>
     </div>
+    
 
     <h6>MESSAGES</h6>
     <div class="list-group list-group-flush mb-3">

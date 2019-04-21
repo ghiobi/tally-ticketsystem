@@ -106,11 +106,14 @@ class DemoSeeder {
     for (let i = 0; i < 50; i++) {
       for (let j = 0; j < chance.integer({ min: 0, max: 10 }); j++) {
         let assigned = chance.bool()
+        let status = this.getStatus(assigned)
+        let rating = this.getRating(status)
         tickets.push(
           await TicketFactory.create({
             user_id: chance.integer({ min: 3, max: 15 }),
-            status: this.getStatus(assigned),
-            assigned_to: assigned ? owner.id : null
+            status: status,
+            assigned_to: assigned ? owner.id : null,
+            rating: rating
           })
         )
       }
@@ -183,6 +186,14 @@ class DemoSeeder {
         return 'submitted'
       case 1:
         return 'closed'
+    }
+  }
+
+  getRating(status) {
+    if (status !== 'closed') {
+      return null
+    } else {
+      return chance.integer({ min: 1, max: 5 })
     }
   }
 }

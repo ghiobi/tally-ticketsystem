@@ -24,6 +24,10 @@ class TicketSchema extends Schema {
         .enu('status', ['submitted', 'replied', 'closed'])
         .notNullable()
         .defaultTo('submitted')
+      table
+        .integer('rating')
+        .defaultTo(null)
+        .nullable()
       table.timestamps()
     })
   }
