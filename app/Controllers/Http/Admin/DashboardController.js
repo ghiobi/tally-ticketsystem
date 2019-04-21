@@ -1,5 +1,7 @@
 'use strict'
 
+const logger = use('App/Logger')
+
 class DashboardController {
   async index({ request, view, auth }) {
     let { organization } = request
@@ -8,16 +10,28 @@ class DashboardController {
 
     switch (show) {
       case 'closed':
-        tickets = this.getTickets(organization).where('status', 'closed')
+        try {
+          tickets = this.getTickets(organization).where('status', 'closed')
+        } catch (err) {
+          logger.error(`Unable to get all closed tickets for organization: ${organization}. \n${err}`)
+        }
         break
       case 'mine':
-        tickets = this.getTickets(organization)
-          .whereNot({ status: 'closed' })
-          .where('assigned_to', auth.user.id)
+        try {
+          tickets = this.getTickets(organization)
+            .whereNot({ status: 'closed' })
+            .where('assigned_to', auth.user.id)
+        } catch (err) {
+          logger.error(`Unable to get all open tickets for user_id: ${auth.user.id}. \n${err}`)
+        }
         break
       default:
         show = 'all'
-        tickets = this.getTickets(organization).whereNot({ status: 'closed' })
+        try {
+          tickets = this.getTickets(organization).whereNot({ status: 'closed' })
+        } catch (err) {
+          logger.error(`Unable to get all open tickets for organization: ${organization}. \n${err}`)
+        }
     }
 
     const search = request.input('search', '')
@@ -26,7 +40,7 @@ class DashboardController {
     tickets = await tickets.paginate(request.input('page', 1))
 
     const adminPaginateUrl = '/admin/tickets?show=' + show + '&' + (search ? 'search=' + search + '&' : '')
-    
+
     return view.render('admin.dashboard', {
       tickets: tickets.toJSON(),
       show,

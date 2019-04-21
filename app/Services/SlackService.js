@@ -1,3 +1,4 @@
+const logger = use('App/Logger')
 const chance = new (require('chance'))()
 const Organization = use('App/Models/Organization')
 const User = use('App/Models/User')
@@ -17,7 +18,12 @@ class SlackService {
    * @returns {Promise<*>}
    */
   async authenticate(client, user_id, team_id) {
-    const organization = await this.findOrCreateOrganization(client, team_id)
+    let organization = ''
+    try {
+      organization = await this.findOrCreateOrganization(client, team_id)
+    } catch (err) {
+      logger.error(`Unable to authenticate slack user: ${user_id} from team: ${team_id}. \n${err}`)
+    }
 
     return this.findOrCreateUser(client, organization, user_id)
   }
@@ -39,33 +45,37 @@ class SlackService {
       return user
     }
 
-    // From https://api.slack.com/methods/users.info
-    const {
-      user: {
-        real_name,
-        profile: { email },
-        is_admin,
-        is_owner
+    try {
+      // From https://api.slack.com/methods/users.info
+      const {
+        user: {
+          real_name,
+          profile: { email },
+          is_admin,
+          is_owner
+        }
+      } = await client.users.info({
+        user: user_id
+      })
+
+      user = await User.create({
+        name: real_name,
+        email,
+        external_id: user_id,
+        organization_id: organization.id,
+        external_access_token: client.token,
+        password: chance.string({ length: 20 })
+      })
+
+      if (is_admin) {
+        await user.setRole('admin')
       }
-    } = await client.users.info({
-      user: user_id
-    })
 
-    user = await User.create({
-      name: real_name,
-      email,
-      external_id: user_id,
-      organization_id: organization.id,
-      external_access_token: client.token,
-      password: chance.string({ length: 20 })
-    })
-
-    if (is_admin) {
-      await user.setRole('admin')
-    }
-
-    if (is_owner) {
-      await user.setRole('owner')
+      if (is_owner) {
+        await user.setRole('owner')
+      }
+    } catch (err) {
+      logger.error(`Unable to create user with slack id: ${user_id}. \n${err}`)
     }
 
     return user
@@ -87,21 +97,22 @@ class SlackService {
       return organization
     }
 
-    // From https://api.slack.com/methods/auth.test
-    const { url, team } = await client.auth.test()
+    try {
+      // From https://api.slack.com/methods/auth.test
+      const { url, team } = await client.auth.test()
 
-    const slug = await this.findAvailableSlug(
-      url.substring(
-        url.indexOf(SLACK_PROTOCOL) + SLACK_PROTOCOL.length,
-        url.indexOf(SLACK_DOMAIN)
+      const slug = await this.findAvailableSlug(
+        url.substring(url.indexOf(SLACK_PROTOCOL) + SLACK_PROTOCOL.length, url.indexOf(SLACK_DOMAIN))
       )
-    )
 
-    organization = await Organization.create({
-      slug,
-      name: team,
-      external_id: team_id
-    })
+      organization = await Organization.create({
+        slug,
+        name: team,
+        external_id: team_id
+      })
+    } catch (err) {
+      logger.error(`Unable to create organization with slack team id: ${team_id}. \n${err}`)
+    }
 
     return organization
   }

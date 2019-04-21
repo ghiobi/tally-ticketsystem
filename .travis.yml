@@ -4,9 +4,10 @@ node_js:
 services:
   - docker
 cache:
+  npm: true
   directories:
-    - ~/.npm
     - ~/.cache
+    - /.cache
 before_install:
   - cp .env.testing .env
   - docker-compose up -d

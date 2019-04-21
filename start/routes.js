@@ -1,4 +1,5 @@
 'use strict'
+const logger = use('App/Logger')
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,8 @@
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
+
+logger.info('Registering routes...')
 
 /**
  * Public Organization Routes

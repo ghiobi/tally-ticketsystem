@@ -1,10 +1,9 @@
 'use strict'
 
+const logger = use('App/Logger')
 const currencyToSymbolMap = require('currency-symbol-map/map')
-
 const Helpers = use('Helpers')
 const Drive = use('Drive')
-
 const Expense = use('App/Models/Expense')
 const ExpenseLineItem = use('App/Models/ExpenseLineItem')
 const ExpenseBusinessPurpose = use('App/Models/ExpenseBusinessPurpose')
@@ -98,19 +97,29 @@ class NewExpenseController {
   async submit({ request, response, auth, session }) {
     const { title, business_purpose, memo, category, currency, region, price, tax } = request.post()
     const user = auth.user
-    const expense = await Expense.create({ title: title, business_purpose: business_purpose, user_id: user.id })
-
-    for (var i = 0; i < memo.length; i++) {
-      await ExpenseLineItem.create({
-        expense_id: expense.id,
-        memo: memo[i],
-        currency: currency[i],
-        category: category[i],
-        region: region[i],
-        price: price[i],
-        tax: tax[i]
-      })
+    let expense = ''
+    try {
+      expense = await Expense.create({ title: title, business_purpose: business_purpose, user_id: user.id })
+    } catch (err) {
+      logger.error(`Unable to create expense for user: ${user}. \n${err}`)
     }
+
+    try {
+      for (var i = 0; i < memo.length; i++) {
+        await ExpenseLineItem.create({
+          expense_id: expense.id,
+          memo: memo[i],
+          currency: currency[i],
+          category: category[i],
+          region: region[i],
+          price: price[i],
+          tax: tax[i]
+        })
+      }
+    } catch (err) {
+      logger.error(`Unable to create expense line item for user: ${user} expense: ${expense}. \n${err}`)
+    }
+
     session.flash({ success: 'Your expense was filed.' })
     return response.redirect(`/organization/${request.organization.slug}/expense/${expense.id}`)
   }

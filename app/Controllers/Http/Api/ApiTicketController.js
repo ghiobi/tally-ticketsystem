@@ -1,5 +1,6 @@
 'use strict'
 
+const logger = use('App/Logger')
 const User = use('App/Models/User')
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
@@ -34,6 +35,7 @@ class ApiTicketController {
 
       return response.json(await user.tickets().fetch())
     } catch (e) {
+      logger.error(`Unable to get user tickets for user_id: ${params.user_id}. \n${e}`)
       return response.status(500).send('Internal Server Error. Please try again.')
     }
   }
@@ -55,16 +57,25 @@ class ApiTicketController {
         user = SlackService.findOrCreateUser(client, request.organization, user_id)
       }
 
-      const ticket = await Ticket.create({
-        user_id: user.id,
-        title: title
-      })
+      let ticket = null
+      try {
+        ticket = await Ticket.create({
+          user_id: user.id,
+          title: title
+        })
+      } catch (err) {
+        logger.error(`Unable to create tickets for user_id: ${user_id}. \n${err}`)
+      }
 
-      await Message.create({
-        user_id: user.id,
-        ticket_id: ticket.id,
-        body: body
-      })
+      try {
+        await Message.create({
+          user_id: user.id,
+          ticket_id: ticket.id,
+          body: body
+        })
+      } catch (err) {
+        logger.error(`Unable to create new message for ticket: ${ticket} for user: ${user_id}. \n${err}`)
+      }
 
       return response.status(200).send({
         ok: true
