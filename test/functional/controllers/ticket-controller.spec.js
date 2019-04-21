@@ -10,6 +10,7 @@ trait('Session/Client')
 let organization = null
 let user = null
 let ticket = null
+let ticketAdmin = null
 let admin = null
 
 before(async () => {
@@ -34,6 +35,9 @@ before(async () => {
 
   ticket = await TicketFactory.make()
   await ticket.user().associate(user)
+
+  ticketAdmin = await TicketFactory.make()
+  await ticketAdmin.user().associate(admin)
 })
 
 test('Make sure user is redirected back after submitting reply', async ({ client }) => {
@@ -157,4 +161,76 @@ test('Make sure a ticket can be unassigned', async ({ client, assert }) => {
   const currTicket = await Ticket.find(ticket.id)
 
   assert.notExists(currTicket.assigned_to)
+})
+
+test('Assert response is 500 if download type not specified', async ({ client }) => {
+  const response = await client
+    .post(`organization/${organization.slug}/ticket/${ticket.id}/download`)
+    .loginVia(admin)
+    .end()
+
+  response.assertStatus(400)
+})
+
+test('Assert response is 403 if user tries to access a ticket that does not belong to him', async ({ client }) => {
+  const response = await client
+    .post(`organization/${organization.slug}/ticket/${ticketAdmin.id}/download?type=YAML`)
+    .loginVia(user)
+    .end()
+
+  response.assertStatus(403)
+})
+
+test('Make sure user downloads ticket with no redirect and returns YAML file', async ({ client, assert }) => {
+  const response = await client
+    .post(`organization/${organization.slug}/ticket/${ticket.id}/download?type=YAML`)
+    .loginVia(user)
+    .end()
+
+  // The ticket data may have been overriden by the previous tests. Therefore, get the current ticket
+  const currTicket = await Ticket.find(ticket.id)
+
+  response.assertHeader('content-type', 'text/yaml; charset=UTF-8')
+  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + currTicket.id + '].yml"')
+  assert.include(response.text, 'id: ' + currTicket.id)
+  assert.include(response.text, 'user_id: ' + currTicket.user_id)
+  assert.include(response.text, 'title: ' + currTicket.title)
+  assert.include(response.text, 'status: ' + currTicket.status)
+})
+
+test('Make sure user downloads ticket with no redirect and returns JSON file', async ({ client, assert }) => {
+  const response = await client
+    .post(`organization/${organization.slug}/ticket/${ticket.id}/download?type=JSON`)
+    .loginVia(user)
+    .end()
+
+  // The ticket data may have been overriden by the previous tests. Therefore, get the current ticket
+  const currTicket = await Ticket.find(ticket.id)
+
+  response.assertHeader('content-type', 'application/json; charset=UTF-8')
+  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + currTicket.id + '].json"')
+  assert.include(response.text, '"id": ' + currTicket.id)
+  assert.include(response.text, '"user_id": ' + currTicket.user_id)
+  assert.include(response.text, '"title": "' + currTicket.title + '"')
+  assert.include(response.text, '"status": "' + currTicket.status + '"')
+})
+
+test('Make sure user downloads ticket with no redirect and returns CSV file', async ({ client }) => {
+  const response = await client
+    .post(`organization/${organization.slug}/ticket/${ticket.id}/download?type=CSV`)
+    .loginVia(user)
+    .end()
+
+  response.assertHeader('content-type', 'text/csv; charset=UTF-8')
+  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + ticket.id + '].csv"')
+})
+
+test('Make sure user downloads ticket with no redirect and returns PDF file', async ({ client }) => {
+  const response = await client
+    .post(`organization/${organization.slug}/ticket/${ticket.id}/download?type=PDF`)
+    .loginVia(user)
+    .end()
+
+  response.assertHeader('content-type', 'application/pdf')
+  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + ticket.id + '].pdf"')
 })
