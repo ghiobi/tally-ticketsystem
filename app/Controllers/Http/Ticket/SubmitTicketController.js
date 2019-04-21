@@ -3,6 +3,7 @@
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
 const EmailService = use('App/Services/EmailService')
+const StatsD = require('../../../../config/statsd')
 
 class SubmitTicketController {
   async index({ view }) {
@@ -23,6 +24,8 @@ class SubmitTicketController {
       ticket_id: ticket.id,
       body: request.input('body')
     })
+
+    StatsD.increment('ticket.submission.success')
 
     try {
       await EmailService.sendTicketConfirmation(ticket)
