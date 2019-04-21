@@ -29,6 +29,7 @@ class SubmitTicketController {
       })
     } catch (err) {
       logger.error(`Unable to submit user: ${user} ticket: ${ticket}. \n${err}`)
+      StatsD.increment('ticket.submission.failed')
     }
 
     StatsD.increment('ticket.submission.success')

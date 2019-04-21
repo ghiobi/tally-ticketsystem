@@ -1,7 +1,7 @@
 'use strict'
 
 const Hash = use('Hash')
-
+const StatsD = require('../../../../config/statsd')
 const { validateAll } = use('Validator')
 
 class LoginController {
@@ -29,6 +29,7 @@ class LoginController {
 
     if (validation.fails()) {
       session.withErrors(validation.messages()).flashAll()
+      StatsD.increment('login.failed')
 
       return response.redirect('back')
     }
@@ -36,11 +37,10 @@ class LoginController {
     /**
      * Validating the existance of the user.
      */
-    const user = await request.organization.findUserByEmail(
-      request.input('email')
-    )
+    const user = await request.organization.findUserByEmail(request.input('email'))
 
     if (!user) {
+      StatsD.increment('login.failed')
       return this.failed(session, response)
     }
 
@@ -50,6 +50,7 @@ class LoginController {
     const isSame = await Hash.verify(request.input('password'), user.password)
 
     if (!isSame) {
+      StatsD.increment('login.failed')
       return this.failed(session, response)
     }
 
@@ -59,17 +60,15 @@ class LoginController {
     await auth.login(user)
 
     if (await user.hasRole('admin')) {
-      return response.redirect(
-        `/organization/${request.organization.slug}/admin`
-      )
+      StatsD.increment('login.admin.success')
+      return response.redirect(`/organization/${request.organization.slug}/admin`)
     }
+    StatsD.increment('login.user.success')
     return response.redirect(`/organization/${request.organization.slug}`)
   }
 
   failed(session, response) {
-    session
-      .withErrors({ invalid: 'Could not find user.' })
-      .flashExcept(['password'])
+    session.withErrors({ invalid: 'Could not find user.' }).flashExcept(['password'])
 
     return response.redirect('back')
   }

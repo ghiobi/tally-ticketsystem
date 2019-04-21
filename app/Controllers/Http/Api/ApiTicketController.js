@@ -6,6 +6,7 @@ const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
 const SlackService = use('App/Services/SlackService')
 const Client = use('Slack/WebClient')
+const StatsD = require('../../../../config/statsd')
 
 class ApiTicketController {
   /**
@@ -20,6 +21,8 @@ class ApiTicketController {
           .fetch()
       )
     } catch (e) {
+      StatsD.increment('api.organization.ticket.get.failed')
+      logger.error(`Unable to get user tickets for organization: ${request.organization}. \n${e}`)
       return response.status(500).send('Internal Server Error. Please try again.')
     }
   }
@@ -36,6 +39,7 @@ class ApiTicketController {
       return response.json(await user.tickets().fetch())
     } catch (e) {
       logger.error(`Unable to get user tickets for user_id: ${params.user_id}. \n${e}`)
+      StatsD.increment('api.user.ticket.get.all.failed')
       return response.status(500).send('Internal Server Error. Please try again.')
     }
   }
@@ -64,6 +68,7 @@ class ApiTicketController {
           title: title
         })
       } catch (err) {
+        StatsD.increment('api.user.ticket.create.failed')
         logger.error(`Unable to create tickets for user_id: ${user_id}. \n${err}`)
       }
 
@@ -74,6 +79,7 @@ class ApiTicketController {
           body: body
         })
       } catch (err) {
+        StatsD.increment('api.user.ticket.message.create.failed')
         logger.error(`Unable to create new message for ticket: ${ticket} for user: ${user_id}. \n${err}`)
       }
 
@@ -97,6 +103,7 @@ class ApiTicketController {
           .first()
       )
     } catch (e) {
+      StatsD.increment('api.user.ticket.get.single.failed')
       return response.status(500).send('Internal Server Error. Please try again.')
     }
   }
