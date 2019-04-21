@@ -8,6 +8,7 @@ const User = use('App/Models/User')
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
 const Helpers = use('Helpers')
+const StatsD = require('../../../../config/statsd')
 
 class TicketController {
   async index({ view, params }) {
@@ -39,8 +40,10 @@ class TicketController {
         ticket_id: ticket.id,
         body: reply
       })
+      StatsD.increment('ticket.reply.success')
     } catch (err) {
       logger.error(`Unable to submit reply for ticket: ${ticket}. \n${err}`)
+      StatsD.increment('ticket.reply.failed')
     }
 
     if (await auth.user.hasRole('admin')) {
@@ -68,8 +71,10 @@ class TicketController {
 
     try {
       await ticket.updateStatus('closed')
+      StatsD.increment('ticket.close.success')
     } catch (err) {
       logger.error(`Unable to resolve ticket: ${ticket}. \n${err}`)
+      StatsD.increment('ticket.close.failed')
     }
 
     try {
@@ -106,8 +111,10 @@ class TicketController {
 
     try {
       await ticket.updateStatus('replied')
+      StatsD.increment('ticket.reopen.success')
     } catch (err) {
       logger.error(`Unable to update status of ticket: ${ticket}. \n${err}`)
+      StatsD.increment('ticket.reopen.failed')
     }
 
     // Notify ticket owner
@@ -173,6 +180,7 @@ class TicketController {
     }
 
     const exportFile = await ExportService.export(ticket, requestType)
+    StatsD.increment('ticket.export.success')
     await response.attachment(Helpers.tmpPath(exportFile))
     await ExportService.deleteExport(exportFile)
   }

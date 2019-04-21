@@ -1,5 +1,6 @@
 'use strict'
 
+const StatsD = require('../../../../config/statsd')
 const logger = use('App/Logger')
 
 class DashboardController {
@@ -13,6 +14,7 @@ class DashboardController {
         try {
           tickets = this.getTickets(organization).where('status', 'closed')
         } catch (err) {
+          StatsD.increment('ticket.dashboard.admin.view.closed.failed')
           logger.error(`Unable to get all closed tickets for organization: ${organization}. \n${err}`)
         }
         break
@@ -22,6 +24,7 @@ class DashboardController {
             .whereNot({ status: 'closed' })
             .where('assigned_to', auth.user.id)
         } catch (err) {
+          StatsD.increment('ticket.dashboard.admin.view.mine.failed')
           logger.error(`Unable to get all open tickets for user_id: ${auth.user.id}. \n${err}`)
         }
         break
@@ -30,6 +33,7 @@ class DashboardController {
         try {
           tickets = this.getTickets(organization).whereNot({ status: 'closed' })
         } catch (err) {
+          StatsD.increment('ticket.dashboard.admin.view.all.failed')
           logger.error(`Unable to get all open tickets for organization: ${organization}. \n${err}`)
         }
     }

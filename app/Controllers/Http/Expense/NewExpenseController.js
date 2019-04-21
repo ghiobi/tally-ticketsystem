@@ -11,6 +11,7 @@ const LineItemCategory = use('App/Models/LineItemCategory')
 const LineItemRegion = use('App/Models/LineItemRegion')
 const OcrService = use('App/Services/OcrService')
 const ReceiptParserService = use('App/Services/ReceiptParserService')
+const StatsD = require('../../../../config/statsd')
 
 class NewExpenseController {
   async index({ view }) {
@@ -34,47 +35,56 @@ class NewExpenseController {
     //find which receipt number the image belongs to
     let receiptImage = null
     let receiptNumber = 0
-    while (receiptImage === null) {
-      receiptImage = request.file(`receipt[${receiptNumber}]`, {
-        types: ['image']
+    let expense_in_progress = null
+    let receipts_in_progress = []
+    let fileName = null
+    try {
+      while (receiptImage === null) {
+        receiptImage = request.file(`receipt[${receiptNumber}]`, {
+          types: ['image']
+        })
+        if (receiptImage !== null) break
+        receiptNumber++
+      }
+
+      //put uploaded file in /tmp/uploads
+      fileName = `${auth.user.id}${new Date().getTime()}` //userid + timestamp for uniqueness
+      await receiptImage.move(Helpers.tmpPath('uploads'), {
+        name: fileName,
+        overwrite: true
       })
-      if (receiptImage !== null) break
-      receiptNumber++
-    }
+      if (!receiptImage.moved()) {
+        return receiptImage.error()
+      }
 
-    //put uploaded file in /tmp/uploads
-    const fileName = `${auth.user.id}${new Date().getTime()}` //userid + timestamp for uniqueness
-    await receiptImage.move(Helpers.tmpPath('uploads'), {
-      name: fileName,
-      overwrite: true
-    })
-    if (!receiptImage.moved()) {
-      return receiptImage.error()
-    }
+      //parse
+      const parsedText = await OcrService.parseImage(`/uploads/${fileName}`)
+      if (parsedText) {
+        const receiptData = await ReceiptParserService.parse(parsedText)
 
-    //parse
-    const parsedText = await OcrService.parseImage(`/uploads/${fileName}`)
-    if (parsedText) {
-      const receiptData = await ReceiptParserService.parse(parsedText)
+        //replace with parsed data
+        price[receiptNumber] = receiptData['total']
+        currency[receiptNumber] = receiptData['currency']
+        region[receiptNumber] = receiptData['region']
+      }
 
-      //replace with parsed data
-      price[receiptNumber] = receiptData['total']
-      currency[receiptNumber] = receiptData['currency']
-      region[receiptNumber] = receiptData['region']
-    }
-
-    //set the fields that were already filled
-    const expense_in_progress = { title: title, business_purpose: business_purpose }
-    const receipts_in_progress = []
-    for (var i = 0; i < memo.length; i++) {
-      receipts_in_progress.push({
-        memo: memo[i],
-        category: category[i],
-        currency: currency[i],
-        region: region[i],
-        price: price[i],
-        tax: tax[i]
-      })
+      //set the fields that were already filled
+      expense_in_progress = { title: title, business_purpose: business_purpose }
+      receipts_in_progress = []
+      for (var i = 0; i < memo.length; i++) {
+        receipts_in_progress.push({
+          memo: memo[i],
+          category: category[i],
+          currency: currency[i],
+          region: region[i],
+          price: price[i],
+          tax: tax[i]
+        })
+      }
+      StatsD.increment('expense.receipt.scan.success')
+    } catch (err) {
+      logger.error(`Unable to scan receipt for user: ${auth.user}. \n${err}`)
+      StatsD.increment('expense.receipt.scan.failed')
     }
 
     //delete picture
@@ -115,9 +125,11 @@ class NewExpenseController {
           price: price[i],
           tax: tax[i]
         })
+        StatsD.increment('expense.create.success')
       }
     } catch (err) {
       logger.error(`Unable to create expense line item for user: ${user} expense: ${expense}. \n${err}`)
+      StatsD.increment('expense.create.failed')
     }
 
     session.flash({ success: 'Your expense was filed.' })

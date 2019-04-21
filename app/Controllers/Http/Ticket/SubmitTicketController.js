@@ -4,6 +4,7 @@ const logger = use('App/Logger')
 const Ticket = use('App/Models/Ticket')
 const Message = use('App/Models/Message')
 const EmailService = use('App/Services/EmailService')
+const StatsD = require('../../../../config/statsd')
 
 class SubmitTicketController {
   async index({ view }) {
@@ -28,7 +29,10 @@ class SubmitTicketController {
       })
     } catch (err) {
       logger.error(`Unable to submit user: ${user} ticket: ${ticket}. \n${err}`)
+      StatsD.increment('ticket.submission.failed')
     }
+
+    StatsD.increment('ticket.submission.success')
 
     try {
       await EmailService.sendTicketConfirmation(ticket)
