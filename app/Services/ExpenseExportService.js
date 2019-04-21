@@ -2,6 +2,8 @@ const Drive = use('Drive')
 const yaml = require('js-yaml')
 const PDFDocument = require('pdfkit')
 const createCsvWriter = require('csv-writer').createObjectCsvStringifier
+const Hash = use('Hash')
+
 class ExpenseExportService {
   async export(tickets, type) {
     switch (type) {
@@ -18,8 +20,10 @@ class ExpenseExportService {
 
   async exportCSV(tickets) {
     tickets = tickets.toJSON()
-    var filename_ids = tickets.map((ticket) => ticket.id)
-    const filepath = 'ticket_' + JSON.stringify(filename_ids) + '.csv'
+
+    const filename_ids = tickets.map((ticket) => ticket.id)
+    const filename_hash = await Hash.make(JSON.stringify(filename_ids))
+    const filepath = 'ticket_' + filename_hash.substr(0, 16) + '.csv'
 
     const exists = await Drive.exists(filepath)
     if (exists) {
@@ -56,8 +60,10 @@ class ExpenseExportService {
 
   async exportPDF(tickets) {
     tickets = tickets.toJSON()
-    var filename_ids = tickets.map((ticket) => ticket.id)
-    const filepath = 'ticket_' + JSON.stringify(filename_ids) + '.pdf'
+
+    const filename_ids = tickets.map((ticket) => ticket.id)
+    const filename_hash = await Hash.make(JSON.stringify(filename_ids))
+    const filepath = 'ticket_' + filename_hash.substr(0, 16) + '.pdf'
 
     const exists = await Drive.exists(filepath)
     if (exists) {
@@ -94,8 +100,10 @@ class ExpenseExportService {
 
   async exportJSON(tickets) {
     tickets = tickets.toJSON()
-    var filename_ids = tickets.map((ticket) => ticket.id)
-    const filepath = 'ticket_' + JSON.stringify(filename_ids) + '.json'
+
+    const filename_ids = tickets.map((ticket) => ticket.id)
+    const filename_hash = await Hash.make(JSON.stringify(filename_ids))
+    const filepath = 'ticket_' + filename_hash.substr(0, 16) + '.json'
 
     const exists = await Drive.exists(filepath)
     if (exists) {
@@ -108,8 +116,10 @@ class ExpenseExportService {
 
   async exportYAML(tickets) {
     tickets = tickets.toJSON()
-    var filename_ids = tickets.map((ticket) => ticket.id)
-    const filepath = 'ticket_' + JSON.stringify(filename_ids) + '.yml'
+
+    const filename_ids = tickets.map((ticket) => ticket.id)
+    const filename_hash = await Hash.make(JSON.stringify(filename_ids))
+    const filepath = 'ticket_' + filename_hash.substr(0, 16) + '.yml'
 
     const exists = await Drive.exists(filepath)
     if (exists) {

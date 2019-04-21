@@ -73,7 +73,6 @@ test('Assert can export as pdf', async ({ client }) => {
 
   response.assertStatus(200)
   response.assertHeader('content-type', 'application/pdf')
-  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + ticket1.id + '].pdf"')
 })
 
 test('Assert can export as csv', async ({ client }) => {
@@ -85,7 +84,6 @@ test('Assert can export as csv', async ({ client }) => {
 
   response.assertStatus(200)
   response.assertHeader('content-type', 'text/csv; charset=UTF-8')
-  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + ticket1.id + '].csv"')
 })
 
 test('Assert can export as JSON', async ({ client, assert }) => {
@@ -97,7 +95,6 @@ test('Assert can export as JSON', async ({ client, assert }) => {
 
   response.assertStatus(200)
   response.assertHeader('content-type', 'application/json; charset=UTF-8')
-  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + ticket1.id + '].json"')
   assert.include(response.text, '"id": ' + ticket1.id)
   assert.include(response.text, '"user_id": ' + ticket1.user_id)
   assert.include(response.text, '"title": "' + ticket1.title + '"')
@@ -113,7 +110,6 @@ test('Assert can export as YAML', async ({ client, assert }) => {
 
   response.assertStatus(200)
   response.assertHeader('content-type', 'text/yaml; charset=UTF-8')
-  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + ticket1.id + '].yml"')
   assert.include(response.text, 'id: ' + ticket1.id)
   assert.include(response.text, 'user_id: ' + ticket1.user_id)
   assert.include(response.text, 'title: ' + ticket1.title)
@@ -139,10 +135,6 @@ test('Assert a admin user can export tickets that belong to anyone in the organi
 
   response.assertStatus(200)
   response.assertHeader('content-type', 'application/json; charset=UTF-8')
-  response.assertHeader(
-    'content-disposition',
-    'attachment; filename="ticket_[' + ticket1.id + ',' + ticket2.id + '].json"'
-  )
 
   const response_data = JSON.parse(response.text)
   assert.equal(response_data.length, 2)
@@ -162,7 +154,6 @@ test('Assert a non-admin user can include non-existent or non-premissible ticket
 
   response.assertStatus(200)
   response.assertHeader('content-type', 'application/json; charset=UTF-8')
-  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + ticket1.id + '].json"')
 
   const response_data = JSON.parse(response.text)
   assert.equal(response_data.length, 1)

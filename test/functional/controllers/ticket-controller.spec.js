@@ -191,7 +191,6 @@ test('Make sure user downloads ticket with no redirect and returns YAML file', a
   const currTicket = await Ticket.find(ticket.id)
 
   response.assertHeader('content-type', 'text/yaml; charset=UTF-8')
-  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + currTicket.id + '].yml"')
   assert.include(response.text, 'id: ' + currTicket.id)
   assert.include(response.text, 'user_id: ' + currTicket.user_id)
   assert.include(response.text, 'title: ' + currTicket.title)
@@ -208,7 +207,6 @@ test('Make sure user downloads ticket with no redirect and returns JSON file', a
   const currTicket = await Ticket.find(ticket.id)
 
   response.assertHeader('content-type', 'application/json; charset=UTF-8')
-  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + currTicket.id + '].json"')
   assert.include(response.text, '"id": ' + currTicket.id)
   assert.include(response.text, '"user_id": ' + currTicket.user_id)
   assert.include(response.text, '"title": "' + currTicket.title + '"')
@@ -222,7 +220,6 @@ test('Make sure user downloads ticket with no redirect and returns CSV file', as
     .end()
 
   response.assertHeader('content-type', 'text/csv; charset=UTF-8')
-  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + ticket.id + '].csv"')
 })
 
 test('Make sure user downloads ticket with no redirect and returns PDF file', async ({ client }) => {
@@ -232,5 +229,4 @@ test('Make sure user downloads ticket with no redirect and returns PDF file', as
     .end()
 
   response.assertHeader('content-type', 'application/pdf')
-  response.assertHeader('content-disposition', 'attachment; filename="ticket_[' + ticket.id + '].pdf"')
 })
