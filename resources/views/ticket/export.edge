@@ -19,21 +19,21 @@
 <section id="export-ticket-content" class="flex-grow-1">
     
     <div class="container">
-      <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#downloadModal"><i class="fa fa-download"></i>Export Tickets</button>
+      @if(tickets.length)
+      <button class="btn btn-secondary btn-sm" id="toggleDownloadModal" data-toggle="modal" data-target="#downloadModal"><i class="fa fa-download"></i>Export Tickets</button>
       <form id="exportForm" method="post" action="{{ organizationRoute }}/ticket/export">
         {{ csrfField() }}
-        @if(tickets.length)
         @include('ticket.partials.tickets-export-table')
-    @else
+        <input type="hidden" name="type" id="exportTypeInput" value="CSV">
+        <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#downloadModal"><i class="fa fa-download"></i>Export Tickets</button>
+      </form>
+      @else
         <div class="row">
         <div class="col-md-6 offset-3 text-center">
             <p class="text-bold mb-1">There are no tickets here</p>
         </div>
         </div>
-    @endif
-    <input type="hidden" name="type" id="exportTypeInput" value="CSV">
-    <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#downloadModal"><i class="fa fa-download"></i>Export Tickets</button>
-    <form>
+      @endif
   </div>
     
 </section>

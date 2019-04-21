@@ -3,6 +3,19 @@ const yaml = require('js-yaml')
 const PDFDocument = require('pdfkit')
 const createCsvWriter = require('csv-writer').createObjectCsvStringifier
 class ExpenseExportService {
+  async export(tickets, type) {
+    switch (type) {
+      case 'CSV':
+        return this.exportCSV(tickets)
+      case 'PDF':
+        return this.exportPDF(tickets)
+      case 'JSON':
+        return this.exportJSON(tickets)
+      case 'YAML':
+        return this.exportYAML(tickets)
+    }
+  }
+
   async exportCSV(tickets) {
     tickets = tickets.toJSON()
     var filename_ids = tickets.map((ticket) => ticket.id)
