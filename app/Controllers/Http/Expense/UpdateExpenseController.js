@@ -8,6 +8,7 @@ const ExpenseBusinessPurpose = use('App/Models/ExpenseBusinessPurpose')
 const LineItemCategory = use('App/Models/LineItemCategory')
 const LineItemRegion = use('App/Models/LineItemRegion')
 const ForbiddenException = use('App/Exceptions/ForbiddenException')
+const StatsD = require('../../../../config/statsd')
 
 class UpdateExpenseController {
   async index({ view, params }) {
@@ -62,6 +63,7 @@ class UpdateExpenseController {
 
     if (!expense) {
       session.flash({ error: 'Error retrieving expense' })
+      StatsD.increment('expense.update.failed')
       return response.redirect('back')
     }
 
@@ -74,6 +76,7 @@ class UpdateExpenseController {
         await expense.updateTitle(title)
       } catch (err) {
         logger.error(`Unable to update expense title for expense: ${expense}. \n${err}`)
+        StatsD.increment('expense.update.failed')
       }
     }
 
@@ -82,6 +85,7 @@ class UpdateExpenseController {
         await expense.updateBusinessPurpose(business_purpose)
       } catch (err) {
         logger.error(`Unable to update expense business purpose for expense: ${expense}. \n${err}`)
+        StatsD.increment('expense.update.failed')
       }
     }
 
@@ -107,6 +111,7 @@ class UpdateExpenseController {
           oldItem.updateTax(tax[i])
         }
         delete lineItemsDict[id[i]]
+        StatsD.increment('expense.update.success')
       } else {
         try {
           await ExpenseLineItem.create({
@@ -118,8 +123,10 @@ class UpdateExpenseController {
             price: price[i],
             tax: tax[i]
           })
+          StatsD.increment('expense.update.success')
         } catch (err) {
           logger.error(`Unable to create expense line item for expense: ${expense}. \n${err}`)
+          StatsD.increment('expense.update.failed')
         }
       }
     }

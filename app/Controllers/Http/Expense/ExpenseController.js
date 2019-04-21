@@ -3,6 +3,7 @@
 const logger = use('App/Logger')
 const Expense = use('App/Models/Expense')
 const ForbiddenException = use('App/Exceptions/ForbiddenException')
+const StatsD = require('../../../../config/statsd')
 
 class ExpenseController {
   async index({ view, request, auth }) {
@@ -37,8 +38,11 @@ class ExpenseController {
         .with('user')
         .with('expenseLineItems')
         .first()
+
+      StatsD.increment('expense.view.success')
     } catch (err) {
       logger.error(`Unable to load expense: ${params.expense_id}. \n${err}`)
+      StatsD.increment('expense.view.failed')
     }
 
     return view.render('expense.expense', { expense: expense.toJSON() })
@@ -49,6 +53,7 @@ class ExpenseController {
     const expense = await Expense.find(expense_id)
     if (!expense) {
       session.flash({ error: 'expense was not found' })
+      StatsD.increment('expense.delete.failed')
       return response.redirect('back')
     }
 
@@ -57,8 +62,10 @@ class ExpenseController {
     }
     try {
       await expense.delete()
+      StatsD.increment('expense.delete.success')
     } catch (err) {
       logger.error(`Unable to delete expense: ${expense_id}. \n${err}`)
+      StatsD.increment('expense.delete.failed')
     }
     return response.redirect('back')
   }
