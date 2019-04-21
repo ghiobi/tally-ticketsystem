@@ -1,7 +1,7 @@
 'use strict'
 
 const { test, trait, before } = use('Test/Suite')('Export Ticket Controller')
-const { OrganizationFactory, UserFactory, TicketFactory, Ticket, MessageFactory } = models
+const { OrganizationFactory, UserFactory, TicketFactory, MessageFactory } = models
 
 trait('Test/ApiClient')
 trait('Auth/Client')
@@ -44,24 +44,24 @@ before(async () => {
   await MessageFactory.create({ ticket_id: ticket2.id, user_id: admin.id })
 })
 
-test('Assert 500 if download type not specified', async ({ client }) => {
+test('Assert 400 if download type not specified', async ({ client }) => {
   const response = await client
     .post(`organization/${organization.slug}/ticket/export`)
     .send({ ticket: ticket1.id })
     .loginVia(admin)
     .end()
 
-  response.assertStatus(500)
+  response.assertStatus(400)
 })
 
-test('Assert 500 if no tickets specified', async ({ client }) => {
+test('Assert 400 if no tickets specified', async ({ client }) => {
   const response = await client
     .post(`organization/${organization.slug}/ticket/export`)
     .send({ type: 'CSV' })
     .loginVia(admin)
     .end()
 
-  response.assertStatus(500)
+  response.assertStatus(400)
 })
 
 test('Assert can export as pdf', async ({ client }) => {

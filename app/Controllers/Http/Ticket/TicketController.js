@@ -113,6 +113,11 @@ class TicketController {
   }
 
   async download({ request, response, params, auth }) {
+    const requestType = request.input('type')
+    if (!requestType || !['PDF', 'CSV', 'JSON', 'YAML'].includes(requestType)) {
+      return response.status(400).send('Internal Server Error. Please try again.')
+    }
+
     let ticket
     if (await auth.user.hasRole('admin')) {
       ticket = await Ticket.query()
@@ -134,26 +139,10 @@ class TicketController {
     if (!ticket || ticket.rows.length === 0) {
       return response.status(500).send('Internal Server Error. Please try again.')
     }
-    const requestType = request.input('type')
 
-    if (!requestType || !['PDF', 'CSV', 'JSON', 'YAML'].includes(requestType)) {
-      return response.status(500).send('Internal Server Error. Please try again.')
-    } else {
-      let exportFile
-      if (requestType === 'PDF') {
-        exportFile = await ExportService.exportPDF(ticket)
-      } else if (requestType === 'CSV') {
-        exportFile = await ExportService.exportCSV(ticket)
-      } else if (requestType === 'JSON') {
-        exportFile = await ExportService.exportJSON(ticket)
-      } else {
-        exportFile = await ExportService.exportYAML(ticket)
-      }
-
-      await response.attachment(Helpers.tmpPath(exportFile))
-
-      await ExportService.deleteExport(exportFile)
-    }
+    const exportFile = await ExportService.export(ticket, requestType)
+    await response.attachment(Helpers.tmpPath(exportFile))
+    await ExportService.deleteExport(exportFile)
   }
 }
 

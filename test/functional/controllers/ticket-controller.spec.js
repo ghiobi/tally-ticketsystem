@@ -169,10 +169,10 @@ test('Assert response is 500 if download type not specified', async ({ client })
     .loginVia(admin)
     .end()
 
-  response.assertStatus(500)
+  response.assertStatus(400)
 })
 
-test('Assert response is 500 if user tries to access a ticket that does not belong to him', async ({ client }) => {
+test('Assert response is 403 if user tries to access a ticket that does not belong to him', async ({ client }) => {
   const response = await client
     .post(`organization/${organization.slug}/ticket/${ticketAdmin.id}/download?type=YAML`)
     .loginVia(user)

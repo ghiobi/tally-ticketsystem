@@ -8,7 +8,7 @@ class ExportTicketController {
   async index({ view, auth, request }) {
     let tickets
 
-    if (auth.user.hasRole('admin')) {
+    if (await auth.user.hasRole('admin')) {
       const { organization } = request
       tickets = await organization
         .tickets()
@@ -33,7 +33,7 @@ class ExportTicketController {
     let ticketsInput = request.input('ticket')
 
     if (!requestType || !['PDF', 'CSV', 'JSON', 'YAML'].includes(requestType) || !ticketsInput) {
-      return response.status(500).send('Internal Server Error. Please try again.')
+      return response.status(400).send('Internal Server Error. Please try again.')
     }
 
     if (!Array.isArray(ticketsInput)) {
@@ -62,19 +62,8 @@ class ExportTicketController {
       return response.status(500).send('Internal Server Error. Please try again.')
     }
 
-    let exportFile
-    if (requestType === 'PDF') {
-      exportFile = await ExportService.exportPDF(tickets)
-    } else if (requestType === 'CSV') {
-      exportFile = await ExportService.exportCSV(tickets)
-    } else if (requestType === 'JSON') {
-      exportFile = await ExportService.exportJSON(tickets)
-    } else {
-      exportFile = await ExportService.exportYAML(tickets)
-    }
-
+    const exportFile = await ExportService.export(tickets, requestType)
     response.attachment(Helpers.tmpPath(exportFile))
-
     await ExportService.deleteExport(exportFile)
   }
 }
