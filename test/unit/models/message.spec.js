@@ -11,7 +11,8 @@ before(async () => {
 
   ticket = await TicketFactory.create({
     user_id: user.id,
-    assigned_to: null
+    assigned_to: null,
+    rating: null
   })
 })
 
@@ -25,9 +26,7 @@ test('check if a message can be inserted', async ({ assert }) => {
   assert.exists(inDatabase)
 })
 
-test('makes sure the relations return the correct models', async ({
-  assert
-}) => {
+test('makes sure the relations return the correct models', async ({ assert }) => {
   const message = await MessageFactory.create({
     user_id: user.id,
     ticket_id: ticket.id

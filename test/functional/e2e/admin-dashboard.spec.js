@@ -68,3 +68,16 @@ test('Admins can use the tickets filters', async ({ browser }) => {
     .waitFor(1000)
     .assertQueryParam('show', 'all')
 }).timeout(60000)
+
+test('Admins can see ratings when on closed tickets page', async ({ browser }) => {
+  await actions.login(browser, organization.slug, admin.email, 'password')
+
+  const page = await browser.visit(`/organization/${organization.slug}/admin/tickets?show=all`)
+
+  await page
+    .waitForElement('#closed-btn')
+    .click('#closed-btn')
+    .waitFor(1000)
+    .assertQueryParam('show', 'closed')
+    .assertHas('Rating')
+}).timeout(60000)

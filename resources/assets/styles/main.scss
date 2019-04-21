@@ -71,3 +71,26 @@ $logo-height: 40px;
   margin-left: -5px;
   padding-left: 5px;
 }
+
+.rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  font-size: 1.8rem;
+  color: #d8d8d8;
+}
+
+.rating-on {
+  color: #1abc9c;
+}
+
+.rating > span {
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+}
+.rating .editable > span:hover:before,
+.rating .editable > span:hover ~ span:before {
+  color: #1abc9c;
+  content: '\2605';
+  position: absolute;
+}

@@ -54,7 +54,8 @@ const namedMiddleware = {
   /* Page Guards */
   expenseDetailGuard: 'App/Middleware/Pageguards/ExpenseDetail',
   resetPassword: 'App/Middleware/Pageguards/ResetPassword',
-  ticketGuard: 'App/Middleware/Pageguards/TicketBelongsToUser'
+  IsTicketOwner: 'App/Middleware/Pageguards/TicketBelongsToUser',
+  IsTicketOwnerOrIsAdmin: 'App/Middleware/Pageguards/TicketBelongsToUserOrIsAdmin'
 }
 
 /*

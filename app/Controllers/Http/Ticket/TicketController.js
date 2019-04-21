@@ -62,7 +62,6 @@ class TicketController {
 
   async resolve({ response, request, auth, params }) {
     const ticket = await Ticket.find(params.ticket_id)
-
     if (ticket.status === 'closed') {
       return response.redirect('back')
     }
@@ -176,6 +175,28 @@ class TicketController {
     const exportFile = await ExportService.export(ticket, requestType)
     await response.attachment(Helpers.tmpPath(exportFile))
     await ExportService.deleteExport(exportFile)
+  }
+
+  async rate({ response, params, session }) {
+    const ticket = await Ticket.find(params.ticket_id)
+    const rating = params.rating
+    let validRating = true
+    if (rating < 1 || rating > 5) {
+      validRating = false
+    }
+
+    if (ticket.status !== 'closed' || !validRating) {
+      return response.redirect('back')
+    }
+
+    try {
+      await ticket.updateRating(parseInt(rating, 10))
+    } catch (err) {
+      logger.error(`Unable to rate ticket: ${ticket}. \n${err}`)
+    }
+
+    session.flash({ success: 'Thank you for you valuable feedback!' })
+    return response.redirect('back')
   }
 }
 

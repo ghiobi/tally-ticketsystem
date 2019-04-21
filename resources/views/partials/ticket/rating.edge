@@ -1,0 +1,53 @@
+@if(ticket.user_id === auth.user.id)
+<div class="rating">
+    <a href="{{ organizationRoute }}/ticket/{{ticket.id}}/rate/5"><span 
+    @if(ticket.rating>=5)
+        class="rating-on editable" 
+    @endif
+    >★</span></a>
+    <a href="{{ organizationRoute }}/ticket/{{ticket.id}}/rate/4"><span 
+    @if(ticket.rating>=4)
+        class="rating-on editable" 
+    @endif
+    >★</span></a>
+    <a href="{{ organizationRoute }}/ticket/{{ticket.id}}/rate/3"><span 
+    @if(ticket.rating>=3)
+        class="rating-on editable" 
+    @endif
+    >★</span></a>
+    <a href="{{ organizationRoute }}/ticket/{{ticket.id}}/rate/2"><span 
+    @if(ticket.rating>=2)
+        class="rating-on editable" 
+    @endif
+    >★</span></a>
+    <a href="{{ organizationRoute }}/ticket/{{ticket.id}}/rate/1"><span 
+    @if(ticket.rating>=1)
+        class="rating-on editable"  
+    @endif
+    >★</span></a>
+</div>
+@else
+<div class="rating">
+    <span 
+    @if(ticket.rating>=5)
+        class="rating-on" 
+    @endif
+    >★</span><span 
+    @if(ticket.rating>=4)
+        class="rating-on" 
+    @endif
+    >★</span><span 
+    @if(ticket.rating>=3)
+        class="rating-on" 
+    @endif
+    >★</span><span 
+    @if(ticket.rating>=2)
+        class="rating-on" 
+    @endif
+    >★</span><span 
+    @if(ticket.rating>=1)
+        class="rating-on"  
+    @endif
+    >★</span>
+</div>
+@endif

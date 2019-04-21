@@ -87,7 +87,8 @@ test('make sure a user can get their tickets', async ({ assert }) => {
 
   const ticket = await TicketFactory.create({
     user_id: user.id,
-    assigned_to: null
+    assigned_to: null,
+    rating: null
   })
 
   const tickets = await user.tickets().fetch()

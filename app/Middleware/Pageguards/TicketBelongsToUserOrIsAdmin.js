@@ -6,7 +6,7 @@
 const { HttpException } = require('@adonisjs/generic-exceptions')
 const ForbiddenException = use('App/Exceptions/ForbiddenException')
 
-class TicketBelongsToUser {
+class TicketBelongsToUserOrIsAdmin {
   /**
    * @param {Response} ctx.reponse
    * @param {auth}
@@ -30,7 +30,7 @@ class TicketBelongsToUser {
       throw new HttpException(null, 404)
     }
 
-    if (ticket.user_id !== auth.user.id) {
+    if (ticket.user_id !== auth.user.id && !(await auth.user.hasRole('admin'))) {
       throw new ForbiddenException()
     }
 
@@ -38,4 +38,4 @@ class TicketBelongsToUser {
   }
 }
 
-module.exports = TicketBelongsToUser
+module.exports = TicketBelongsToUserOrIsAdmin
